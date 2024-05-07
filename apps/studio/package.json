@@ -1,0 +1,42 @@
+{
+  "name": "studio",
+  "version": "1.0.0",
+  "private": true,
+  "keywords": [
+    "sanity"
+  ],
+  "license": "UNLICENSED",
+  "main": "package.json",
+  "scripts": {
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "deploy-graphql": "sanity graphql deploy",
+    "dev": "sanity dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "start": "sanity start",
+    "type": "sanity schema extract && sanity typegen generate --enforce-required-fields"
+  },
+  "dependencies": {
+    "@sanity/assist": "^2.0.0",
+    "@sanity/document-internationalization": "^2.1.0",
+    "@sanity/vision": "^3.30.1",
+    "country-flag-icons": "^1.5.9",
+    "lucide-react": "^0.344.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "sanity": "^3.36.0",
+    "sanity-plugin-asset-source-unsplash": "^1.1.2",
+    "sanity-plugin-icon-picker": "^3.3.0",
+    "sanity-plugin-media": "^2.2.5",
+    "slugify": "^1.6.6",
+    "styled-components": "^6.0.7"
+  },
+  "devDependencies": {
+    "@sanity/eslint-config-studio": "^3.0.1",
+    "@types/react": "^18.0.25",
+    "eslint": "^8.6.0",
+    "prettier": "2.8.8",
+    "typescript": "^5.1.6"
+  }
+}

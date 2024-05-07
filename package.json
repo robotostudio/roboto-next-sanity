@@ -1,0 +1,22 @@
+{
+  "name": "roboto-next-sanity",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "deploy": "turbo deploy",
+    "dev": "turbo dev",
+    "format": "turbo format",
+    "lint": "turbo lint"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0"
+  },
+  "packageManager": "npm@9.8.1",
+  "engines": {
+    "node": ">=18"
+  }
+}
