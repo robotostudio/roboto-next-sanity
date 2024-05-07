@@ -1,81 +1,53 @@
-# Turborepo starter
+# Roboto Next Sanity
 
-This is an official starter Turborepo.
+Welcome to the "Roboto Next Sanity" repository! This template monorepo is designed to streamline the development of projects using a combination of Roboto, Next.js, and Sanity.io. It provides a structured yet flexible foundation for building scalable and maintainable applications.
 
-## Using this example
+## Description
 
-Run the following command:
+This monorepo includes templates and configurations that integrate the robust text rendering capabilities of Roboto, the server-side rendering features of Next.js, and the real-time data management of Sanity.io. It's ideal for developers looking to jumpstart their projects with a solid architecture that covers frontend, backend, and content management.
 
-```sh
-npx create-turbo@latest
+### Features
+
+- **Next.js Setup**: Pre-configured with the latest version of Next.js for server-side rendering and static site generation.
+- **Sanity Studio**: Integrated Sanity Studio for seamless content management.
+- **Roboto Typography**: Roboto font setup for beautiful, readable text across all components.
+- **Scalable Architecture**: Designed for scalability, making it suitable for projects of any size.
+- **Pre-configured Themes**: Includes themes that can be customized to fit your brand identity.
+
+## Installation
+
+To get started with this template monorepo, follow these steps:
+
+1. **Run the following command**:
+
+```bash
+npx create-roboto-next-app@latest 
 ```
 
-## What's inside?
+this will ask for the project name and information about the sanity project that you want to connect to.
 
-This Turborepo includes the following packages/apps:
+2. **After initialization**
+  run the following command to install the dependencies
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
+```bash
+npm install
 ```
-cd my-turborepo
-pnpm build
+3. **Start the development server**
+
+```bash
+npm run dev
 ```
 
-### Develop
+## To deploy this project
 
-To develop all apps and packages, run the following command:
+### There are two parts 
 
-```
-cd my-turborepo
-pnpm dev
-```
+1. **Next js deployment on vercel**
 
-### Remote Caching
+    - connect repo with vercel 
+    - add environment variables
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+2. **Sanity deployment on sanity.io**
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+    - first deploy will be manual, because we need to add the domain to the sanity project
+    - after the first deploy, this can be automated, just by adding deploy token to your github action

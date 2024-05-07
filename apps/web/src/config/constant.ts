@@ -27,3 +27,66 @@ export const LOCALIZED_SANITY_TAGS = {
   slugPage: (locale: Locale) => `${SANITY_TAGS.slugPage}-${locale}`,
 } as const;
 
+
+
+type GetSanityTag = {
+  type: string;
+  locale?: Locale;
+  slug?: string;
+};
+
+export const getSanityTags = ({ type, locale, slug }: GetSanityTag) => {
+  const isLocalized = !!locale;
+
+  if (type === 'mainPage') {
+    return [
+      SANITY_TAGS.mainPage,
+      ...(isLocalized ? [LOCALIZED_SANITY_TAGS.mainPage(locale)] : []),
+    ];
+  }
+
+  if (type === 'page') {
+    return [
+      SANITY_TAGS.slugPage,
+      ...(isLocalized ? [LOCALIZED_SANITY_TAGS.slugPage(locale)] : []),
+      ...(slug ? [slug] : []),
+    ];
+  }
+
+  if (type === 'blog') {
+    return [
+      SANITY_TAGS.blogs,
+      SANITY_TAGS.blogPage,
+      SANITY_TAGS.blogIndex,
+      ...(isLocalized
+        ? [
+            LOCALIZED_SANITY_TAGS.blogPage(locale),
+            LOCALIZED_SANITY_TAGS.blogIndex(locale),
+            LOCALIZED_SANITY_TAGS.blogs(locale),
+          ]
+        : []),
+      ...(slug ? [slug] : []),
+    ];
+  }
+
+  if (type === 'blogIndex') {
+    return [
+      SANITY_TAGS.blogIndex,
+      ...(isLocalized
+        ? [
+            LOCALIZED_SANITY_TAGS.blogIndex(locale),
+            LOCALIZED_SANITY_TAGS.blogs(locale),
+          ]
+        : []),
+    ];
+  }
+
+  if (type === 'footer') {
+    return [SANITY_TAGS.footer];
+  }
+  if (type === 'navbar') {
+    return [SANITY_TAGS.navbar];
+  }
+
+  return [];
+};
