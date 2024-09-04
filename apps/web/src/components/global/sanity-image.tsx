@@ -1,9 +1,9 @@
 import { getImageDimensions } from '@sanity/asset-utils';
-import Image, { ImageProps } from 'next/image';
-import { FC } from 'react';
+import Image, { type ImageProps } from 'next/image';
+import type { FC } from 'react';
 import { urlFor } from '~/lib/sanity';
 
-import { SanityImage as SanityImageProp } from '~/types';
+import type { SanityImage as SanityImageProp } from '~/types';
 
 const getDimension = (
   image: NonNullable<SanityImageProp['asset']>,

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { getNavbarData } from './navbar-api';
 import { NavbarClient } from './navbar.client';
 

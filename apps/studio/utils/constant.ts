@@ -28,4 +28,3 @@ export const GROUPS: FieldGroupDefinition[] = [
   { name: CONST.CARD, icon: BlockElementIcon, title: 'Card' },
   { name: CONST.RELATED, icon: InlineElementIcon, title: 'Related' },
 ];
-

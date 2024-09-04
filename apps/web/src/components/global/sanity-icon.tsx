@@ -1,16 +1,22 @@
-import { ComponentProps, FC } from 'react';
+import type { ComponentProps, FC } from 'react';
+import { cn } from '~/lib/utils';
 
-import Svg from 'react-inlinesvg';
-
-type IconProps = Omit<ComponentProps<typeof Svg>, 'src'> & {
+type IconProps = Omit<ComponentProps<'span'>, 'src'> & {
   icon?: {
     svg?: string | null;
   };
 };
 
-
-export const SanityIcon: FC<IconProps> = ({ icon, ...props }) => {
+export const SanityIcon: FC<IconProps> = ({ icon, className, ...props }) => {
   const { svg } = icon ?? {};
+
   if (!svg) return <></>;
-  return <Svg {...props} src={svg} />;
+
+  return (
+    <span
+      {...props}
+      className={cn('flex size-12 items-center justify-center', className)}
+      dangerouslySetInnerHTML={{ __html: svg ?? '' }}
+    />
+  );
 };

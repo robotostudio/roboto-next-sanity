@@ -2,6 +2,7 @@ import { draftMode } from 'next/headers';
 import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
 import { getLocalizedSlug, handleErrors } from '~/lib/helper';
 import {
+  blogPageQueryOG,
   getAllBlogIndexTranslationsQuery,
   getAllBlogsPathsQuery,
   getBlogIndexDataQuery,
@@ -9,6 +10,7 @@ import {
 } from '~/lib/sanity/query';
 import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
 import type {
+  BlogPageQueryOGResult,
   GetAllBlogIndexTranslationsQueryResult,
   GetAllBlogsPathsQueryResult,
   GetBlogIndexDataQueryResult,
@@ -64,6 +66,15 @@ export const getBlogIndexData = async (locale: Locale) => {
       params: { locale },
       preview: isEnabled,
       tags: [LOCALIZED_SANITY_TAGS.blogIndex(locale), SANITY_TAGS.blogIndex],
+    }),
+  );
+};
+
+export const getBlogPageOGData = async (id: string) => {
+  return await handleErrors(
+    sanityServerFetch<BlogPageQueryOGResult>({
+      query: blogPageQueryOG,
+      params: { id },
     }),
   );
 };

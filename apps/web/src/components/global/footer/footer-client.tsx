@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { FC } from 'react';
-import { GetFooterDataQueryResult } from '~/sanity.types';
-import { PageComponentProps } from '~/types';
+import type { FC } from 'react';
+import type { GetFooterDataQueryResult } from '~/sanity.types';
+import type { PageComponentProps } from '~/types';
 
 export const FooterClient: FC<PageComponentProps<GetFooterDataQueryResult>> = ({
   data,
@@ -28,7 +28,7 @@ export const FooterClient: FC<PageComponentProps<GetFooterDataQueryResult>> = ({
               </div>
             ))}
         </nav>
-        <div className="mt-10 flex justify-center space-x-10"></div>
+        <div className="mt-10 flex justify-center space-x-10" />
         <p className="mt-10 text-center text-xs leading-5 text-slate-200">
           &copy; 2020 Roboto Studio, Inc. All rights reserved.
         </p>

@@ -7,18 +7,13 @@ import {
   Text,
   ThemeProvider,
 } from '@sanity/ui';
-import { ComponentProps, useRef, useState } from 'react';
+import { type ComponentProps, useRef, useState } from 'react';
 import { AiOutlineReload } from 'react-icons/ai';
 import { BiLinkExternal } from 'react-icons/bi';
-import { UserViewComponent } from 'sanity/structure';
+import type { UserViewComponent } from 'sanity/structure';
 import { usePreviewIframe } from '../hooks/usePreviewIframe';
 
-
-
-
-export function PreviewIFrame(
-  props: ComponentProps<UserViewComponent>,
-): JSX.Element {
+export function PreviewIFrame(props: ComponentProps<UserViewComponent>): JSX.Element {
   const { document, options, documentId, schemaType } = props;
   const [id, setId] = useState(1);
   const iframe = useRef<HTMLIFrameElement>(null);
@@ -66,7 +61,7 @@ export function PreviewIFrame(
 
   return (
     <ThemeProvider>
-      <Flex direction="column" style={{ height: `100%` }}>
+      <Flex direction="column" style={{ height: '100%' }}>
         <Card padding={2} borderBottom>
           <Flex align="center" gap={2}>
             <Box flex={1}>
@@ -96,13 +91,13 @@ export function PreviewIFrame(
             </Flex>
           </Flex>
         </Card>
-        <Card tone="transparent" padding={0} style={{ height: `100%` }}>
-          <Flex align="center" justify="center" style={{ height: `100%` }}>
+        <Card tone="transparent" padding={0} style={{ height: '100%' }}>
+          <Flex align="center" justify="center" style={{ height: '100%' }}>
             <iframe
               key={id}
               ref={iframe}
               title="preview"
-              style={{ width: '100%', height: `100%`, maxHeight: `100%` }}
+              style={{ width: '100%', height: '100%', maxHeight: '100%' }}
               src={previewUrl}
               referrerPolicy="origin-when-cross-origin"
               frameBorder={0}

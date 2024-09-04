@@ -1,13 +1,12 @@
 'use client';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { formBuilderResponseHandler } from '~/action/formspark';
 
+import type { Form, FormField as IFormField } from '~/sanity.types';
 import { Input } from '../global/input';
-import { Button, ButtonProps } from '../ui/button';
-import { RichText } from '../global/richText';
-import { Form, FormField as IFormField } from '~/sanity.types';
+import { Button, type ButtonProps } from '../ui/button';
 
 export const FormSubmitButton: FC<ButtonProps> = ({ children, ...props }) => {
   const { pending } = useFormStatus();
@@ -158,7 +157,7 @@ export const PlainFormBuilder: FC<
     return () => {
       clearTimeout(timer);
     };
-  }, [state.isComplete]);
+  }, [state.isComplete, onSubmit]);
 
   if (!state.hasError && state.isComplete)
     return (

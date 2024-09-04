@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { SanityImage } from '../global/sanity-image';
 import { FormBuilderBlock } from './form-builder';
-import { SplitForm } from '~/sanity.types';
-import { ProcessPageBuilderBlock } from '~/types';
+import type { SplitForm } from '~/sanity.types';
+import type { ProcessPageBuilderBlock } from '~/types';
 
 export type SplitFormBlockProps = ProcessPageBuilderBlock<SplitForm>;
 

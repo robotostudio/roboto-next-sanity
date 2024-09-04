@@ -1,11 +1,11 @@
-import { Locale } from './config';
-import { CarouselField, Form } from './sanity.types';
+import type { Locale } from './config';
+import type { CarouselField, Form } from './sanity.types';
 
 export type PreviewProps<T> = {
   initialData: T;
   query: string;
   preview?: boolean;
-  queryParams: Record<string, any>;
+  queryParams: Record<string, unknown>;
 };
 
 export type PageParams<T = Record<string, string>> = {
@@ -61,4 +61,4 @@ export type ProcessPageBuilderBlock<T> = ProcessPageBuilderAddButtons<
   ProcessPageBuilderAddForm<T>
 >;
 
-
+export type Maybe<T> = T | null | undefined;

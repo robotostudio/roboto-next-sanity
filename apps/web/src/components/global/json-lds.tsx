@@ -1,5 +1,5 @@
-import { FC, useId } from 'react';
-import { Corporation, LocalBusiness, WithContext } from 'schema-dts';
+import { type FC, useId } from 'react';
+import type { Corporation, LocalBusiness, WithContext } from 'schema-dts';
 
 export const url = 'https://demo.roboto.studio';
 

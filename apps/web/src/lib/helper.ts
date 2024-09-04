@@ -1,6 +1,4 @@
-import { Locale } from '~/config';
-// import { SanityImage } from '~/types';
-import * as React from 'react';
+import type { Locale } from '~/config';
 
 export async function handleErrors<T>(
   promise: Promise<T>,
@@ -11,8 +9,6 @@ export async function handleErrors<T>(
   } catch (err) {
     if (err instanceof Error) {
       console.log('errr', err.name, err.message);
-      // } else if (isAxiosError(err)) {
-      //   console.log('eror', err.response);
     } else {
       console.log('eror', JSON.stringify(err));
     }
@@ -22,9 +18,8 @@ export async function handleErrors<T>(
 }
 
 export const extractFormData = (data: FormData) => {
-  const raw: any = {};
+  const raw: Record<string, unknown> = {};
   data.forEach((val, key) => {
-    console.log('args', val, key);
     if (!key.startsWith('$')) {
       raw[key] = val;
     }
@@ -36,33 +31,12 @@ export const getLocalizedSlug = (
   slug: string,
   locale: Locale,
   prefix?: string,
-) => {
-  if (locale === 'en-GB') return '/' + [prefix, slug].filter(Boolean).join('/');
-  return '/' + [locale, prefix, slug].filter(Boolean).join('/');
+): string => {
+  const segments = locale === 'en-GB' ? [prefix, slug] : [locale, prefix, slug];
+  return `/${segments.filter(Boolean).join('/')}`;
 };
 
-// export const getImageDimensionProps = (image: NonNullable<SanityImage>) => {
-//   const { height, width } = getImageDimensions(image);
-//   return {
-//     height,
-//     width,
-//   };
-// };
-
-export function useMediaQuery(query: string) {
-  const [value, setValue] = React.useState(false);
-
-  React.useEffect(() => {
-    function onChange(event: MediaQueryListEvent) {
-      setValue(event.matches);
-    }
-
-    const result = matchMedia(query);
-    result.addEventListener('change', onChange);
-    setValue(result.matches);
-
-    return () => result.removeEventListener('change', onChange);
-  }, [query]);
-
-  return value;
-}
+export const getTitleCase = (name: string) => {
+  const titleTemp = name.replace(/([A-Z])/g, ' $1');
+  return titleTemp.charAt(0).toUpperCase() + titleTemp.slice(1);
+};

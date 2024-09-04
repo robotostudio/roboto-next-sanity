@@ -6,8 +6,8 @@ export const languageField = defineField({
   initialValue: () => 'en-GB',
   name: 'language',
   type: 'string',
-  readOnly: true,
-  hidden: true,
+  // readOnly: true,
+  // hidden: true,
 });
 
 export const iconField = defineField({
@@ -51,4 +51,3 @@ export const customSlugField = ({ name, ...props }: Props) =>
     },
     ...props,
   });
-

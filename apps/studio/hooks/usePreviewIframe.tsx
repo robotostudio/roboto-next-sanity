@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { SanityDocument, useValidationStatus } from 'sanity';
+import { type SanityDocument, useValidationStatus } from 'sanity';
 import { resolvePreviewUrl } from '../resolve-preview-url';
 
 export type PreviewIframeOptions = {
@@ -18,23 +18,20 @@ export const usePreviewIframe = ({ ctx, document }: PreviewIframeOptions) => {
         loading: false,
         hasErrors: false,
       };
-    } else {
-      return {
-        loading: false,
-        hasErrors: validation.validation.some(
-          (error) => error.level === 'error',
-        ),
-        errors: validation.validation
-          .filter((error) => error.level === 'error')
-          .map((error) => `${error.path.join('.')}: ${error.message}`),
-      };
     }
-  }, [validation.isValidating]);
+    return {
+      loading: false,
+      hasErrors: validation.validation.some((error) => error.level === 'error'),
+      errors: validation.validation
+        .filter((error) => error.level === 'error')
+        .map((error) => `${error.path.join('.')}: ${error.message}`),
+    };
+  }, [validation.isValidating, validation.validation]);
 
   const previewUrl = useMemo(() => {
     if (!document) return '';
     return resolvePreviewUrl(document as SanityDocument);
-  }, []);
+  }, [document]);
 
   return {
     ...status,

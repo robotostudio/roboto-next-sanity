@@ -37,6 +37,16 @@ export const page = defineType({
       ],
     }),
     defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      group: CONST.MAIN_CONTENT,
+      validation: (Rule) => Rule.required(),
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
