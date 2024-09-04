@@ -5,9 +5,10 @@ import { draftMode } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { client } from '~/lib/sanity/client';
-import { token } from '~/lib/sanity/token';
 
-const clientWithToken = client.withConfig({ token });
+const clientWithToken = client.withConfig({
+  token: process.env.SANITY_API_READ_TOKEN,
+});
 
 export async function GET(request: NextRequest) {
   if (!process.env.SANITY_API_TOKEN) {

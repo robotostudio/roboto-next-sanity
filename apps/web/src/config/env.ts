@@ -9,7 +9,6 @@ export const env = createEnv({
   server: {
     SANITY_API_TOKEN: z.string(),
     SANITY_PREVIEW_SECRET: z.string(),
-    VERCEL_URL: z.string().optional(),
   },
 
   /*
@@ -38,7 +37,6 @@ export const env = createEnv({
     SANITY_PREVIEW_SECRET: process.env.SANITY_PREVIEW_SECRET,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
-    VERCEL_URL: process.env.VERCEL_URL,
     NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL:
       process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
     NEXT_PUBLIC_VERCEL_BRANCH_URL: process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL,
