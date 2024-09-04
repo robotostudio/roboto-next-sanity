@@ -13,7 +13,7 @@
     "lint": "turbo lint"
   },
   "devDependencies": {
-    "turbo": "^1.13.0"
+    "turbo": "^2.1.1"
   },
   "packageManager": "npm@9.8.1",
   "engines": {
