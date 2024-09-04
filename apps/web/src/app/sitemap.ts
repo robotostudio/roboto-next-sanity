@@ -11,6 +11,8 @@ type SiteMap = Pick<
   'changeFrequency' | 'priority'
 >;
 
+
+
 const formatToSitemap = (
   data: SitemapProjection[],
   options: SiteMap,

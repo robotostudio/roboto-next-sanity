@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { baseUrl, ogImageDimensions } from '~/config';
-
+  
 export const getPageUrl = (slug?: string) => `${baseUrl}${slug ?? ''}`;
 
 const getOgImage = (options?: { type: string; id: string }) => {

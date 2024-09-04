@@ -45,9 +45,12 @@ export const env = createEnv({
   },
 });
 
-export const baseUrl =
-  env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
-    : env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
-    ? `https://${env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
-    : 'http://localhost:3000';
+const getBaseUrl = (): string => {
+  if (env.NEXT_PUBLIC_VERCEL_ENV === 'production')
+    return env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL as string;
+  if (env.NEXT_PUBLIC_VERCEL_ENV === 'preview')
+    return `https://${env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`;
+  return 'http://localhost:3000';
+};
+
+export const baseUrl = getBaseUrl();
