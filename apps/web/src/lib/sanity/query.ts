@@ -1,19 +1,7 @@
 import { groq } from 'next-sanity';
-import { Locale } from '~/config';
-import { Blog, BlogIndex, PageBuilder } from '~/sanity.types';
-import { SanityImage } from '~/types';
-
-
 
 export const localeMatch = `select(($locale == 'en-GB' || $locale == '' ) => 
   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)`;
-
-
-export type GetSlugPageDataQueryResponse = {
-  title: string;
-  slug: string;
-  pageBuilder: PageBuilder;
-};
 
 export const getAllSlugPagePathsQuery = groq`
 *[_type == "page" && defined(slug.current) && !seoNoIndex]{
@@ -21,17 +9,6 @@ export const getAllSlugPagePathsQuery = groq`
   "locale":language
 }
 `;
-
-export type GetAllSlugPagePathsQueryResponse = {
-  slug: string;
-  locale: Locale;
-}[];
-
-export type GetMainPageDataQueryResponse = {
-  title: string;
-  description: string;
-  pageBuilder: PageBuilder;
-};
 
 export const getAllMainPageTranslationsQuery = groq`
 *[_type == "mainPage"].language
@@ -58,26 +35,9 @@ export const getBlogIndexDataQuery = groq`
 }
 `;
 
-export type IndexPageBlog = {
-  title: string;
-  image: SanityImage;
-  description: string;
-  slug: string;
-  _id: string;
-};
-
-export type GetBlogIndexDataQuery = {
-  seo: BlogIndex;
-  blogs: IndexPageBlog[];
-};
-
-export type GetBlogPageDataQueryResponse = Blog;
-
 export const getAllBlogIndexTranslationsQuery = groq`
 *[_type == "blogIndex"].language
 `;
-
-export type GetAllBlogIndexTranslationsQueryResponse = string[];
 
 export const getAllBlogsPathsQuery = groq`
 *[_type == "blog" && defined(slug.current) && !seoNoIndex]{
@@ -85,11 +45,6 @@ export const getAllBlogsPathsQuery = groq`
   "locale":language
 }
 `;
-
-export type GetAllBlogsPathsQuery = {
-  slug: string;
-  locale: Locale;
-}[];
 
 const _url = `defined(url)=>{
   url{
@@ -226,19 +181,6 @@ export const getMarketingModalDataQuery = groq`
     ${_form}    
 }
 `;
-// export const ogQueryWrapper = (condition: string) => groq`
-// *[${condition}][0]{
-//   ${[
-//     coalesceConditions('title', ['ogTitle', 'title']),
-//     coalesceConditions('description', ['ogDescription', 'description']),
-//     coalesceConditions('image', [
-//       'seoImage',
-//       'image',
-//       groq`*[_type =="logo"][0].image`,
-//     ]),
-//   ].join(',')}
-// }
-// `;
 
 export const getOGDataQuery = groq`
 *[_id == $id][0]{
@@ -249,4 +191,3 @@ export const getOGDataQuery = groq`
 
 }
 `;
-

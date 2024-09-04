@@ -447,24 +447,20 @@ export type Navbar = {
   } & Button>;
 };
 
-export type MarketingModal = {
+export type Form = {
   _id: string;
-  _type: "marketingModal";
+  _type: "form";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  isActive?: boolean;
+  label?: string;
   title?: string;
-  description?: string;
-  form?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "form";
-  };
-  buttons?: Array<{
+  formId?: string;
+  language?: string;
+  fields?: Array<{
     _key: string;
-  } & Button>;
+  } & FormField>;
+  buttonText?: string;
 };
 
 export type TranslationMetadata = {
@@ -496,11 +492,6 @@ export type InternationalizedArrayReferenceValue = {
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "mainPage";
-  } | {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "form";
   } | {
     _ref: string;
     _type: "reference";
@@ -549,22 +540,6 @@ export type BlogIndex = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-};
-
-export type Form = {
-  _id: string;
-  _type: "form";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  label?: string;
-  title?: string;
-  formId?: string;
-  language?: string;
-  fields?: Array<{
-    _key: string;
-  } & FormField>;
-  buttonText?: string;
 };
 
 export type MainPage = {
@@ -958,11 +933,6 @@ export type SitemapQueryResult = Array<{
   slug: null;
   _updatedAt: string;
   _type: "logo";
-  _id: string;
-} | {
-  slug: null;
-  _updatedAt: string;
-  _type: "marketingModal";
   _id: string;
 } | {
   slug: null;
@@ -1711,26 +1681,7 @@ export type GetSlugPageDataQueryResult = {
 } | null;
 // Variable: getMarketingModalDataQuery
 // Query: *[_type == "marketingModal" && isActive][0]{    _id,    title,    description,    defined(form)=>{  form->{    ...,  }}    }
-export type GetMarketingModalDataQueryResult = {
-  _id: string;
-  title: string | null;
-  description: string | null;
-  form: {
-    _id: string;
-    _type: "form";
-    _createdAt: string;
-    _updatedAt: string;
-    _rev: string;
-    label?: string;
-    title?: string;
-    formId?: string;
-    language?: string;
-    fields?: Array<{
-      _key: string;
-    } & FormField>;
-    buttonText?: string;
-  } | null;
-} | null;
+export type GetMarketingModalDataQueryResult = null;
 // Variable: getOGDataQuery
 // Query: *[_id == $id][0]{    _id,    "title":coalesce(ogTitle,title),    "description":coalesce(ogDescription,description),    "image":coalesce(seoImage,image,*[_type =="logo"][0].image).asset->url}
 export type GetOGDataQueryResult = {
