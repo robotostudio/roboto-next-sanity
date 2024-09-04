@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { getFooterData } from './footer-api';
 import { FooterClient } from './footer-client';
 

@@ -1,7 +1,6 @@
-import { FC } from 'react';
-
-import { Hero } from '~/sanity.types';
-import { ProcessPageBuilderBlock } from '~/types';
+import type { FC } from 'react';
+import type { Hero } from '~/sanity.types';
+import type { ProcessPageBuilderBlock } from '~/types';
 import { Buttons } from '../global/buttons';
 import { RichText } from '../global/richText';
 

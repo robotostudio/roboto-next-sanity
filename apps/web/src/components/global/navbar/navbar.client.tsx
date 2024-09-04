@@ -1,5 +1,4 @@
 'use client';
-
 import {
   Accordion,
   AccordionContent,
@@ -32,7 +31,6 @@ import { cn } from '~/lib/utils';
 import type { GetNavbarDataQueryResult } from '~/sanity.types';
 import type { PageComponentProps } from '~/types';
 import { Buttons } from '../buttons';
-
 import { SanityIcon } from '../sanity-icon';
 import { useIsMobile } from '~/hooks/use-is-mobile';
 

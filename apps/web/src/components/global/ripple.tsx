@@ -11,7 +11,7 @@ const Ripple = React.memo(function Ripple() {
       <div className="absolute left-1/2 top-1/2 -z-10 h-full w-full overflow-visible opacity-20">
         {Array.from({ length: NUM_CIRCLES }, (_, i) => (
           <div
-            key={i}
+            key={i.toString()}
             className="absolute -translate-x-1/2 -translate-y-1/2 animate-ripple rounded-full bg-white"
             style={{
               width: MAIN_CIRCLE_SIZE + i * 70,
@@ -19,7 +19,7 @@ const Ripple = React.memo(function Ripple() {
               opacity: MAIN_CIRCLE_OPACITY - i * 0.03,
               animationDelay: `${i * 0.06}s`,
             }}
-          ></div>
+          />
         ))}
       </div>
     </div>

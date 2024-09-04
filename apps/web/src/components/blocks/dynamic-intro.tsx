@@ -1,9 +1,9 @@
-import { FC, Suspense } from 'react';
+import { type FC, Suspense } from 'react';
 import { SearchParamsText } from '../atoms/searchParamsText';
-import { ProcessPageBuilderBlock } from '~/types';
+import type { ProcessPageBuilderBlock } from '~/types';
 import { RichText } from '../global/richText';
 import { Buttons } from '../global/buttons';
-import { DynamicIntro } from '~/sanity.types';
+import type { DynamicIntro } from '~/sanity.types';
 
 export type DynamicIntroBlockProps = ProcessPageBuilderBlock<DynamicIntro>;
 

@@ -1,12 +1,10 @@
-import { FC } from 'react';
-
+import type { FC } from 'react';
 import { HeroBlock, CtaBlock, DynamicIntroBlock } from '../blocks';
 import { SplitFormBlock } from '../blocks/split-form';
 import { ImageCarouselBlock } from '../blocks/image-carousel';
-import { PageBuilder } from '~/sanity.types';
+import type { PageBuilder } from '~/sanity.types';
 
 export type PageBuilderBlockProps<T> = {
-  // pageBuilder?: PageBuilder;
   pageBuilder?: T | null;
 };
 
@@ -30,7 +28,7 @@ const BlockNotFound: FC<{ _type: string }> = ({ _type }) => {
 export const PageBuilderBlock: FC<PageBuilderBlockProps<PageBuilder>> = ({
   pageBuilder,
 }) => {
-  if (!Array.isArray(pageBuilder)) return <section></section>;
+  if (!Array.isArray(pageBuilder)) return null;
   return (
     <section className="flex flex-col gap-4">
       {pageBuilder.map((block) => {

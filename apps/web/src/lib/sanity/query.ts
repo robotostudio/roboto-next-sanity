@@ -215,3 +215,11 @@ export const mainPageQueryOG = groq`
   ${_ogFields}
 }
 `;
+
+export const sitemapQuery = groq`
+*[_type in $types && defined(slug.current) && seoNoIndex != true ]{
+  "slug":slug.current,
+  _updatedAt,
+  _type,
+  _id
+}`;

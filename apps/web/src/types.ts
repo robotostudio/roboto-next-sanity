@@ -5,7 +5,7 @@ export type PreviewProps<T> = {
   initialData: T;
   query: string;
   preview?: boolean;
-  queryParams: Record<string, any>;
+  queryParams: Record<string, unknown>;
 };
 
 export type PageParams<T = Record<string, string>> = {

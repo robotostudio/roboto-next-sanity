@@ -1,16 +1,16 @@
 'use client';
 import {
   PortableText,
-  PortableTextComponentProps,
-  PortableTextMarkComponentProps,
-  PortableTextProps,
-  PortableTextReactComponents,
+  type PortableTextComponentProps,
+  type PortableTextMarkComponentProps,
+  type PortableTextProps,
+  type PortableTextReactComponents,
 } from '@portabletext/react';
 import { CheckSquare } from 'lucide-react';
 import Link from 'next/link';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { cn } from '~/lib/utils';
-import { ProcessedUrl, SanityImage as SanityImageProps } from '~/types';
+import type { ProcessedUrl, SanityImage as SanityImageProps } from '~/types';
 import { SanityImage } from './sanity-image';
 
 export const CustomLinkResolver: FC<
@@ -98,7 +98,7 @@ export const RichText: FC<PortableRichTextProps> = ({ value, className }) => {
   return (
     <div
       className={cn(
-        `prose-lg prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted  prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80`,
+        'prose-lg prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted  prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80',
         className,
       )}
     >
@@ -121,7 +121,7 @@ export const ArticleRichText: FC<PortableRichTextProps> = ({
   return (
     <div
       className={cn(
-        `prose prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted  prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80`,
+        'prose prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted  prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80',
         className,
       )}
     >

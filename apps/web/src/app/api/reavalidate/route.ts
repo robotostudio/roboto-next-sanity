@@ -1,8 +1,8 @@
 // ./src/app/api/revalidate/route.ts
 import { parseBody } from 'next-sanity/webhook';
 import { revalidatePath, revalidateTag } from 'next/cache';
-import { NextResponse, type NextRequest } from 'next/server';
-import { Locale, getSanityTags } from '~/config';
+import { type NextRequest, NextResponse } from 'next/server';
+import { type Locale, getSanityTags } from '~/config';
 
 type WebhookPayload = {
   _type: string;
@@ -37,7 +37,9 @@ export async function POST(req: NextRequest) {
       locale: body?.language,
       slug,
     });
-    tags.forEach((tag) => revalidateTag(tag));
+    for (const tag of tags) {
+      revalidateTag(tag);
+    }
 
     revalidateTag(body._type);
 
@@ -46,8 +48,10 @@ export async function POST(req: NextRequest) {
     }
     const message = `Updated route: ${slug} and tags: ${tags.join(', ')}`;
     return NextResponse.json({ body, message });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error(err);
-    return new Response(err?.message, { status: 500 });
+    return new Response(err instanceof Error ? err.message : 'Unknown error', {
+      status: 500,
+    });
   }
 }

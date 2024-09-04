@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { ComponentProps, FC } from 'react';
+import type { ComponentProps, FC } from 'react';
 
 export type SearchParamsTextProps = {
   param?: string;
