@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { baseUrl, ogImageDimensions, webConfig } from '~/config';
+import { baseUrl, ogImageDimensions } from '~/config';
 
 export const getPageUrl = (slug?: string) => `${baseUrl}${slug ?? ''}`;
 
@@ -38,7 +38,7 @@ export const getMetaData = (data: Record<string, any>): Metadata => {
   const metadata: Metadata = {
     title: meta.seoTitle,
     description: meta.seoDescription,
-    metadataBase: new URL(webConfig.root),
+    metadataBase: new URL(baseUrl),
     creator: 'Roboto Studio Demo',
     authors: {
       name: 'Roboto',

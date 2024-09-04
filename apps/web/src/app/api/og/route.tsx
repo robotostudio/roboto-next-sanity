@@ -7,7 +7,7 @@ import {
   getGenericPageOGData,
   getSlugPageOGData,
 } from '~/components/pages/slug-page/slug-page-api';
-import { ogImageDimensions } from '~/config';
+import { env, ogImageDimensions } from '~/config';
 import { getTitleCase } from '~/lib/helper';
 import type { Maybe } from '~/types';
 
@@ -227,6 +227,7 @@ const block = {
 } as const;
 
 export async function GET({ url }: Request): Promise<ImageResponse> {
+  console.log('env', env);
   const { searchParams } = new URL(url);
   const type = searchParams.get('type') as keyof typeof block;
   const para = Object.fromEntries(searchParams.entries());

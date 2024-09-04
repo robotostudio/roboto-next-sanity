@@ -1,14 +1,12 @@
-import { SanityImageSource } from '@sanity/asset-utils';
+import type { SanityImageSource } from '@sanity/asset-utils';
 import createImageUrlBuilder from '@sanity/image-url';
 import { createClient } from 'next-sanity';
-
-import { isProd } from '~/config';
 
 export const sanityConfig = {
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID as string,
   apiVersion: '2021-06-09',
-  useCdn: isProd,
+  useCdn: process.env.NODE_ENV === 'production',
 };
 
 const sanityClient = createClient({

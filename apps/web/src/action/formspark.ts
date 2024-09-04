@@ -24,7 +24,6 @@ export async function formBuilderResponseHandler<T>(
     });
   } catch (err) {
     if (err instanceof AxiosError) {
-      console.log('🚀 ~ err:', err?.message);
       return {
         message: JSON.stringify(err.response?.data) ?? 'Something went wrong',
         hasError: true,
