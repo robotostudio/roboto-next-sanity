@@ -1,6 +1,5 @@
 'use server';
-import { draftMode } from 'next/headers';
-import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
+import { type Locale, SANITY_TAGS } from '~/config';
 import { getLocalizedSlug, handleErrors } from '~/lib/helper';
 import {
   genericPageQueryOG,
@@ -17,15 +16,13 @@ import type {
 } from '~/sanity.types';
 
 export const getSlugPageData = async (slug: string, locale: Locale) => {
-  const { isEnabled } = draftMode();
-
   const localizedSlug = getLocalizedSlug(slug, locale);
+  console.log('🚀 ~ getSlugPageData ~ localizedSlug:', localizedSlug);
   return await handleErrors(
     sanityServerFetch<GetSlugPageDataQueryResult>({
       query: getSlugPageDataQuery,
       params: { slug: localizedSlug, locale },
-      tags: [LOCALIZED_SANITY_TAGS.slugPage(locale), slug, localizedSlug],
-      preview: isEnabled,
+      tags: [localizedSlug],
     }),
   );
 };

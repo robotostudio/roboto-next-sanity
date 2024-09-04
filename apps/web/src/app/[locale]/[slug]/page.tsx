@@ -41,18 +41,18 @@ export default async function Page({ params }: PageParams<{ slug: string }>) {
   }
   const { isEnabled } = draftMode();
 
-  if (isEnabled) {
-    return (
-      <LiveQuery
-        enabled
-        initialData={data}
-        query={getSlugPageDataQuery}
-        params={{ slug: getLocalizedSlug(slug, locale), locale }}
-        as={SlugPageClient}
-      >
-        <SlugPage data={data} />
-      </LiveQuery>
-    );
-  }
+  // if (isEnabled) {
+  //   return (
+  //     <LiveQuery
+  //       enabled
+  //       initialData={data}
+  //       query={getSlugPageDataQuery}
+  //       params={{ slug: getLocalizedSlug(slug, locale), locale }}
+  //       as={SlugPageClient}
+  //     >
+  //       <SlugPage data={data} />
+  //     </LiveQuery>
+  //   );
+  // }
   return <SlugPage data={data} />;
 }

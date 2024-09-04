@@ -35,19 +35,19 @@ export default async function Page({ params }: PageParams) {
   if (!data || err) return notFound();
 
   const { isEnabled } = draftMode();
-  if (isEnabled) {
-    return (
-      <LiveQuery
-        enabled
-        initialData={data}
-        query={getMainPageDataQuery}
-        params={{ locale: params.locale }}
-        as={MainPageComponentClient}
-      >
-        <MainPageComponent data={data} />
-      </LiveQuery>
-    );
-  }
+  // if (isEnabled) {
+  //   return (
+  //     <LiveQuery
+  //       enabled
+  //       initialData={data}
+  //       query={getMainPageDataQuery}
+  //       params={{ locale: params.locale }}
+  //       as={MainPageComponentClient}
+  //     >
+  //       <MainPageComponent data={data} />
+  //     </LiveQuery>
+  //   );
+  // }
 
   return <MainPageComponent data={data} />;
 }

@@ -42,21 +42,21 @@ export default async function SlugPage({
   const [data, err] = await getBlogPageData(params.slug, params.locale);
   if (!data || err) return notFound();
   const { isEnabled } = draftMode();
-  if (isEnabled) {
-    return (
-      <LiveQuery
-        enabled
-        initialData={data}
-        query={getBlogPageDataQuery}
-        params={{
-          slug: getLocalizedSlug(params.slug, params.locale, 'blog'),
-          locale: params.locale,
-        }}
-        as={BlogSlugPageClient}
-      >
-        <BlogSlugPage data={data} />
-      </LiveQuery>
-    );
-  }
+  // if (isEnabled) {
+  //   return (
+  //     <LiveQuery
+  //       enabled
+  //       initialData={data}
+  //       query={getBlogPageDataQuery}
+  //       params={{
+  //         slug: getLocalizedSlug(params.slug, params.locale, 'blog'),
+  //         locale: params.locale,
+  //       }}
+  //       as={BlogSlugPageClient}
+  //     >
+  //       <BlogSlugPage data={data} />
+  //     </LiveQuery>
+  //   );
+  // }
   return <BlogSlugPage data={data} />;
 }

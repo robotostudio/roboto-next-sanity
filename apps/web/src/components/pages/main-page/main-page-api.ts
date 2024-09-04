@@ -1,5 +1,4 @@
-import { draftMode } from 'next/headers';
-import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
+import { type Locale, SANITY_TAGS } from '~/config';
 import { handleErrors } from '~/lib/helper';
 import {
   getAllMainPageTranslationsQuery,
@@ -14,13 +13,11 @@ import type {
 } from '~/sanity.types';
 
 export const getMainPageData = async (locale: Locale) => {
-  const { isEnabled } = draftMode();
   return await handleErrors(
     sanityServerFetch<GetMainPageDataQueryResult>({
       query: getMainPageDataQuery,
       params: { locale },
-      preview: isEnabled,
-      tags: [LOCALIZED_SANITY_TAGS.mainPage(locale), SANITY_TAGS.mainPage],
+      tags: ['main-page-api'],
     }),
   );
 };

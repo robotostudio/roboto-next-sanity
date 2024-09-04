@@ -20,7 +20,11 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),
     NEXT_PUBLIC_SITE_URL: z.string().min(1),
-    NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
+    NEXT_PUBLIC_VERCEL_ENV: z
+      .enum(['development', 'preview', 'production'])
+      .default('development'),
+    NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
+    NEXT_PUBLIC_VERCEL_BRANCH_URL: z.string().optional(),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -33,13 +37,17 @@ export const env = createEnv({
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     SANITY_PREVIEW_SECRET: process.env.SANITY_PREVIEW_SECRET,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
+    NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
+    NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL:
+      process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
+    NEXT_PUBLIC_VERCEL_BRANCH_URL: process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL,
   },
 });
 
-export const baseUrl = env.NEXT_PUBLIC_SITE_URL
-  ? env.NEXT_PUBLIC_SITE_URL
-  : env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${env.NEXT_PUBLIC_VERCEL_URL}`
-  : 'http://localhost:3000';
+export const baseUrl =
+  env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+    ? env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+    : env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+    ? `https://${env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
+    : 'http://localhost:3000';

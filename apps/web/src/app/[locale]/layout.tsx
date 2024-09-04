@@ -1,7 +1,8 @@
 import { Loader2 } from 'lucide-react';
 import { NextIntlClientProvider } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import dynamic from 'next/dynamic';
+import { VisualEditing } from 'next-sanity';
+import { revalidateTag } from 'next/cache';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -10,16 +11,11 @@ import { Footer } from '~/components/global/footer';
 import { Navbar } from '~/components/global/navbar';
 import { PreviewBar } from '~/components/global/preview-bar';
 import { locales } from '~/config';
-import { token } from '~/lib/sanity/sanity-server-fetch';
 
 type Props = {
   children: React.ReactNode;
   params: { locale: string };
 };
-
-const PreviewProvider = dynamic(
-  () => import('~/components/global/preview-provider'),
-);
 
 export const metadata = {
   title: {
@@ -39,18 +35,27 @@ export default async function LocaleLayout({
   preconnect('https://cdn.sanity.io');
   prefetchDNS('https://cdn.sanity.io');
 
-  const { isEnabled } = draftMode();
   return (
     <html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale}>
           <Navbar />
-          {isEnabled ? (
-            <PreviewProvider token={token}>{children}</PreviewProvider>
+          {draftMode().isEnabled ? (
+            <>
+              {children}
+              <PreviewBar />
+              <VisualEditing
+                refresh={async (payload) => {
+                  'use server';
+                  if (payload.source === 'manual') return;
+                  const slug = payload?.document?.slug?.current;
+                  if (slug) revalidateTag(slug);
+                }}
+              />
+            </>
           ) : (
             children
           )}
-          {isEnabled && <PreviewBar />}
           <Suspense
             fallback={
               <div className="mx-auto max-w-7xl overflow-hidden bg-primary px-6 py-20 sm:py-24 lg:px-8">
