@@ -648,6 +648,17 @@ export type Page = {
   _rev: string;
   title?: string;
   description?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   slug?: Slug;
   pageBuilder?: PageBuilder;
   language?: string;
@@ -680,6 +691,35 @@ export type Page = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
+  };
+};
+
+export type CustomUrl = {
+  _type: "customUrl";
+  type?: "internal" | "external";
+  openInNewTab?: boolean;
+  external?: string;
+  href?: string;
+  internal?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "page";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "blogIndex";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "blog";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "mainPage";
   };
 };
 
@@ -738,35 +778,6 @@ export type SanityImageMetadata = {
   blurHash?: string;
   hasAlpha?: boolean;
   isOpaque?: boolean;
-};
-
-export type CustomUrl = {
-  _type: "customUrl";
-  type?: "internal" | "external";
-  openInNewTab?: boolean;
-  external?: string;
-  href?: string;
-  internal?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "page";
-  } | {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "blogIndex";
-  } | {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "blog";
-  } | {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "mainPage";
-  };
 };
 
 export type InternationalizedArrayReference = Array<{
@@ -1679,9 +1690,6 @@ export type GetSlugPageDataQueryResult = {
     } | null;
   }> | null;
 } | null;
-// Variable: getMarketingModalDataQuery
-// Query: *[_type == "marketingModal" && isActive][0]{    _id,    title,    description,    defined(form)=>{  form->{    ...,  }}    }
-export type GetMarketingModalDataQueryResult = null;
 // Variable: getOGDataQuery
 // Query: *[_id == $id][0]{    _id,    "title":coalesce(ogTitle,title),    "description":coalesce(ogDescription,description),    "image":coalesce(seoImage,image,*[_type =="logo"][0].image).asset->url}
 export type GetOGDataQueryResult = {
@@ -1704,5 +1712,177 @@ export type GetOGDataQueryResult = {
   title: string | null;
   description: string | null;
   image: string | null;
+} | null;
+// Variable: genericPageQueryOG
+// Query: *[_id == $id && defined(slug.current)][0]{    _id,  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",    "dominantColor":image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",  "logo":*[_type =="logo"][0].image.asset->url,  _type,  "date":coalesce(date,_createdAt)}
+export type GenericPageQueryOGResult = {
+  _id: string;
+  title: null;
+  description: null;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "media.tag";
+  date: null | string;
+} | {
+  _id: string;
+  title: null;
+  description: null;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "translation.metadata";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "assist.instruction.context";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "footer";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "form";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "navbar";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: null;
+  logo: string | null;
+  _type: "logo";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null | string;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "sanity.fileAsset";
+  date: null | string;
+} | {
+  _id: string;
+  title: null | string;
+  description: null | string;
+  image: null;
+  dominantColor: null;
+  seoImage: null;
+  logo: string | null;
+  _type: "sanity.imageAsset";
+  date: null | string;
+} | {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: null;
+  dominantColor: null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "blogIndex";
+  date: null | string;
+} | {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: null;
+  dominantColor: null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "mainPage";
+  date: null | string;
+} | {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "blog";
+  date: null | string;
+} | {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "page";
+  date: null | string;
+} | null;
+// Variable: slugPageQueryOG
+// Query: *[_type == "page" && _id == $id][0]{    _id,  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",    "dominantColor":image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",  "logo":*[_type =="logo"][0].image.asset->url,  _type,  "date":coalesce(date,_createdAt)}
+export type SlugPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "page";
+  date: null | string;
+} | null;
+// Variable: blogPageQueryOG
+// Query: *[_type == "blog" && _id == $id][0]{    _id,  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",    "dominantColor":image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",  "logo":*[_type =="logo"][0].image.asset->url,  _type,  "date":coalesce(date,_createdAt)}
+export type BlogPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "blog";
+  date: null | string;
+} | null;
+// Variable: mainPageQueryOG
+// Query: *[_type == "mainPage"][0]{    _id,  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",    "dominantColor":image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",  "logo":*[_type =="logo"][0].image.asset->url,  _type,  "date":coalesce(date,_createdAt)}
+export type MainPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: null;
+  dominantColor: null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: "mainPage";
+  date: null | string;
 } | null;
 

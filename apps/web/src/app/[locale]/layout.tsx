@@ -7,7 +7,6 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { preconnect, prefetchDNS } from 'react-dom';
 import { Footer } from '~/components/global/footer';
-import { MarketingModalProvider } from '~/components/global/marketing-modal-provider';
 import { Navbar } from '~/components/global/navbar';
 import { PreviewBar } from '~/components/global/preview-bar';
 import { locales } from '~/config';
@@ -64,7 +63,6 @@ export default async function LocaleLayout({
           >
             <Footer />
           </Suspense>
-          <MarketingModalProvider />
         </NextIntlClientProvider>
       </body>
     </html>

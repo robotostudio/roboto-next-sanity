@@ -1,17 +1,16 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { baseUrl, ogImageDimensions, webConfig } from '~/config';
 
 export const getPageUrl = (slug?: string) => `${baseUrl}${slug ?? ''}`;
 
-const getOgImage = (options?: { title?: string; type: string; id: string }) => {
-  const { title, type, id } = options ?? {};
+const getOgImage = (options?: { type: string; id: string }) => {
+  const { type, id } = options ?? {};
 
   const params = new URLSearchParams({});
   if (id) params.set('id', id);
-  if (title) params.set('title', title);
   if (type) params.set('type', type);
 
-  return 'api/og?' + params.toString();
+  return `api/og?${params.toString()}`;
 };
 
 export const getMetaData = (data: any): Metadata => {
@@ -21,13 +20,10 @@ export const getMetaData = (data: any): Metadata => {
     seoImage,
     seoTitle,
     slug,
-    image,
     title,
     description,
-    icon,
     _id,
   } = data;
-  console.log('🚀 ~ getMetaData ~ data:', data);
 
   const meta = {
     seoTitle: seoTitle ?? title ?? '',
@@ -35,7 +31,6 @@ export const getMetaData = (data: any): Metadata => {
   };
 
   const ogImage = getOgImage({
-    title: meta.seoTitle,
     type: _type,
     id: _id,
   });

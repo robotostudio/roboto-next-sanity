@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { ComponentPropsWithoutRef, FC } from 'react';
+import type { ComponentPropsWithoutRef, FC } from 'react';
 import { cn } from '~/lib/utils';
-import { SanityButton, SanityButtons } from '~/types';
-import { Button, ButtonProps } from '../ui/button';
+import type { SanityButton, SanityButtons } from '~/types';
+import { Button, type ButtonProps } from '../ui/button';
 import { SanityIcon } from './sanity-icon';
 
 export type ButtonsProps = {
@@ -26,11 +26,7 @@ const SanityLinkButton: FC<{ button: SanityButton } & ButtonProps> = ({
   return (
     <Link href={url.href} target={url.openInNewTab ? '_blank' : '_self'}>
       <Button {...props} variant={variant}>
-        {icon?.svg && (
-          <span className="grid size-7 place-items-center">
-            <SanityIcon icon={icon} fontSize={16} />
-          </span>
-        )}
+        {icon?.svg && <SanityIcon icon={icon} className="size-7" />}
         {buttonText}
       </Button>
     </Link>

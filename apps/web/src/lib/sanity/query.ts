@@ -14,7 +14,6 @@ export const getAllMainPageTranslationsQuery = groq`
 *[_type == "mainPage"].language
 `;
 
-export type GetAllMainPageTranslationsQueryResponse = string[];
 
 const cardProjection = `
 "title":coalesce(cardTitle,title),
@@ -173,21 +172,46 @@ export const getSlugPageDataQuery = groq`
 }
 `;
 
-export const getMarketingModalDataQuery = groq`
-*[_type == "marketingModal" && isActive][0]{
-    _id,
-    title,
-    description,
-    ${_form}    
-}
-`;
-
 export const getOGDataQuery = groq`
 *[_id == $id][0]{
     _id,
     "title":coalesce(ogTitle,title),
     "description":coalesce(ogDescription,description),
     "image":coalesce(seoImage,image,*[_type =="logo"][0].image).asset->url
+}
+`;
 
+const _ogFields = `
+  _id,
+  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),
+  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),
+  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  
+  "dominantColor":image.asset->metadata.palette.dominant.background,
+  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",
+  "logo":*[_type =="logo"][0].image.asset->url,
+  _type,
+  "date":coalesce(date,_createdAt)
+`;
+
+export const genericPageQueryOG = groq`
+*[_id == $id && defined(slug.current)][0]{
+  ${_ogFields}
+}
+`;
+export const slugPageQueryOG = groq`
+*[_type == "page" && _id == $id][0]{
+  ${_ogFields}
+}
+`;
+
+export const blogPageQueryOG = groq`
+*[_type == "blog" && _id == $id][0]{
+  ${_ogFields}
+}
+`;
+
+export const mainPageQueryOG = groq`
+*[_type == "mainPage"][0]{
+  ${_ogFields}
 }
 `;
