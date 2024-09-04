@@ -1,5 +1,5 @@
 import { draftMode } from 'next/headers';
-import { LOCALIZED_SANITY_TAGS, Locale, SANITY_TAGS } from '~/config';
+import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
 import { getLocalizedSlug, handleErrors } from '~/lib/helper';
 import {
   getAllBlogIndexTranslationsQuery,
@@ -8,7 +8,7 @@ import {
   getBlogPageDataQuery,
 } from '~/lib/sanity/query';
 import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
-import {
+import type {
   GetAllBlogIndexTranslationsQueryResult,
   GetAllBlogsPathsQueryResult,
   GetBlogIndexDataQueryResult,

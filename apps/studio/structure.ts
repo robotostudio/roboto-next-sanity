@@ -6,12 +6,12 @@ import {
   FileText,
   Footprints,
   HomeIcon,
-  LucideIcon,
+  type LucideIcon,
   Menu,
   Settings,
   Split,
 } from 'lucide-react';
-import {
+import type {
   DefaultDocumentNodeResolver,
   Divider,
   ListItem,
@@ -19,7 +19,7 @@ import {
   StructureBuilder,
   StructureResolverContext,
 } from 'sanity/structure';
-import { SchemaType, SingletonType } from './schemaTypes';
+import type { SchemaType, SingletonType } from './schemaTypes';
 import { getTitleCase } from './utils/helper';
 import { PreviewIFrame } from './components/preview';
 
@@ -126,24 +126,19 @@ const createList = ({ S, type, icon, title }: CreateList) => {
     .icon(icon ?? File);
 };
 
-export const structure = (
-  S: StructureBuilder,
-  context: StructureResolverContext,
-) =>
+export const structure = (S: StructureBuilder, context: StructureResolverContext) =>
   S.list()
     .title('Content')
     .items([
       createSingleTon({ S, type: 'mainPage', icon: HomeIcon }),
       S.divider(),
       createList({ S, type: 'page' }),
-      // createList({ S, type: 'faq' }),
       createIndexList({
         S,
         index: { type: 'blogIndex', icon: BookMarked },
         list: { type: 'blog', icon: FileText },
       }),
       createList({ S, type: 'form', icon: ClipboardType }),
-      createList({ S, type: 'marketingModal', icon: ClipboardType }),
       S.divider(),
       createNestedList({
         S,

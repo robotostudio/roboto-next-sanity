@@ -49,7 +49,6 @@ export const blogIndex = defineType({
         isUnique: isUniqueAcrossAllDocuments,
       },
     }),
-    // pageBuilderField,
     languageField,
     ...seoFields,
     ...ogFields,

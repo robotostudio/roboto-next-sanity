@@ -1,10 +1,11 @@
-import { FC } from 'react';
-import { PageComponentProps } from '~/types';
+import type { FC } from 'react';
+import type { PageComponentProps } from '~/types';
 
 import { PageBuilderBlock } from '~/components/global/pagebuilder';
-import { GetMainPageDataQueryResult, PageBuilder } from '~/sanity.types';
+import type { GetMainPageDataQueryResult, PageBuilder } from '~/sanity.types';
 
-export type MainPageComponentProps = PageComponentProps<GetMainPageDataQueryResult>;
+export type MainPageComponentProps =
+  PageComponentProps<GetMainPageDataQueryResult>;
 
 export const MainPageComponent: FC<MainPageComponentProps> = ({ data }) => {
   const { pageBuilder } = data ?? {};

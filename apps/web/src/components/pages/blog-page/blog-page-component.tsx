@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { FC } from 'react';
+import type { FC } from 'react';
 import Balancer from 'react-wrap-balancer';
 import { ArticleRichText } from '~/components/global/richText';
 import { SanityImage } from '~/components/global/sanity-image';
-import {
+import type {
   GetBlogIndexDataQueryResult,
   GetBlogPageDataQueryResult,
 } from '~/sanity.types';
-import { PageComponentProps } from '~/types';
+import type { PageComponentProps } from '~/types';
 
 export type BlogIndexPageProps =
   PageComponentProps<GetBlogIndexDataQueryResult>;

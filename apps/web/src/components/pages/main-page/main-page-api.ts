@@ -1,12 +1,12 @@
 import { draftMode } from 'next/headers';
-import { LOCALIZED_SANITY_TAGS, Locale, SANITY_TAGS } from '~/config';
+import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
 import { handleErrors } from '~/lib/helper';
 import {
   getAllMainPageTranslationsQuery,
   getMainPageDataQuery,
 } from '~/lib/sanity/query';
 import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
-import {
+import type {
   GetAllMainPageTranslationsQueryResult,
   GetMainPageDataQueryResult,
 } from '~/sanity.types';

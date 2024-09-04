@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import LiveQuery from 'next-sanity/preview/live-query';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -11,7 +11,7 @@ import { MainPageComponentClient } from '~/components/pages/main-page/main-page-
 import { getMainPageDataQuery } from '~/lib/sanity/query';
 
 import { getMetaData } from '~/lib/seo';
-import { PageParams } from '~/types';
+import type { PageParams } from '~/types';
 
 export const dynamicParams = false;
 

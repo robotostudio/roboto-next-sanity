@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import LiveQuery from 'next-sanity/preview/live-query';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -9,22 +9,22 @@ import {
   getBlogPageData,
 } from '~/components/pages/blog-page/blog-page-api';
 import { BlogSlugPageClient } from '~/components/pages/blog-page/blog-page-client';
-import { Locale } from '~/config';
+import type { Locale } from '~/config';
 import { getLocalizedSlug } from '~/lib/helper';
 import { getBlogPageDataQuery } from '~/lib/sanity/query';
 import { getMetaData } from '~/lib/seo';
-import { PageParams } from '~/types';
+import type { PageParams } from '~/types';
 
 export const generateStaticParams = async () => {
   const [slugs, err] = await getAllBlogsPaths();
   if (err || !Array.isArray(slugs)) return [];
   const paths: { slug: string; locale: Locale }[] = [];
-  slugs.forEach((page) => {
+  for (const page of slugs) {
     const slug = page?.slug ? cleanBlogSlug(page.slug) : undefined;
     if (slug && page?.locale) {
       paths.push({ slug, locale: page.locale as Locale });
     }
-  });
+  }
   return paths;
 };
 

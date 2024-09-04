@@ -1,13 +1,13 @@
 'use server';
 import { draftMode } from 'next/headers';
-import { LOCALIZED_SANITY_TAGS, Locale, SANITY_TAGS } from '~/config';
+import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
 import { getLocalizedSlug, handleErrors } from '~/lib/helper';
 import {
   getAllSlugPagePathsQuery,
   getSlugPageDataQuery,
 } from '~/lib/sanity/query';
 import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
-import {
+import type {
   GetAllSlugPagePathsQueryResult,
   GetSlugPageDataQueryResult,
 } from '~/sanity.types';
@@ -37,23 +37,16 @@ export const getAllSlugPagePaths = async () => {
     return [];
   }
   const paths: { slug: string; locale: Locale }[] = [];
-  data.forEach((page) => {
+  for (const page of data) {
     if (page?.slug && page?.locale) {
       const slugFragments = page.slug.split('/').filter(Boolean);
-      if (slugFragments.length > 1) {
-        const [, slug] = slugFragments;
-        paths.push({
-          locale: page.locale as Locale,
-          slug,
-        });
-      } else {
-        const [slug] = slugFragments;
-        paths.push({
-          locale: page.locale as Locale,
-          slug,
-        });
-      }
+      const slug =
+        slugFragments.length > 1 ? slugFragments[1] : slugFragments[0];
+      paths.push({
+        locale: page.locale as Locale,
+        slug,
+      });
     }
-  });
+  }
   return paths;
 };

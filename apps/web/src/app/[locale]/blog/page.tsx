@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { BlogIndexPage } from '~/components/pages/blog-page';
 import {
@@ -6,7 +6,7 @@ import {
   getBlogIndexData,
 } from '~/components/pages/blog-page/blog-page-api';
 import { getMetaData } from '~/lib/seo';
-import { PageParams } from '~/types';
+import type { PageParams } from '~/types';
 
 export const generateStaticParams = async () => {
   const [slugs, err] = await getAllBlogIndexTranslations();

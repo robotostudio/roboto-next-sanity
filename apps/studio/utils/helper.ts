@@ -1,4 +1,4 @@
-import {
+import type {
   CustomValidator,
   PortableTextBlock,
   PreviewConfig,
@@ -41,7 +41,8 @@ export const isUniqueAcrossAllDocuments: SlugIsUniqueValidator = async (
     published: id,
     slug,
   };
-  const query = `!defined(*[!(_id in [$draft, $published]) && slug.current == $slug][0]._id)`;
+  const query =
+    '!defined(*[!(_id in [$draft, $published]) && slug.current == $slug][0]._id)';
   const result = await client.fetch<boolean>(query, params);
   return result;
 };
@@ -66,19 +67,16 @@ export const getDocTypePrefix = (type: string) => {
 export const serializeSlug = (input: string, language = 'en-GB', type = '') => {
   const locale = processLanguage(language);
   const prefix = getDocTypePrefix(type);
-  console.log('lo', { input, language, type, prefix, locale });
-  const slug =
-    '/' +
-    [
-      locale,
-      prefix,
-      slugify(input, {
-        lower: true,
-        remove: /[^a-zA-Z0-9 ]/g,
-      }),
-    ]
-      .filter(Boolean)
-      .join('/');
+  const slugParts = [
+    locale,
+    prefix,
+    slugify(input, {
+      lower: true,
+      remove: /[^a-zA-Z0-9 ]/g,
+    }),
+  ];
+
+  const slug = `/${slugParts.filter(Boolean).join('/')}`;
 
   return slug;
 };
@@ -105,7 +103,7 @@ export const validateSlugIndexPages: CustomValidator<Slug | undefined> = (
   slug: Slug | undefined,
   context: ValidationContext,
 ): string | true => {
-  let language: string = '';
+  let language = '';
   if (context.document != null && context.document.language != null) {
     language = context.document?.language as string;
   }
@@ -118,7 +116,7 @@ export const validateSlugIndexPages: CustomValidator<Slug | undefined> = (
     getDocTypePrefix(context.document?._type),
     language,
   );
-  if (slug?.current != slugValue) {
+  if (slug?.current !== slugValue) {
     return `only ${slugValue} is allowed`;
   }
   return true;
@@ -180,4 +178,3 @@ export const isValidUrl = (url: string) => {
     return isRelativeUrl(url);
   }
 };
-
