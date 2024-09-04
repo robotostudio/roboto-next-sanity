@@ -9,11 +9,11 @@ const getOgImage = (options?: { type: string; id: string }) => {
   const params = new URLSearchParams({});
   if (id) params.set('id', id);
   if (type) params.set('type', type);
-
   return `api/og?${params.toString()}`;
 };
 
-export const getMetaData = (data: any): Metadata => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getMetaData = (data: Record<string, any>): Metadata => {
   const {
     _type,
     seoDescription,
