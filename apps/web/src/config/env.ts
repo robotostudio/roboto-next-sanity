@@ -41,6 +41,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
     NEXT_PUBLIC_VERCEL_BRANCH_URL: process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL,
   },
+  skipValidation: true,
 });
 
 const getBaseUrl = (): string => {
