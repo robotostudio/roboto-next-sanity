@@ -51,4 +51,3 @@ export const customSlugField = ({ name, ...props }: Props) =>
     },
     ...props,
   });
-

@@ -14,5 +14,3 @@ export const documents = [page, blog, form, ...singletons];
 export const internationalizedDocuments = [page, blog, mainPage, blogIndex].map(
   ({ name }) => name,
 );
-
-

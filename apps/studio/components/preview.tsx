@@ -7,18 +7,13 @@ import {
   Text,
   ThemeProvider,
 } from '@sanity/ui';
-import { ComponentProps, useRef, useState } from 'react';
+import { type ComponentProps, useRef, useState } from 'react';
 import { AiOutlineReload } from 'react-icons/ai';
 import { BiLinkExternal } from 'react-icons/bi';
-import { UserViewComponent } from 'sanity/structure';
+import type { UserViewComponent } from 'sanity/structure';
 import { usePreviewIframe } from '../hooks/usePreviewIframe';
 
-
-
-
-export function PreviewIFrame(
-  props: ComponentProps<UserViewComponent>,
-): JSX.Element {
+export function PreviewIFrame(props: ComponentProps<UserViewComponent>): JSX.Element {
   const { document, options, documentId, schemaType } = props;
   const [id, setId] = useState(1);
   const iframe = useRef<HTMLIFrameElement>(null);

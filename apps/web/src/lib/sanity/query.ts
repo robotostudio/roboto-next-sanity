@@ -14,7 +14,6 @@ export const getAllMainPageTranslationsQuery = groq`
 *[_type == "mainPage"].language
 `;
 
-
 const cardProjection = `
 "title":coalesce(cardTitle,title),
 "description":coalesce(cardDescription,description),

@@ -8,7 +8,6 @@ export const locales = ['en-GB', 'fr', 'de'] as const;
 export const DEFAULT_LOCALE = 'en-GB';
 export type Locale = (typeof locales)[number];
 
-
 export const SANITY_TAGS = {
   mainPage: 'main-page',
   blogPage: 'blog-page',
@@ -26,8 +25,6 @@ export const LOCALIZED_SANITY_TAGS = {
   blogIndex: (locale: Locale) => `${SANITY_TAGS.blogIndex}-${locale}`,
   slugPage: (locale: Locale) => `${SANITY_TAGS.slugPage}-${locale}`,
 } as const;
-
-
 
 type GetSanityTag = {
   type: string;

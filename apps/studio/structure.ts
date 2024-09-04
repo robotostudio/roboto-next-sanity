@@ -126,7 +126,10 @@ const createList = ({ S, type, icon, title }: CreateList) => {
     .icon(icon ?? File);
 };
 
-export const structure = (S: StructureBuilder, context: StructureResolverContext) =>
+export const structure = (
+  S: StructureBuilder,
+  context: StructureResolverContext,
+) =>
   S.list()
     .title('Content')
     .items([
