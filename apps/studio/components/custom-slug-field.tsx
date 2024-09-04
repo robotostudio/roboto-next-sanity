@@ -1,8 +1,8 @@
 import { Button, Grid, Stack } from '@sanity/ui';
-import { FC } from 'react';
+import type { FC } from 'react';
 import slugify from 'slugify';
 
-import { Path, StringInputProps, set, useFormValue } from 'sanity';
+import { type Path, type StringInputProps, set, useFormValue } from 'sanity';
 
 const getPath = (path: Path) => {
   const _ = path.slice(0, -1);

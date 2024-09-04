@@ -4,12 +4,16 @@ on:
     branches: [main]
     paths:
       - "apps/studio/**"
+
+  workflow_dispatch:
+
 jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
     env:
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_DEPLOY_TOKEN }}
+      NODE_OPTIONS: "--max_old_space_size=4096"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -23,9 +27,7 @@ jobs:
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
-      - name: Change Directory To Studio
-        run: cd ./apps/studio
       - name: Install dependencies
         run: npm install
       - name: Deploy Studio
-        run: npm run deploy
+        run: cd ./apps/studio && npm run deploy

@@ -61,7 +61,7 @@ export function PreviewIFrame(props: ComponentProps<UserViewComponent>): JSX.Ele
 
   return (
     <ThemeProvider>
-      <Flex direction="column" style={{ height: `100%` }}>
+      <Flex direction="column" style={{ height: '100%' }}>
         <Card padding={2} borderBottom>
           <Flex align="center" gap={2}>
             <Box flex={1}>
@@ -91,13 +91,13 @@ export function PreviewIFrame(props: ComponentProps<UserViewComponent>): JSX.Ele
             </Flex>
           </Flex>
         </Card>
-        <Card tone="transparent" padding={0} style={{ height: `100%` }}>
-          <Flex align="center" justify="center" style={{ height: `100%` }}>
+        <Card tone="transparent" padding={0} style={{ height: '100%' }}>
+          <Flex align="center" justify="center" style={{ height: '100%' }}>
             <iframe
               key={id}
               ref={iframe}
               title="preview"
-              style={{ width: '100%', height: `100%`, maxHeight: `100%` }}
+              style={{ width: '100%', height: '100%', maxHeight: '100%' }}
               src={previewUrl}
               referrerPolicy="origin-when-cross-origin"
               frameBorder={0}
