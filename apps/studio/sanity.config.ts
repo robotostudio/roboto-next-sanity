@@ -38,8 +38,12 @@ export default defineConfig({
     presentationTool({
       resolve: resolve,
       previewUrl: {
+        origin:
+          window.location.hostname === 'localhost'
+            ? 'http://localhost:3000'
+            : 'https://roboto-next-sanity-template.vercel.app',
         previewMode: {
-          enable: 'http://localhost:3000/api/presentation-draft',
+          enable: '/api/presentation-draft',
         },
       },
     }),
