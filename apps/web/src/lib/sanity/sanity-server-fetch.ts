@@ -5,9 +5,6 @@ import { draftMode } from 'next/headers';
 
 const token = process.env.SANITY_API_READ_TOKEN;
 
-console.log('🚀 ~ token:', process.env);
-
-
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
