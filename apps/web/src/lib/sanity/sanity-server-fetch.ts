@@ -2,7 +2,11 @@
 import 'server-only';
 import { type QueryOptions, type QueryParams, createClient } from 'next-sanity';
 import { draftMode } from 'next/headers';
-import { token } from './token';
+
+const token = process.env.SANITY_API_READ_TOKEN;
+
+console.log('🚀 ~ token:', process.env);
+
 
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
