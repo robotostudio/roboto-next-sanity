@@ -28,4 +28,11 @@ export const urlFor = (source: SanityImageSource) =>
 export const client = createClient({
   ...sanityConfig,
   perspective: 'published',
+  stega: {
+    enabled: process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview',
+    studioUrl:
+      process.env.NODE_ENV === 'production'
+        ? 'https://template-roboto.sanity.studio'
+        : 'http://localhost:3333',
+  },
 });

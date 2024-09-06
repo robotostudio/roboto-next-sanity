@@ -41,7 +41,7 @@ export default defineConfig({
         origin:
           window.location.hostname === 'localhost'
             ? 'http://localhost:3000'
-            : 'https://roboto-next-sanity-template.vercel.app',
+            : 'https://roboto-next-sanity-web-sbe4.vercel.app',
         previewMode: {
           enable: '/api/presentation-draft',
         },
