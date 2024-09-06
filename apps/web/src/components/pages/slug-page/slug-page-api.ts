@@ -1,6 +1,7 @@
 'use server';
 import { type Locale, SANITY_TAGS } from '~/config';
 import { getLocalizedSlug, handleErrors } from '~/lib/helper';
+import { client } from '~/lib/sanity';
 import {
   genericPageQueryOG,
   getAllSlugPagePathsQuery,
@@ -17,7 +18,6 @@ import type {
 
 export const getSlugPageData = async (slug: string, locale: Locale) => {
   const localizedSlug = getLocalizedSlug(slug, locale);
-  console.log('🚀 ~ getSlugPageData ~ localizedSlug:', localizedSlug);
   return await handleErrors(
     sanityServerFetch<GetSlugPageDataQueryResult>({
       query: getSlugPageDataQuery,
@@ -29,10 +29,7 @@ export const getSlugPageData = async (slug: string, locale: Locale) => {
 
 export const getAllSlugPagePaths = async () => {
   const [data, err] = await handleErrors(
-    sanityServerFetch<GetAllSlugPagePathsQueryResult>({
-      query: getAllSlugPagePathsQuery,
-      tags: [SANITY_TAGS.slugPage],
-    }),
+    client.fetch<GetAllSlugPagePathsQueryResult>(getAllSlugPagePathsQuery),
   );
   if (!data || err) {
     return [];

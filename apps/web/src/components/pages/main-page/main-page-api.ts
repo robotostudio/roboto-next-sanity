@@ -1,5 +1,6 @@
-import { type Locale, SANITY_TAGS } from '~/config';
+import type { Locale } from '~/config';
 import { handleErrors } from '~/lib/helper';
+import { client } from '~/lib/sanity';
 import {
   getAllMainPageTranslationsQuery,
   getMainPageDataQuery,
@@ -24,10 +25,9 @@ export const getMainPageData = async (locale: Locale) => {
 
 export const getAllMainPageTranslations = async () => {
   return await handleErrors(
-    sanityServerFetch<GetAllMainPageTranslationsQueryResult>({
-      query: getAllMainPageTranslationsQuery,
-      tags: [SANITY_TAGS.mainPage],
-    }),
+    client.fetch<GetAllMainPageTranslationsQueryResult>(
+      getAllMainPageTranslationsQuery,
+    ),
   );
 };
 

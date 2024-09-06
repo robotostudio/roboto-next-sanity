@@ -1,17 +1,24 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getSlugPageData } from '~/components/pages/slug-page/slug-page-api';
+import {
+  getAllSlugPagePaths,
+  getSlugPageData,
+} from '~/components/pages/slug-page/slug-page-api';
 import { SlugPage } from '~/components/pages/slug-page/slug-page-component';
+import { getMetaData } from '~/lib/seo';
 import type { PageParams } from '~/types';
 
 export const generateStaticParams = async () => {
-  return [];
+  const slugs = await getAllSlugPagePaths();
+  return slugs;
 };
 
 export const generateMetadata = async ({
   params,
 }: PageParams<{ slug: string }>): Promise<Metadata> => {
-  return {};
+  const [data, err] = await getSlugPageData(params.slug, params.locale);
+  if (err || !data) return {};
+  return getMetaData(data);
 };
 
 export default async function Page({ params }: PageParams<{ slug: string }>) {

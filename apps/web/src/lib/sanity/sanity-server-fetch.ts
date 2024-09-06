@@ -5,7 +5,6 @@ import { draftMode } from 'next/headers';
 
 const token = process.env.SANITY_API_READ_TOKEN;
 
-console.log('🚀 ~ token:', process.env);
 
 
 const client = createClient({
