@@ -1,5 +1,3 @@
-// ./src/app/api/draft-mode/enable/route.ts
-
 import { validatePreviewUrl } from '@sanity/preview-url-secret';
 import { draftMode } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
@@ -7,7 +5,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { client } from '~/lib/sanity/client';
 
 const clientWithToken = client.withConfig({
-  token: process.env.SANITY_API_READ_TOKEN,
+  token: process.env.SANITY_API_TOKEN,
 });
 
 export async function GET(request: NextRequest) {

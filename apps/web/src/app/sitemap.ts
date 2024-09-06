@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { baseUrl } from '~/config';
 import { handleErrors } from '~/lib/helper';
+import { client } from '~/lib/sanity';
 import { sitemapQuery } from '~/lib/sanity/query';
-import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
 
 import type { SitemapProjection } from '~/types';
 
@@ -10,8 +10,6 @@ type SiteMap = Pick<
   MetadataRoute.Sitemap[number],
   'changeFrequency' | 'priority'
 >;
-
-
 
 const formatToSitemap = (
   data: SitemapProjection[],
@@ -26,11 +24,8 @@ const formatToSitemap = (
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [slugPages] = await handleErrors(
-    sanityServerFetch<SitemapProjection[]>({
-      query: sitemapQuery,
-      params: {
-        types: ['page', 'mainPage', 'blog', 'blogIndex'],
-      },
+    client.fetch<SitemapProjection[]>(sitemapQuery, {
+      types: ['page', 'mainPage', 'blog', 'blogIndex'],
     }),
   );
   if (!slugPages) {
