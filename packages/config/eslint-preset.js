@@ -8,21 +8,11 @@ module.exports = {
   ],
   plugins: ["@typescript-eslint"],
   parser: "@typescript-eslint/parser",
-  ignorePatterns: ["next.config.js"],
+  ignorePatterns: ["next.config.mjs"],
   rules: {
     "@next/next/no-html-link-for-pages": "off",
     "react/jsx-key": "off",
     "no-explicit-any": "off",
-    "no-console": ["warn", { allow: ["warn", "error", "info"] }],
-    // "sort-imports": [
-    //   "error",
-    //   {
-    //     ignoreCase: false,
-    //     ignoreDeclarationSort: false,
-    //     ignoreMemberSort: false,
-    //     memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
-    //     allowSeparatedGroups: false,
-    //   },
-    // ],
+    "no-console": "off",
   },
 };

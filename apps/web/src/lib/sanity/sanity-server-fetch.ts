@@ -2,10 +2,7 @@
 import 'server-only';
 import { type QueryOptions, type QueryParams, createClient } from 'next-sanity';
 import { draftMode } from 'next/headers';
-
-const token = process.env.SANITY_API_READ_TOKEN;
-
-
+import { serverEnv } from '~/config/server-env';
 
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -32,13 +29,14 @@ export async function sanityServerFetch<QueryResponse>({
   revalidate?: number | false;
 }) {
   const isDraftMode = draftMode().isEnabled;
-  if (isDraftMode && !token) {
+  if (isDraftMode && !serverEnv.SANITY_API_READ_TOKEN) {
     throw new Error('Missing environment variable SANITY_API_READ_TOKEN');
   }
+
   return client.fetch<QueryResponse>(query, params, {
     ...(isDraftMode
       ? ({
-          token: token,
+          token: serverEnv.SANITY_API_READ_TOKEN,
           perspective: 'previewDrafts',
           stega: true,
         } satisfies QueryOptions)

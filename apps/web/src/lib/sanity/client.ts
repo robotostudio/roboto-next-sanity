@@ -1,21 +1,16 @@
 import type { SanityImageSource } from '@sanity/asset-utils';
 import createImageUrlBuilder from '@sanity/image-url';
 import { createClient } from 'next-sanity';
+import { isProd } from '~/config';
+import { clientEnv } from '~/config/client-env';
 
 export const sanityConfig = {
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID as string,
-  apiVersion: '2021-06-09',
-  useCdn: process.env.NODE_ENV === 'production',
+  dataset: clientEnv.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: clientEnv.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  apiVersion: '2022-11-15',
+  useCdn: isProd,
 };
 
-
-export const scriptClient = createClient({
-  ...sanityConfig,
-  token: process.env.SANITY_API_TOKEN,
-  useCdn: false,
-  perspective: 'published',
-});
 
 const imageBuilder = createImageUrlBuilder({
   projectId: sanityConfig.projectId,

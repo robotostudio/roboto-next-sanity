@@ -144,7 +144,6 @@ export const PortableRichTextNative: FC<PortableRichTextProps> = ({
   return (
     <div className={className}>
       {' '}
-      {/* Wrapped PortableText in a div with className */}
       <PortableText
         onMissingComponent={(...args) => {
           console.log('missing components', args);
