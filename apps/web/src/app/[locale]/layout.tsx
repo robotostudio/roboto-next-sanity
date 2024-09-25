@@ -1,11 +1,9 @@
-import { Loader2 } from 'lucide-react';
 import { NextIntlClientProvider } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import { VisualEditing } from 'next-sanity';
 import { revalidateTag } from 'next/cache';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 import { preconnect, prefetchDNS } from 'react-dom';
 import { Footer } from '~/components/global/footer';
 import { Navbar } from '~/components/global/navbar';
@@ -48,26 +46,24 @@ export default async function LocaleLayout({
                 refresh={async (payload) => {
                   'use server';
                   if (payload.source === 'manual') return;
-                  const slug = payload?.document?.slug?.current;
-                  if (slug) revalidateTag(slug);
+                  const tags = [
+                    payload?.document?.slug?.current,
+                    payload?.document?._id?.startsWith('drafts.')
+                      ? payload?.document?._id.slice(7)
+                      : payload?.document?._id,
+                    payload?.document?._type,
+                  ];
+                  console.log('🚀 ~ refresh tags:', tags);
+                  for (const tag of tags) {
+                    if (tag) revalidateTag(tag);
+                  }
                 }}
               />
             </>
           ) : (
             children
           )}
-          <Suspense
-            fallback={
-              <div className="mx-auto max-w-7xl overflow-hidden bg-primary px-6 py-20 sm:py-24 lg:px-8">
-                <div className="flex h-full w-full items-center justify-center gap-2  text-slate-200">
-                  <Loader2 className="animate-spin " />
-                  Loading footer
-                </div>
-              </div>
-            }
-          >
-            <Footer />
-          </Suspense>
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
