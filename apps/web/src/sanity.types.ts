@@ -893,6 +893,16 @@ export type SanityAssistSchemaTypeAnnotations = {
   >;
 };
 
+export type SanityAssistOutputType = {
+  _type: 'sanity.assist.output.type';
+  type?: string;
+};
+
+export type SanityAssistOutputField = {
+  _type: 'sanity.assist.output.field';
+  path?: string;
+};
+
 export type SanityAssistInstructionContext = {
   _type: 'sanity.assist.instruction.context';
   reference?: {
@@ -971,16 +981,12 @@ export type SanityAssistInstruction = {
   userId?: string;
   createdById?: string;
   output?: Array<
-    | {
-        path?: string;
-        _type: 'sanity.assist.output.field';
+    | ({
         _key: string;
-      }
-    | {
-        type?: string;
-        _type: 'sanity.assist.output.type';
+      } & SanityAssistOutputField)
+    | ({
         _key: string;
-      }
+      } & SanityAssistOutputType)
   >;
 };
 
@@ -993,68 +999,60 @@ export type SanityAssistSchemaTypeField = {
     } & SanityAssistInstruction
   >;
 };
+
+export type AllSanitySchemaTypes =
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityFileAsset
+  | Geopoint
+  | CarouselField
+  | DynamicIntro
+  | ImageCarousel
+  | SplitForm
+  | Cta
+  | Hero
+  | FormFields
+  | FormField
+  | RichText
+  | NavDropdownColumn
+  | NavLinkColumn
+  | Button
+  | NavLink
+  | PageBuilder
+  | Footer
+  | Logo
+  | Navbar
+  | Form
+  | TranslationMetadata
+  | InternationalizedArrayReferenceValue
+  | BlogIndex
+  | MainPage
+  | Blog
+  | Page
+  | CustomUrl
+  | SanityImageCrop
+  | SanityImageHotspot
+  | SanityImageAsset
+  | SanityAssetSourceData
+  | SanityImageMetadata
+  | InternationalizedArrayReference
+  | IconPicker
+  | MediaTag
+  | Slug
+  | SanityAssistInstructionTask
+  | SanityAssistTaskStatus
+  | SanityAssistSchemaTypeAnnotations
+  | SanityAssistOutputType
+  | SanityAssistOutputField
+  | SanityAssistInstructionContext
+  | AssistInstructionContext
+  | SanityAssistInstructionUserInput
+  | SanityAssistInstructionPrompt
+  | SanityAssistInstructionFieldRef
+  | SanityAssistInstruction
+  | SanityAssistSchemaTypeField;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-
-// Source: ../web/src/app/sitemap.ts
-// Variable: sitemapQuery
-// Query: *[_type in $types && defined(slug.current) && seoNoIndex != true ]{  "slug":slug.current,  _updatedAt,  _type,  _id}
-export type SitemapQueryResult = Array<
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'assist.instruction.context';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'footer';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'form';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'logo';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'media.tag';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'navbar';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'sanity.fileAsset';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'sanity.imageAsset';
-      _id: string;
-    }
-  | {
-      slug: null;
-      _updatedAt: string;
-      _type: 'translation.metadata';
-      _id: string;
-    }
->;
-
 // Source: ../web/src/lib/sanity/query.ts
 // Variable: getAllSlugPagePathsQuery
 // Query: *[_type == "page" && defined(slug.current) && !seoNoIndex]{  "slug":slug.current,  "locale":language}
@@ -1138,92 +1136,485 @@ export type GetAllBlogsPathsQueryResult = Array<{
 }>;
 // Variable: getFooterDataQuery
 // Query: *[_type == "footer"][0]{    _id,    title,    defined(links)=>{  links[]{    ...,    title,    _type,    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }},    defined(columns)=>{  columns[]{    ...,    title,    description,    defined(icon)=>{  icon{    svg  }},    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }}  }}  }},    "logo":*[_type == "logo"][0].image.asset->url}
-export type GetFooterDataQueryResult = {
-  _id: string;
-  title: string | null;
-  links: Array<{
-    _key: string;
-    title: string | null;
-    _type: 'navLink';
-    url: {
-      openInNewTab: boolean | null;
-      href: string | null;
-    } | null;
-    columns: null;
-  }> | null;
-  logo: string | null;
-} | null;
+export type GetFooterDataQueryResult =
+  | {
+      _id: string;
+      title: string | null;
+      links: Array<
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url?: CustomUrl;
+            columns: null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+            columns: null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+      > | null;
+      logo: string | null;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      logo: string | null;
+    }
+  | null;
 // Variable: getNavbarDataQuery
 // Query: *[_type == "navbar"][0]{    _id,    title,    defined(links)=>{  links[]{    ...,    title,    _type,    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }},    defined(columns)=>{  columns[]{    ...,    title,    description,    defined(icon)=>{  icon{    svg  }},    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }}  }}  }},    defined(buttons)=>{  buttons[]{    ...,    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }},    defined(icon)=>{  icon{    svg  }}  }},    "logo":*[_type == "logo"][0].image.asset->url  }
-export type GetNavbarDataQueryResult = {
-  _id: string;
-  title: string | null;
-  links: Array<
-    | {
-        _key: string;
-        title: string | null;
-        _type: 'navDropdownColumn';
-        url: null;
-        columns: Array<{
-          _key: string;
-          title: string | null;
-          description: string | null;
-          icon: {
-            svg: string | null;
-          } | null;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-        }> | null;
-      }
-    | {
-        _key: string;
-        title: string | null;
-        _type: 'navLink';
-        url: {
-          openInNewTab: boolean | null;
-          href: string | null;
-        } | null;
-        columns: null;
-      }
-  > | null;
-  buttons: Array<{
-    _key: string;
-    url: {
-      openInNewTab: boolean | null;
-      href: string | null;
-    } | null;
-    icon: {
-      svg: string | null;
-    } | null;
-  }> | null;
-  logo: string | null;
-} | null;
+export type GetNavbarDataQueryResult =
+  | {
+      _id: string;
+      title: string | null;
+      links: Array<
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns?: Array<
+              {
+                _key: string;
+              } & NavLinkColumn
+            >;
+            url: null;
+          }
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns?: Array<
+              {
+                _key: string;
+              } & NavLinkColumn
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns: Array<
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            url: null;
+          }
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns: Array<
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url?: CustomUrl;
+            columns: null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+            columns: null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+      > | null;
+      buttons: Array<
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon?: IconPicker;
+            buttonText?: string;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon?: IconPicker;
+            buttonText?: string;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon: {
+              svg: string | null;
+            } | null;
+            buttonText?: string;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon: {
+              svg: string | null;
+            } | null;
+            buttonText?: string;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+      > | null;
+      logo: string | null;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      buttons: Array<
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon?: IconPicker;
+            buttonText?: string;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon?: IconPicker;
+            buttonText?: string;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon: {
+              svg: string | null;
+            } | null;
+            buttonText?: string;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'button';
+            variant?: 'default' | 'link' | 'outline' | 'secondary';
+            icon: {
+              svg: string | null;
+            } | null;
+            buttonText?: string;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+      > | null;
+      logo: string | null;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      links: Array<
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns?: Array<
+              {
+                _key: string;
+              } & NavLinkColumn
+            >;
+            url: null;
+          }
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns?: Array<
+              {
+                _key: string;
+              } & NavLinkColumn
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns: Array<
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            url: null;
+          }
+        | {
+            _key: string;
+            _type: 'navDropdownColumn';
+            title: string | null;
+            columns: Array<
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon?: IconPicker;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'navLinkColumn';
+                  title: string | null;
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  description: string | null;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url?: CustomUrl;
+            columns: null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+            columns: null;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url?: CustomUrl;
+          }
+        | {
+            _key: string;
+            _type: 'navLink';
+            title: string | null;
+            url: {
+              openInNewTab: boolean | null;
+              href: string | '#' | null;
+            } | null;
+          }
+      > | null;
+      logo: string | null;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      logo: string | null;
+    }
+  | null;
 // Variable: getBlogPageDataQuery
 // Query: *[_type == "blog" && slug.current == $slug && select(($locale == 'en-GB' || $locale == '' ) =>   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{    ...,    defined(richText)=>{  richText[]{    ...,     defined(markDefs)=>{  markDefs[]{    ...,    defined(customLink)=>{  customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }}     }}     }}  }
-export type GetBlogPageDataQueryResult = {
-  _id: string;
-  _type: 'blog';
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  description?: string;
-  slug?: Slug;
-  image?: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
-  richText: Array<
-    | {
+export type GetBlogPageDataQueryResult =
+  | {
+      _id: string;
+      _type: 'blog';
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      description?: string;
+      slug?: Slug;
+      image?: {
         asset?: {
           _ref: string;
           _type: 'reference';
@@ -1232,87 +1623,3362 @@ export type GetBlogPageDataQueryResult = {
         };
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
-        caption?: string;
-        alt?: string;
         _type: 'image';
-        markDefs: null;
-      }
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: 'span';
-          _key: string;
-        }>;
-        style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-        listItem?: 'bullet' | 'check' | 'number';
-        markDefs: Array<{
-          customLink: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          _type: 'customLink';
-        }> | null;
-        level?: number;
-        _type: 'block';
-      }
-  > | null;
-  language?: string;
-  pageBuilder?: PageBuilder;
-  seoTitle?: string;
-  seoDescription?: string;
-  seoImage?: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
-  seoNoIndex?: boolean;
-  seoHideFromLists?: boolean;
-  ogTitle?: string;
-  ogDescription?: string;
-  cardTitle?: string;
-  cardDescription?: string;
-  cardImage?: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
-} | null;
+      };
+      richText?: RichText;
+      language?: string;
+      pageBuilder?: PageBuilder;
+      seoTitle?: string;
+      seoDescription?: string;
+      seoImage?: {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+      seoNoIndex?: boolean;
+      seoHideFromLists?: boolean;
+      ogTitle?: string;
+      ogDescription?: string;
+      cardTitle?: string;
+      cardDescription?: string;
+      cardImage?: {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+    }
+  | {
+      _id: string;
+      _type: 'blog';
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      description?: string;
+      slug?: Slug;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+      richText: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: 'span';
+              _key: string;
+            }>;
+            style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+            listItem?: 'bullet' | 'check' | 'number';
+            markDefs?: Array<{
+              customLink?: CustomUrl;
+              _type: 'customLink';
+              _key: string;
+            }>;
+            level?: number;
+            _type: 'block';
+            _key: string;
+          }
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: 'span';
+              _key: string;
+            }>;
+            style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+            listItem?: 'bullet' | 'check' | 'number';
+            markDefs: Array<
+              | {
+                  customLink?: CustomUrl;
+                  _type: 'customLink';
+                  _key: string;
+                }
+              | {
+                  customLink: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                  _type: 'customLink';
+                  _key: string;
+                }
+            > | null;
+            level?: number;
+            _type: 'block';
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            caption?: string;
+            alt?: string;
+            _type: 'image';
+            _key: string;
+            markDefs: null;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            caption?: string;
+            alt?: string;
+            _type: 'image';
+            _key: string;
+          }
+      > | null;
+      language?: string;
+      pageBuilder?: PageBuilder;
+      seoTitle?: string;
+      seoDescription?: string;
+      seoImage?: {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+      seoNoIndex?: boolean;
+      seoHideFromLists?: boolean;
+      ogTitle?: string;
+      ogDescription?: string;
+      cardTitle?: string;
+      cardDescription?: string;
+      cardImage?: {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+    }
+  | null;
 // Variable: getMainPageDataQuery
 // Query: *[_type == "mainPage" && select(($locale == 'en-GB' || $locale == '' ) =>   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{  _id,  _type,  title,  description,  defined(pageBuilder)=>{  pageBuilder[]{    ...,    _type,    defined(buttons)=>{  buttons[]{    ...,    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }},    defined(icon)=>{  icon{    svg  }}  }},    defined(richText)=>{  richText[]{    ...,     defined(markDefs)=>{  markDefs[]{    ...,    defined(customLink)=>{  customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }}     }}     }},    defined(form)=>{  form->{    ...,  }}  }}}
-export type GetMainPageDataQueryResult = {
-  _id: string;
-  _type: 'mainPage';
-  title: string | null;
-  description: string | null;
-  pageBuilder: Array<
-    | {
-        _key: string;
-        _type: 'cta';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+export type GetMainPageDataQueryResult =
+  | {
+      _id: string;
+      _type: 'mainPage';
+      title: string | null;
+      description: string | null;
+      pageBuilder: Array<
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1321,48 +4987,112 @@ export type GetMainPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'dynamicIntro';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1371,48 +5101,73 @@ export type GetMainPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'hero';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1421,48 +5176,123 @@ export type GetMainPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'imageCarousel';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1471,39 +5301,62 @@ export type GetMainPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'splitForm';
-        buttons: null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1512,75 +5365,3519 @@ export type GetMainPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: {
-          _id: string;
-          _type: 'form';
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          label?: string;
-          title?: string;
-          formId?: string;
-          language?: string;
-          fields?: Array<
-            {
-              _key: string;
-            } & FormField
-          >;
-          buttonText?: string;
-        } | null;
-      }
-  > | null;
-} | null;
+            };
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: 'image';
+            };
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: 'image';
+            };
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: 'image';
+            };
+          }
+      > | null;
+    }
+  | {
+      _id: string;
+      _type: 'mainPage';
+      title: string | null;
+      description: string | null;
+    }
+  | null;
 // Variable: getSlugPageDataQuery
 // Query: *[_type == "page" && slug.current == $slug ][0]{    _id,    _type,    title,    content,    "slug":slug.current,    defined(pageBuilder)=>{  pageBuilder[]{    ...,    _type,    defined(buttons)=>{  buttons[]{    ...,    defined(url)=>{  url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }},    defined(icon)=>{  icon{    svg  }}  }},    defined(richText)=>{  richText[]{    ...,     defined(markDefs)=>{  markDefs[]{    ...,    defined(customLink)=>{  customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }}     }}     }},    defined(form)=>{  form->{    ...,  }}  }}    }
-export type GetSlugPageDataQueryResult = {
-  _id: string;
-  _type: 'page';
-  title: string | null;
-  content: null;
-  slug: string | null;
-  pageBuilder: Array<
-    | {
-        _key: string;
-        _type: 'cta';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+export type GetSlugPageDataQueryResult =
+  | {
+      _id: string;
+      _type: 'page';
+      title: string | null;
+      content: null;
+      slug: string | null;
+      pageBuilder: Array<
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'cta';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'dynamicIntro';
+            eyebrow?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'hero';
+            title?: string;
+            isTitleH1?: boolean;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons?: Array<
+              {
+                _key: string;
+              } & Button
+            >;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+            form: null;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'imageCarousel';
+            eyebrow?: string;
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            buttons: Array<
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon?: IconPicker;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url?: CustomUrl;
+                }
+              | {
+                  _key: string;
+                  _type: 'button';
+                  variant?: 'default' | 'link' | 'outline' | 'secondary';
+                  icon: {
+                    svg: string | null;
+                  } | null;
+                  buttonText?: string;
+                  url: {
+                    openInNewTab: boolean | null;
+                    href: string | '#' | null;
+                  } | null;
+                }
+            > | null;
+            carousel?: Array<
+              {
+                _key: string;
+              } & CarouselField
+            >;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1589,48 +8886,112 @@ export type GetSlugPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'dynamicIntro';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1639,48 +9000,73 @@ export type GetSlugPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'hero';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1689,48 +9075,123 @@ export type GetSlugPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'imageCarousel';
-        buttons: Array<{
-          _key: string;
-          url: {
-            openInNewTab: boolean | null;
-            href: string | null;
-          } | null;
-          icon: {
-            svg: string | null;
-          } | null;
-        }> | null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1739,39 +9200,62 @@ export type GetSlugPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: null;
-      }
-    | {
-        _key: string;
-        _type: 'splitForm';
-        buttons: null;
-        richText: Array<
-          | {
+            };
+            buttons: null;
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
               asset?: {
                 _ref: string;
                 _type: 'reference';
@@ -1780,51 +9264,330 @@ export type GetSlugPageDataQueryResult = {
               };
               hotspot?: SanityImageHotspot;
               crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
               _type: 'image';
-              markDefs: null;
-            }
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs: Array<{
-                customLink: {
-                  openInNewTab: boolean | null;
-                  href: string | null;
-                } | null;
-                _type: 'customLink';
-              }> | null;
-              level?: number;
-              _type: 'block';
-            }
-        > | null;
-        form: {
-          _id: string;
-          _type: 'form';
-          _createdAt: string;
-          _updatedAt: string;
-          _rev: string;
-          label?: string;
-          title?: string;
-          formId?: string;
-          language?: string;
-          fields?: Array<
-            {
-              _key: string;
-            } & FormField
-          >;
-          buttonText?: string;
-        } | null;
-      }
-  > | null;
-} | null;
+            };
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'form';
+            };
+            image?: {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: 'image';
+            };
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText?: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            >;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: 'image';
+            };
+          }
+        | {
+            _key: string;
+            _type: 'splitForm';
+            title?: string;
+            richText: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs?: Array<{
+                    customLink?: CustomUrl;
+                    _type: 'customLink';
+                    _key: string;
+                  }>;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  children?: Array<{
+                    marks?: Array<string>;
+                    text?: string;
+                    _type: 'span';
+                    _key: string;
+                  }>;
+                  style?:
+                    | 'h2'
+                    | 'h3'
+                    | 'h4'
+                    | 'h5'
+                    | 'h6'
+                    | 'inline'
+                    | 'normal';
+                  listItem?: 'bullet' | 'check' | 'number';
+                  markDefs: Array<
+                    | {
+                        customLink?: CustomUrl;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                    | {
+                        customLink: {
+                          openInNewTab: boolean | null;
+                          href: string | '#' | null;
+                        } | null;
+                        _type: 'customLink';
+                        _key: string;
+                      }
+                  > | null;
+                  level?: number;
+                  _type: 'block';
+                  _key: string;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                  markDefs: null;
+                }
+              | {
+                  asset?: {
+                    _ref: string;
+                    _type: 'reference';
+                    _weak?: boolean;
+                    [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+                  };
+                  hotspot?: SanityImageHotspot;
+                  crop?: SanityImageCrop;
+                  caption?: string;
+                  alt?: string;
+                  _type: 'image';
+                  _key: string;
+                }
+            > | null;
+            form: {
+              _id: string;
+              _type: 'form';
+              _createdAt: string;
+              _updatedAt: string;
+              _rev: string;
+              label?: string;
+              title?: string;
+              formId?: string;
+              language?: string;
+              fields?: Array<
+                {
+                  _key: string;
+                } & FormField
+              >;
+              buttonText?: string;
+            } | null;
+            image?: {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: 'image';
+            };
+          }
+      > | null;
+    }
+  | {
+      _id: string;
+      _type: 'page';
+      title: string | null;
+      content: null;
+      slug: string | null;
+    }
+  | null;
 // Variable: getOGDataQuery
 // Query: *[_id == $id][0]{    _id,    "title":coalesce(ogTitle,title),    "description":coalesce(ogDescription,description),    "image":coalesce(seoImage,image,*[_type =="logo"][0].image).asset->url}
 export type GetOGDataQueryResult =
@@ -1858,28 +9621,6 @@ export type GetOGDataQueryResult =
 export type GenericPageQueryOGResult =
   | {
       _id: string;
-      title: null;
-      description: null;
-      image: null;
-      dominantColor: null;
-      seoImage: null;
-      logo: string | null;
-      _type: 'media.tag';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: null;
-      description: null;
-      image: null;
-      dominantColor: null;
-      seoImage: null;
-      logo: string | null;
-      _type: 'translation.metadata';
-      date: null | string;
-    }
-  | {
-      _id: string;
       title: null | string;
       description: null;
       image: null;
@@ -1887,6 +9628,28 @@ export type GenericPageQueryOGResult =
       seoImage: null;
       logo: string | null;
       _type: 'assist.instruction.context';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blog';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blogIndex';
       date: null | string;
     }
   | {
@@ -1915,6 +9678,39 @@ export type GenericPageQueryOGResult =
       _id: string;
       title: null | string;
       description: null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: null;
+      logo: string | null;
+      _type: 'logo';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'mainPage';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: null;
+      description: null;
+      image: null;
+      dominantColor: null;
+      seoImage: null;
+      logo: string | null;
+      _type: 'media.tag';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: null | string;
+      description: null;
       image: null;
       dominantColor: null;
       seoImage: null;
@@ -1924,13 +9720,13 @@ export type GenericPageQueryOGResult =
     }
   | {
       _id: string;
-      title: null | string;
-      description: null;
+      title: string | null;
+      description: string | null;
       image: string | null;
       dominantColor: string | null;
-      seoImage: null;
+      seoImage: string | null;
       logo: string | null;
-      _type: 'logo';
+      _type: 'page';
       date: null | string;
     }
   | {
@@ -1957,46 +9753,13 @@ export type GenericPageQueryOGResult =
     }
   | {
       _id: string;
-      title: string | null;
-      description: string | null;
+      title: null;
+      description: null;
       image: null;
       dominantColor: null;
-      seoImage: string | null;
+      seoImage: null;
       logo: string | null;
-      _type: 'blogIndex';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: null;
-      dominantColor: null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'mainPage';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: string | null;
-      dominantColor: string | null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'blog';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: string | null;
-      dominantColor: string | null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'page';
+      _type: 'translation.metadata';
       date: null | string;
     }
   | null;
@@ -2039,3 +9802,108 @@ export type MainPageQueryOGResult = {
   _type: 'mainPage';
   date: null | string;
 } | null;
+// Variable: sitemapQuery
+// Query: *[_type in $types && defined(slug.current) && seoNoIndex != true ]{  "slug":slug.current,  _updatedAt,  _type,  _id}
+export type SitemapQueryResult = Array<
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'assist.instruction.context';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'blog';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'blogIndex';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'footer';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'form';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'logo';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'mainPage';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'media.tag';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'navbar';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'page';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'sanity.fileAsset';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'sanity.imageAsset';
+      _id: string;
+    }
+  | {
+      slug: null;
+      _updatedAt: string;
+      _type: 'translation.metadata';
+      _id: string;
+    }
+>;
+
+// Query TypeMap
+import '@sanity/client';
+declare module '@sanity/client' {
+  interface SanityQueries {
+    '\n*[_type == "page" && defined(slug.current) && !seoNoIndex]{\n  "slug":slug.current,\n  "locale":language\n}\n': GetAllSlugPagePathsQueryResult;
+    '\n*[_type == "mainPage"].language\n': GetAllMainPageTranslationsQueryResult;
+    '\n{\n    "seo":*[_type == "blogIndex" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n        ...,\n    },\n    "blogs":*[_type == "blog" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)]{\n      _id,\n      \n"title":coalesce(cardTitle,title),\n"description":coalesce(cardDescription,description),\n"image":coalesce(cardImage,image)\n,\n      "slug":slug.current\n    }\n}\n': GetBlogIndexDataQueryResult;
+    '\n*[_type == "blogIndex"].language\n': GetAllBlogIndexTranslationsQueryResult;
+    '\n*[_type == "blog" && defined(slug.current) && !seoNoIndex]{\n  "slug":slug.current,\n  "locale":language\n}\n': GetAllBlogsPathsQueryResult;
+    '\n*[_type == "footer"][0]{\n    _id,\n    title,\n    defined(links)=>{\n  links[]{\n    ...,\n    title,\n    _type,\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n},\n    defined(columns)=>{\n  columns[]{\n    ...,\n    title,\n    description,\n    defined(icon)=>{\n  icon{\n    svg\n  }\n},\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n}\n  }\n}\n  }\n},\n    "logo":*[_type == "logo"][0].image.asset->url\n}\n': GetFooterDataQueryResult;
+    '\n*[_type == "navbar"][0]{\n    _id,\n    title,\n    defined(links)=>{\n  links[]{\n    ...,\n    title,\n    _type,\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n},\n    defined(columns)=>{\n  columns[]{\n    ...,\n    title,\n    description,\n    defined(icon)=>{\n  icon{\n    svg\n  }\n},\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n}\n  }\n}\n  }\n},\n    defined(buttons)=>{\n  buttons[]{\n    ...,\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n},\n    defined(icon)=>{\n  icon{\n    svg\n  }\n}\n  }\n},\n    "logo":*[_type == "logo"][0].image.asset->url\n  }\n  ': GetNavbarDataQueryResult;
+    '\n*[_type == "blog" && slug.current == $slug && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n    ...,\n    defined(richText)=>{\n  richText[]{\n    ...,\n     defined(markDefs)=>{\n  markDefs[]{\n    ...,\n    defined(customLink)=>{\n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n}   \n  }\n}\n   \n  }\n}\n  }\n  ': GetBlogPageDataQueryResult;
+    '\n*[_type == "mainPage" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n  _id,\n  _type,\n  title,\n  description,\n  defined(pageBuilder)=>{\n  pageBuilder[]{\n    ...,\n    _type,\n    defined(buttons)=>{\n  buttons[]{\n    ...,\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n},\n    defined(icon)=>{\n  icon{\n    svg\n  }\n}\n  }\n},\n    defined(richText)=>{\n  richText[]{\n    ...,\n     defined(markDefs)=>{\n  markDefs[]{\n    ...,\n    defined(customLink)=>{\n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n}   \n  }\n}\n   \n  }\n},\n    defined(form)=>{\n  form->{\n    ...,\n  }\n}\n\n  }\n\n}\n}\n': GetMainPageDataQueryResult;
+    '\n*[_type == "page" && slug.current == $slug ][0]{\n    _id,\n    _type,\n    title,\n    content,\n    "slug":slug.current,\n    defined(pageBuilder)=>{\n  pageBuilder[]{\n    ...,\n    _type,\n    defined(buttons)=>{\n  buttons[]{\n    ...,\n    defined(url)=>{\n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n},\n    defined(icon)=>{\n  icon{\n    svg\n  }\n}\n  }\n},\n    defined(richText)=>{\n  richText[]{\n    ...,\n     defined(markDefs)=>{\n  markDefs[]{\n    ...,\n    defined(customLink)=>{\n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n}   \n  }\n}\n   \n  }\n},\n    defined(form)=>{\n  form->{\n    ...,\n  }\n}\n\n  }\n\n}\n    \n}\n': GetSlugPageDataQueryResult;
+    '\n*[_id == $id][0]{\n    _id,\n    "title":coalesce(ogTitle,title),\n    "description":coalesce(ogDescription,description),\n    "image":coalesce(seoImage,image,*[_type =="logo"][0].image).asset->url\n}\n': GetOGDataQueryResult;
+    '\n*[_id == $id && defined(slug.current)][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': GenericPageQueryOGResult;
+    '\n*[_type == "page" && _id == $id][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': SlugPageQueryOGResult;
+    '\n*[_type == "blog" && _id == $id][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': BlogPageQueryOGResult;
+    '\n*[_type == "mainPage"][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': MainPageQueryOGResult;
+    '\n*[_type in $types && defined(slug.current) && seoNoIndex != true ]{\n  "slug":slug.current,\n  _updatedAt,\n  _type,\n  _id\n}': SitemapQueryResult;
+  }
+}
