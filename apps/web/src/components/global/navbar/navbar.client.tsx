@@ -33,7 +33,6 @@ import type { PageComponentProps } from '~/types';
 import { Buttons } from '../buttons';
 import { SanityIcon } from '../sanity-icon';
 import { useIsMobile } from '~/hooks/use-is-mobile';
-import { serverEnv } from '~/config/server';
 
 
 
