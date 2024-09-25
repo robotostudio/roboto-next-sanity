@@ -1,5 +1,5 @@
 import type { Locale } from './config';
-import type { CarouselField, Form, Button } from './sanity.types';
+import type { Page, Form, Button } from './sanity.types';
 
 export type PreviewProps<T> = {
   initialData: T;
@@ -40,7 +40,7 @@ export type SanityButton = {
 
 export type SanityButtons = Array<SanityButton>;
 
-export type SanityImage = NonNullable<CarouselField['image']>;
+export type SanityImage = NonNullable<Page['image']>;
 
 export type SitemapProjection = {
   _updatedAt: string;

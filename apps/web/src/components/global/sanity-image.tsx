@@ -3,7 +3,7 @@ import Image, { type ImageProps } from 'next/image';
 import type { FC } from 'react';
 import { urlFor } from '~/lib/sanity';
 
-import type { SanityImage as SanityImageProp } from '~/types';
+import type { Maybe, SanityImage as SanityImageProp } from '~/types';
 
 const getDimension = (
   image: NonNullable<SanityImageProp['asset']>,
@@ -30,8 +30,15 @@ export const getImageBlurProps = (image?: SanityImageProp) => {
   return {};
 };
 
+const getImageAlt = (image?: unknown): string => {
+  if (!image) return 'image-broken';
+  if (typeof image !== 'object') return 'image-broken';
+  if ('alt' in image && typeof image.alt === 'string') return image.alt;
+  return 'image-broken';
+};
+
 type SanityImageProps = {
-  image?: SanityImageProp;
+  image?: Maybe<SanityImageProp>;
   className?: string;
   options?: Omit<ImageProps, 'className' | 'src' | 'width' | 'height'>;
   width?: number;
@@ -57,6 +64,8 @@ export const SanityImage: FC<SanityImageProps> = ({
 
   const blurProps = getImageBlurProps(image);
 
+  const alt = getImageAlt(image);
+
   const url = urlFor(_image)
     .width(dimension.width)
     .height(dimension.height)
@@ -64,9 +73,9 @@ export const SanityImage: FC<SanityImageProps> = ({
     .url();
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex size-full flex-col items-center justify-center">
       <Image
-        alt={image?.asset._ref ?? 'image-broken'}
+        alt={alt}
         src={url}
         loading={loading}
         sizes="(max-width: 640px) 80vw, 80vw"

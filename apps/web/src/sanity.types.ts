@@ -84,50 +84,6 @@ export type CarouselField = {
   caption?: string;
 };
 
-export type DynamicIntro = {
-  _type: 'dynamicIntro';
-  eyebrow?: string;
-  richText?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: 'span';
-          _key: string;
-        }>;
-        style?: 'normal' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline';
-        listItem?: 'number' | 'bullet' | 'check';
-        markDefs?: Array<{
-          customLink?: CustomUrl;
-          _type: 'customLink';
-          _key: string;
-        }>;
-        level?: number;
-        _type: 'block';
-        _key: string;
-      }
-    | {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        caption?: string;
-        alt?: string;
-        _type: 'image';
-        _key: string;
-      }
-  >;
-  buttons?: Array<
-    {
-      _key: string;
-    } & Button
-  >;
-};
-
 export type ImageCarousel = {
   _type: 'imageCarousel';
   eyebrow?: string;
@@ -431,9 +387,6 @@ export type PageBuilder = Array<
   | ({
       _key: string;
     } & ImageCarousel)
-  | ({
-      _key: string;
-    } & DynamicIntro)
 >;
 
 export type Footer = {
@@ -1007,7 +960,6 @@ export type AllSanitySchemaTypes =
   | SanityFileAsset
   | Geopoint
   | CarouselField
-  | DynamicIntro
   | ImageCarousel
   | SplitForm
   | Cta
@@ -1135,35 +1087,24 @@ export type GetAllBlogsPathsQueryResult = Array<{
   locale: string | null;
 }>;
 // Variable: getFooterDataQuery
-// Query: *[_type == "footer"][0]{    _id,    title,      links[]{    ...,    title,    _type,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },    defined(columns)=>{  columns[]{    ...,    title,    description,    defined(icon)=>{  icon{    svg  }},      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }  }}  },    "logo":*[_type == "logo"][0].image.asset->url}
+// Query: *[_type == "footer"][0]{    _id,    title,      links[]{    ...,    title,    _type,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      columns[]{    ...,    title,    description,      icon{    svg  },      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }  }  },    "logo":*[_type == "logo"][0].image.asset->url}
 export type GetFooterDataQueryResult = {
   _id: string;
   title: string | null;
-  links: Array<
-    | {
-        _key: string;
-        _type: 'navLink';
-        title: string | null;
-        url: {
-          openInNewTab: boolean | null;
-          href: string | '#' | null;
-        } | null;
-        columns: null;
-      }
-    | {
-        _key: string;
-        _type: 'navLink';
-        title: string | null;
-        url: {
-          openInNewTab: boolean | null;
-          href: string | '#' | null;
-        } | null;
-      }
-  > | null;
+  links: Array<{
+    _key: string;
+    _type: 'navLink';
+    title: string | null;
+    url: {
+      openInNewTab: boolean | null;
+      href: string | '#' | null;
+    } | null;
+    columns: null;
+  }> | null;
   logo: string | null;
 } | null;
 // Variable: getNavbarDataQuery
-// Query: *[_type == "navbar"][0]{    _id,    title,      links[]{    ...,    title,    _type,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },    defined(columns)=>{  columns[]{    ...,    title,    description,    defined(icon)=>{  icon{    svg  }},      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }  }}  },      buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },    defined(icon)=>{  icon{    svg  }}  },    "logo":*[_type == "logo"][0].image.asset->url  }
+// Query: *[_type == "navbar"][0]{    _id,    title,      links[]{    ...,    title,    _type,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      columns[]{    ...,    title,    description,      icon{    svg  },      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }  }  },      buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  },    "logo":*[_type == "logo"][0].image.asset->url  }
 export type GetNavbarDataQueryResult = {
   _id: string;
   title: string | null;
@@ -1172,43 +1113,19 @@ export type GetNavbarDataQueryResult = {
         _key: string;
         _type: 'navDropdownColumn';
         title: string | null;
-        columns?: Array<
-          {
-            _key: string;
-          } & NavLinkColumn
-        >;
-        url: null;
-      }
-    | {
-        _key: string;
-        _type: 'navDropdownColumn';
-        title: string | null;
-        columns: Array<
-          | {
-              _key: string;
-              _type: 'navLinkColumn';
-              title: string | null;
-              icon?: IconPicker;
-              description: string | null;
-              url: {
-                openInNewTab: boolean | null;
-                href: string | '#' | null;
-              } | null;
-            }
-          | {
-              _key: string;
-              _type: 'navLinkColumn';
-              title: string | null;
-              icon: {
-                svg: string | null;
-              } | null;
-              description: string | null;
-              url: {
-                openInNewTab: boolean | null;
-                href: string | '#' | null;
-              } | null;
-            }
-        > | null;
+        columns: Array<{
+          _key: string;
+          _type: 'navLinkColumn';
+          title: string | null;
+          icon: {
+            svg: string | null;
+          } | null;
+          description: string | null;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
         url: null;
       }
     | {
@@ -1221,57 +1138,70 @@ export type GetNavbarDataQueryResult = {
         } | null;
         columns: null;
       }
-    | {
-        _key: string;
-        _type: 'navLink';
-        title: string | null;
-        url: {
-          openInNewTab: boolean | null;
-          href: string | '#' | null;
-        } | null;
-      }
   > | null;
-  buttons: Array<
-    | {
-        _key: string;
-        _type: 'button';
-        variant?: 'default' | 'link' | 'outline' | 'secondary';
-        icon?: IconPicker;
-        buttonText?: string;
-        url: {
-          openInNewTab: boolean | null;
-          href: string | '#' | null;
-        } | null;
-      }
-    | {
-        _key: string;
-        _type: 'button';
-        variant?: 'default' | 'link' | 'outline' | 'secondary';
-        icon: {
-          svg: string | null;
-        } | null;
-        buttonText?: string;
-        url: {
-          openInNewTab: boolean | null;
-          href: string | '#' | null;
-        } | null;
-      }
-  > | null;
+  buttons: Array<{
+    _key: string;
+    _type: 'button';
+    variant?: 'default' | 'link' | 'outline' | 'secondary';
+    icon: {
+      svg: string | null;
+    } | null;
+    buttonText?: string;
+    url: {
+      openInNewTab: boolean | null;
+      href: string | '#' | null;
+    } | null;
+  }> | null;
   logo: string | null;
 } | null;
 // Variable: getBlogPageDataQuery
-// Query: *[_type == "blog" && slug.current == $slug && select(($locale == 'en-GB' || $locale == '' ) =>   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{    ...,    defined(richText)=>{  richText[]{    ...,     defined(markDefs)=>{  markDefs[]{    ...,    defined(customLink)=>{  customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }}     }}     }}  }
-export type GetBlogPageDataQueryResult =
-  | {
-      _id: string;
-      _type: 'blog';
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      title?: string;
-      description?: string;
-      slug?: Slug;
-      image?: {
+// Query: *[_type == "blog" && slug.current == $slug && select(($locale == 'en-GB' || $locale == '' ) =>   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{    ...,      image{    ...,    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),    "blurData":asset->metadata.lqip,    "dominantColor":asset->metadata.palette.dominant.background,  },      richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     }  }
+export type GetBlogPageDataQueryResult = {
+  _id: string;
+  _type: 'blog';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  slug?: Slug;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+    alt: string | 'Image-Broken';
+    blurData: string | null;
+    dominantColor: string | null;
+  } | null;
+  richText: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: 'span';
+          _key: string;
+        }>;
+        style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+        listItem?: 'bullet' | 'check' | 'number';
+        markDefs: Array<{
+          customLink: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+          _type: 'customLink';
+          _key: string;
+        }> | null;
+        level?: number;
+        _type: 'block';
+        _key: string;
+      }
+    | {
         asset?: {
           _ref: string;
           _type: 'reference';
@@ -1280,186 +1210,60 @@ export type GetBlogPageDataQueryResult =
         };
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
+        caption?: string;
+        alt?: string;
         _type: 'image';
-      };
-      richText?: RichText;
-      language?: string;
-      pageBuilder?: PageBuilder;
-      seoTitle?: string;
-      seoDescription?: string;
-      seoImage?: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      };
-      seoNoIndex?: boolean;
-      seoHideFromLists?: boolean;
-      ogTitle?: string;
-      ogDescription?: string;
-      cardTitle?: string;
-      cardDescription?: string;
-      cardImage?: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      };
-    }
-  | {
-      _id: string;
-      _type: 'blog';
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      title?: string;
-      description?: string;
-      slug?: Slug;
-      image?: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      };
-      richText: Array<
-        | {
-            children?: Array<{
-              marks?: Array<string>;
-              text?: string;
-              _type: 'span';
-              _key: string;
-            }>;
-            style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-            listItem?: 'bullet' | 'check' | 'number';
-            markDefs?: Array<{
-              customLink?: CustomUrl;
-              _type: 'customLink';
-              _key: string;
-            }>;
-            level?: number;
-            _type: 'block';
-            _key: string;
-          }
-        | {
-            children?: Array<{
-              marks?: Array<string>;
-              text?: string;
-              _type: 'span';
-              _key: string;
-            }>;
-            style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-            listItem?: 'bullet' | 'check' | 'number';
-            markDefs: Array<
-              | {
-                  customLink?: CustomUrl;
-                  _type: 'customLink';
-                  _key: string;
-                }
-              | {
-                  customLink: {
-                    openInNewTab: boolean | null;
-                    href: string | '#' | null;
-                  } | null;
-                  _type: 'customLink';
-                  _key: string;
-                }
-            > | null;
-            level?: number;
-            _type: 'block';
-            _key: string;
-          }
-        | {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            caption?: string;
-            alt?: string;
-            _type: 'image';
-            _key: string;
-            markDefs: null;
-          }
-        | {
-            asset?: {
-              _ref: string;
-              _type: 'reference';
-              _weak?: boolean;
-              [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-            };
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            caption?: string;
-            alt?: string;
-            _type: 'image';
-            _key: string;
-          }
-      > | null;
-      language?: string;
-      pageBuilder?: PageBuilder;
-      seoTitle?: string;
-      seoDescription?: string;
-      seoImage?: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      };
-      seoNoIndex?: boolean;
-      seoHideFromLists?: boolean;
-      ogTitle?: string;
-      ogDescription?: string;
-      cardTitle?: string;
-      cardDescription?: string;
-      cardImage?: {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        _type: 'image';
-      };
-    }
-  | null;
+        _key: string;
+        markDefs: null;
+      }
+  > | null;
+  language?: string;
+  pageBuilder?: PageBuilder;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  };
+  seoNoIndex?: boolean;
+  seoHideFromLists?: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
+  cardTitle?: string;
+  cardDescription?: string;
+  cardImage?: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  };
+} | null;
 // Variable: getMainPageDataQuery
-// Query: *[_type == "mainPage" && select(($locale == 'en-GB' || $locale == '' ) =>   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{  _id,  _type,  title,  description,    pageBuilder[]{    ...,    _type,  }}
+// Query: *[_type == "mainPage" && select(($locale == 'en-GB' || $locale == '' ) =>   (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{  _id,  _type,  title,  description,    image{    ...,    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),    "blurData":asset->metadata.lqip,    "dominantColor":asset->metadata.palette.dominant.background,  },    pageBuilder[]{    ...,    _type,    _type == "cta"=>{  ...,    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     },    buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  }},    _type == "hero"=>{  ...,    buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  },    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     }},    _type == "imageCarousel"=>{  ...,    buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  },    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     },},    _type == "splitForm"=>{  ...,    image{    ...,    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),    "blurData":asset->metadata.lqip,    "dominantColor":asset->metadata.palette.dominant.background,  },    form->{    ...,  },    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     },}  }}
 export type GetMainPageDataQueryResult = {
   _id: string;
   _type: 'mainPage';
   title: string | null;
   description: string | null;
+  image: null;
   pageBuilder: Array<
     | {
         _key: string;
         _type: 'cta';
         title?: string;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1469,11 +1273,14 @@ export type GetMainPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1491,64 +1298,29 @@ export type GetMainPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
-      }
-    | {
-        _key: string;
-        _type: 'dynamicIntro';
-        eyebrow?: string;
-        richText?: Array<
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
-                _type: 'customLink';
-                _key: string;
-              }>;
-              level?: number;
-              _type: 'block';
-              _key: string;
-            }
-          | {
-              asset?: {
-                _ref: string;
-                _type: 'reference';
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-              };
-              hotspot?: SanityImageHotspot;
-              crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
-              _type: 'image';
-              _key: string;
-            }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
       }
     | {
         _key: string;
         _type: 'hero';
         title?: string;
         isTitleH1?: boolean;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1558,11 +1330,14 @@ export type GetMainPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1580,20 +1355,29 @@ export type GetMainPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
       }
     | {
         _key: string;
         _type: 'imageCarousel';
         eyebrow?: string;
         title?: string;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1603,11 +1387,14 @@ export type GetMainPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1625,13 +1412,22 @@ export type GetMainPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
         carousel?: Array<
           {
             _key: string;
@@ -1642,7 +1438,7 @@ export type GetMainPageDataQueryResult = {
         _key: string;
         _type: 'splitForm';
         title?: string;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1652,11 +1448,14 @@ export type GetMainPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1674,15 +1473,27 @@ export type GetMainPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        form?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'form';
-        };
-        image?: {
+        > | null;
+        form: {
+          _id: string;
+          _type: 'form';
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          label?: string;
+          title?: string;
+          formId?: string;
+          language?: string;
+          fields?: Array<
+            {
+              _key: string;
+            } & FormField
+          >;
+          buttonText?: string;
+        } | null;
+        image: {
           asset?: {
             _ref: string;
             _type: 'reference';
@@ -1692,24 +1503,41 @@ export type GetMainPageDataQueryResult = {
           hotspot?: SanityImageHotspot;
           crop?: SanityImageCrop;
           _type: 'image';
-        };
+          alt: string | 'Image-Broken';
+          blurData: string | null;
+          dominantColor: string | null;
+        } | null;
       }
   > | null;
 } | null;
 // Variable: getSlugPageDataQuery
-// Query: *[_type == "page" && slug.current == $slug ][0]{    _id,    _type,    title,    content,    "slug":slug.current,      pageBuilder[]{    ...,    _type,  }    }
+// Query: *[_type == "page" && slug.current == $slug ][0]{    _id,    _type,    title,    content,      image{    ...,    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),    "blurData":asset->metadata.lqip,    "dominantColor":asset->metadata.palette.dominant.background,  },    "slug":slug.current,      pageBuilder[]{    ...,    _type,    _type == "cta"=>{  ...,    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     },    buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  }},    _type == "hero"=>{  ...,    buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  },    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     }},    _type == "imageCarousel"=>{  ...,    buttons[]{    ...,      url{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  },      icon{    svg  }  },    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     },},    _type == "splitForm"=>{  ...,    image{    ...,    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),    "blurData":asset->metadata.lqip,    "dominantColor":asset->metadata.palette.dominant.background,  },    form->{    ...,  },    richText[]{    ...,       markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),  }     }     },}  }    }
 export type GetSlugPageDataQueryResult = {
   _id: string;
   _type: 'page';
   title: string | null;
   content: null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+    alt: string | 'Image-Broken';
+    blurData: string | null;
+    dominantColor: string | null;
+  } | null;
   slug: string | null;
   pageBuilder: Array<
     | {
         _key: string;
         _type: 'cta';
         title?: string;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1719,11 +1547,14 @@ export type GetSlugPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1741,64 +1572,29 @@ export type GetSlugPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
-      }
-    | {
-        _key: string;
-        _type: 'dynamicIntro';
-        eyebrow?: string;
-        richText?: Array<
-          | {
-              children?: Array<{
-                marks?: Array<string>;
-                text?: string;
-                _type: 'span';
-                _key: string;
-              }>;
-              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
-              listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
-                _type: 'customLink';
-                _key: string;
-              }>;
-              level?: number;
-              _type: 'block';
-              _key: string;
-            }
-          | {
-              asset?: {
-                _ref: string;
-                _type: 'reference';
-                _weak?: boolean;
-                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-              };
-              hotspot?: SanityImageHotspot;
-              crop?: SanityImageCrop;
-              caption?: string;
-              alt?: string;
-              _type: 'image';
-              _key: string;
-            }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
       }
     | {
         _key: string;
         _type: 'hero';
         title?: string;
         isTitleH1?: boolean;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1808,11 +1604,14 @@ export type GetSlugPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1830,20 +1629,29 @@ export type GetSlugPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
       }
     | {
         _key: string;
         _type: 'imageCarousel';
         eyebrow?: string;
         title?: string;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1853,11 +1661,14 @@ export type GetSlugPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1875,13 +1686,22 @@ export type GetSlugPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        buttons?: Array<
-          {
-            _key: string;
-          } & Button
-        >;
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
         carousel?: Array<
           {
             _key: string;
@@ -1892,7 +1712,7 @@ export type GetSlugPageDataQueryResult = {
         _key: string;
         _type: 'splitForm';
         title?: string;
-        richText?: Array<
+        richText: Array<
           | {
               children?: Array<{
                 marks?: Array<string>;
@@ -1902,11 +1722,14 @@ export type GetSlugPageDataQueryResult = {
               }>;
               style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
               listItem?: 'bullet' | 'check' | 'number';
-              markDefs?: Array<{
-                customLink?: CustomUrl;
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
                 _type: 'customLink';
                 _key: string;
-              }>;
+              }> | null;
               level?: number;
               _type: 'block';
               _key: string;
@@ -1924,15 +1747,27 @@ export type GetSlugPageDataQueryResult = {
               alt?: string;
               _type: 'image';
               _key: string;
+              markDefs: null;
             }
-        >;
-        form?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'form';
-        };
-        image?: {
+        > | null;
+        form: {
+          _id: string;
+          _type: 'form';
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          label?: string;
+          title?: string;
+          formId?: string;
+          language?: string;
+          fields?: Array<
+            {
+              _key: string;
+            } & FormField
+          >;
+          buttonText?: string;
+        } | null;
+        image: {
           asset?: {
             _ref: string;
             _type: 'reference';
@@ -1942,7 +1777,10 @@ export type GetSlugPageDataQueryResult = {
           hotspot?: SanityImageHotspot;
           crop?: SanityImageCrop;
           _type: 'image';
-        };
+          alt: string | 'Image-Broken';
+          blurData: string | null;
+          dominantColor: string | null;
+        } | null;
       }
   > | null;
 } | null;
@@ -2252,11 +2090,11 @@ declare module '@sanity/client' {
     '\n{\n    "seo":*[_type == "blogIndex" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n        ...,\n    },\n    "blogs":*[_type == "blog" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)]{\n      _id,\n      \n"title":coalesce(cardTitle,title),\n"description":coalesce(cardDescription,description),\n"image":coalesce(cardImage,image)\n,\n      "slug":slug.current\n    }\n}\n': GetBlogIndexDataQueryResult;
     '\n*[_type == "blogIndex"].language\n': GetAllBlogIndexTranslationsQueryResult;
     '\n*[_type == "blog" && defined(slug.current) && !seoNoIndex]{\n  "slug":slug.current,\n  "locale":language\n}\n': GetAllBlogsPathsQueryResult;
-    '\n*[_type == "footer"][0]{\n    _id,\n    title,\n    \n  links[]{\n    ...,\n    title,\n    _type,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    defined(columns)=>{\n  columns[]{\n    ...,\n    title,\n    description,\n    defined(icon)=>{\n  icon{\n    svg\n  }\n},\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n\n  }\n}\n  }\n,\n    "logo":*[_type == "logo"][0].image.asset->url\n}\n': GetFooterDataQueryResult;
-    '\n*[_type == "navbar"][0]{\n    _id,\n    title,\n    \n  links[]{\n    ...,\n    title,\n    _type,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    defined(columns)=>{\n  columns[]{\n    ...,\n    title,\n    description,\n    defined(icon)=>{\n  icon{\n    svg\n  }\n},\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n\n  }\n}\n  }\n,\n    \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    defined(icon)=>{\n  icon{\n    svg\n  }\n}\n  }\n,\n    "logo":*[_type == "logo"][0].image.asset->url\n  }\n  ': GetNavbarDataQueryResult;
-    '\n*[_type == "blog" && slug.current == $slug && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n    ...,\n    defined(richText)=>{\n  richText[]{\n    ...,\n     defined(markDefs)=>{\n  markDefs[]{\n    ...,\n    defined(customLink)=>{\n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n}   \n  }\n}\n   \n  }\n}\n  }\n  ': GetBlogPageDataQueryResult;
-    "\n*[_type == \"mainPage\" && select(($locale == 'en-GB' || $locale == '' ) => \n  (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{\n  _id,\n  _type,\n  title,\n  description,\n  \n  pageBuilder[]{\n    ...,\n    _type,\n  }\n\n}\n": GetMainPageDataQueryResult;
-    '\n*[_type == "page" && slug.current == $slug ][0]{\n    _id,\n    _type,\n    title,\n    content,\n    "slug":slug.current,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n  }\n\n    \n}\n': GetSlugPageDataQueryResult;
+    '\n*[_type == "footer"][0]{\n    _id,\n    title,\n    \n  links[]{\n    ...,\n    title,\n    _type,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  columns[]{\n    ...,\n    title,\n    description,\n    \n  icon{\n    svg\n  }\n,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n\n  }\n\n  }\n,\n    "logo":*[_type == "logo"][0].image.asset->url\n}\n': GetFooterDataQueryResult;
+    '\n*[_type == "navbar"][0]{\n    _id,\n    title,\n    \n  links[]{\n    ...,\n    title,\n    _type,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  columns[]{\n    ...,\n    title,\n    description,\n    \n  icon{\n    svg\n  }\n,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n\n  }\n\n  }\n,\n    \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n,\n    "logo":*[_type == "logo"][0].image.asset->url\n  }\n  ': GetNavbarDataQueryResult;
+    '\n*[_type == "blog" && slug.current == $slug && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n    ...,\n    \n  image{\n    ...,\n    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n    "blurData":asset->metadata.lqip,\n    "dominantColor":asset->metadata.palette.dominant.background,\n  }\n,\n    \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n\n  }\n  ': GetBlogPageDataQueryResult;
+    '\n*[_type == "mainPage" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n  (!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n  _id,\n  _type,\n  title,\n  description,\n  \n  image{\n    ...,\n    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n    "blurData":asset->metadata.lqip,\n    "dominantColor":asset->metadata.palette.dominant.background,\n  }\n,\n  \n  pageBuilder[]{\n    ...,\n    _type,\n    _type == "cta"=>{\n  ...,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n,\n  \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n\n},\n    _type == "hero"=>{\n  ...,\n  \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n\n},\n    _type == "imageCarousel"=>{\n  ...,\n  \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n,\n},\n    _type == "splitForm"=>{\n  ...,\n  \n  image{\n    ...,\n    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n    "blurData":asset->metadata.lqip,\n    "dominantColor":asset->metadata.palette.dominant.background,\n  }\n,\n  \n  form->{\n    ...,\n  }\n,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n,\n}\n  }\n\n}\n': GetMainPageDataQueryResult;
+    '\n*[_type == "page" && slug.current == $slug ][0]{\n    _id,\n    _type,\n    title,\n    content,\n    \n  image{\n    ...,\n    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n    "blurData":asset->metadata.lqip,\n    "dominantColor":asset->metadata.palette.dominant.background,\n  }\n,\n    "slug":slug.current,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n    _type == "cta"=>{\n  ...,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n,\n  \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n\n},\n    _type == "hero"=>{\n  ...,\n  \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n\n},\n    _type == "imageCarousel"=>{\n  ...,\n  \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n,\n    \n  icon{\n    svg\n  }\n\n  }\n,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n,\n},\n    _type == "splitForm"=>{\n  ...,\n  \n  image{\n    ...,\n    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n    "blurData":asset->metadata.lqip,\n    "dominantColor":asset->metadata.palette.dominant.background,\n  }\n,\n  \n  form->{\n    ...,\n  }\n,\n  \n  richText[]{\n    ...,\n     \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n  }\n   \n  }\n\n   \n  }\n,\n}\n  }\n\n    \n}\n': GetSlugPageDataQueryResult;
     '\n*[_id == $id][0]{\n    _id,\n    "title":coalesce(ogTitle,title),\n    "description":coalesce(ogDescription,description),\n    "image":coalesce(seoImage,image,*[_type =="logo"][0].image).asset->url\n}\n': GetOGDataQueryResult;
     '\n*[_id == $id && defined(slug.current)][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': GenericPageQueryOGResult;
     '\n*[_type == "page" && _id == $id][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': SlugPageQueryOGResult;

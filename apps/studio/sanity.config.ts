@@ -57,6 +57,16 @@ export default defineConfig({
     }),
   ],
 
+  document: {
+    newDocumentOptions: (prev, { creationContext }) => {
+      const { type } = creationContext;
+      if (type === 'global') return [];
+      return prev;
+    },
+  },
+  scheduledPublishing: {
+    enabled: false,
+  },
   schema: {
     types: schemaTypes,
   },

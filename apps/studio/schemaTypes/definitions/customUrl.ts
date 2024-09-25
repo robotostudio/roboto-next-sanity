@@ -14,6 +14,7 @@ export const customUrl = defineType({
       type: 'string',
       options: createRadioListLayout(['internal', 'external']),
       initialValue: () => 'external',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'openInNewTab',
@@ -49,6 +50,7 @@ export const customUrl = defineType({
     defineField({
       name: 'internal',
       type: 'reference',
+      options: { disableNew: true },
       hidden: ({ parent }) => parent?.type !== 'internal',
       to: allLinkableTypes,
       validation: (rule) => [

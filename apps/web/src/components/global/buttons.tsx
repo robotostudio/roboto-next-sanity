@@ -15,7 +15,8 @@ const SanityLinkButton: FC<{ button: SanityButton } & ButtonProps> = ({
   ...props
 }) => {
   const { buttonText, url, variant, icon } = button ?? {};
-  if (!url?.href) return <Button variant={'destructive'}>Link Broken</Button>;
+  if (!url?.href || url?.href === '#')
+    return <Button variant={'destructive'}>Link Broken</Button>;
   return (
     <Link href={url.href} target={url.openInNewTab ? '_blank' : '_self'}>
       <Button {...props} variant={variant ?? 'default'}>

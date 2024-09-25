@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import { VisualEditing } from 'next-sanity';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { preconnect, prefetchDNS } from 'react-dom';
@@ -45,7 +45,10 @@ export default async function LocaleLayout({
               <VisualEditing
                 refresh={async (payload) => {
                   'use server';
-                  if (payload.source === 'manual') return;
+                  if (payload.source === 'manual') {
+                    revalidatePath('/', 'layout');
+                    return;
+                  }
                   const tags = [
                     payload?.document?.slug?.current,
                     payload?.document?._id?.startsWith('drafts.')

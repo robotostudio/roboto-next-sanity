@@ -41,9 +41,10 @@ export const ImageCarouselBlock: FC<ImageCarouselBlockProps> = ({
   eyebrow,
   richText,
   title,
+  _type,
 }) => {
   return (
-    <section className="py-12">
+    <section className="py-12" id={_type}>
       <div className="mx-auto w-full max-w-6xl">
         <div className="grid grid-cols-2 gap-2">
           <div>

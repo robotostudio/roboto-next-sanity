@@ -1,5 +1,5 @@
 'use server';
-import { type Locale, SANITY_TAGS } from '~/config';
+import type { Locale } from '~/config';
 import { getLocalizedSlug, handleErrors } from '~/lib/helper';
 import { client } from '~/lib/sanity';
 import {

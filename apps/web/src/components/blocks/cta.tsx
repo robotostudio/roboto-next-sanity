@@ -7,9 +7,14 @@ import Ripple from '../global/ripple';
 
 export type CtaBlockProps = ProcessPageBuilderBlock<Cta>;
 
-export const CtaBlock: FC<CtaBlockProps> = ({ title, richText, buttons }) => {
+export const CtaBlock: FC<CtaBlockProps> = ({
+  title,
+  richText,
+  buttons,
+  _type,
+}) => {
   return (
-    <section className="relative overflow-hidden py-20 md:py-32">
+    <section className="relative overflow-hidden py-20 md:py-32" id={_type}>
       <Ripple />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">

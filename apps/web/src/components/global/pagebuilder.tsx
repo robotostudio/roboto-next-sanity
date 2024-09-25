@@ -1,8 +1,9 @@
 import type { FC } from 'react';
-import { HeroBlock, CtaBlock, DynamicIntroBlock } from '../blocks';
 import { SplitFormBlock } from '../blocks/split-form';
 import { ImageCarouselBlock } from '../blocks/image-carousel';
 import type { PageBuilder } from '~/sanity.types';
+import { CtaBlock } from '../blocks/cta';
+import { HeroBlock } from '../blocks/hero';
 
 export type PageBuilderBlockProps<T> = {
   pageBuilder?: T | null;
@@ -11,10 +12,11 @@ export type PageBuilderBlockProps<T> = {
 type BlockTypeKeys = PageBuilder[number]['_type'];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const Blocks: Record<BlockTypeKeys, FC<any>> = {
   hero: HeroBlock,
   cta: CtaBlock,
-  dynamicIntro: DynamicIntroBlock,
+  // dynamicIntro: DynamicIntroBlock,
   splitForm: SplitFormBlock,
   imageCarousel: ImageCarouselBlock,
 };

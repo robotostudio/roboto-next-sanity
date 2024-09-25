@@ -10,9 +10,10 @@ export const SplitFormBlock: FC<SplitFormBlockProps> = ({
   form,
   image,
   title,
+  _type,
 }) => {
   return (
-    <section className="flex items-center justify-center">
+    <section className="flex items-center justify-center" id={_type}>
       <div className="grid max-w-6xl grid-cols-2 place-items-center">
         <div>
           <SanityImage image={image} />

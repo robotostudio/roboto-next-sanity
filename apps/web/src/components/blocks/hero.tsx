@@ -11,9 +11,10 @@ export const HeroBlock: FC<HeroBlockProps> = ({
   buttons,
   richText,
   isTitleH1,
+  _type,
 }) => {
   return (
-    <section key="1" className="py-8 text-center">
+    <section key="1" className="py-8 text-center" id={_type}>
       <div className="container px-4 text-center md:px-6">
         {isTitleH1 ? (
           <h1 className="mb-2 text-3xl font-bold tracking-tighter">{title}</h1>

@@ -44,6 +44,15 @@ export const getAllBlogsPathsQuery = groq`
 }
 `;
 
+const _image = `
+  image{
+    ...,
+    "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),
+    "blurData":asset->metadata.lqip,
+    "dominantColor":asset->metadata.palette.dominant.background,
+  }
+`;
+
 const _url = `
   url{
     openInNewTab,
@@ -51,26 +60,26 @@ const _url = `
   }
 `;
 
-const _customLink = `defined(customLink)=>{
+const _customLink = `
   customLink{
     openInNewTab,
     "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),
   }
-}`;
+`;
 
-const _markDefs = ` defined(markDefs)=>{
+const _markDefs = ` 
   markDefs[]{
     ...,
     ${_customLink}   
   }
-}`;
+`;
 
-const _icon = `defined(icon)=>{
+const _icon = `
   icon{
     svg
   }
-}`;
-const _columns = `defined(columns)=>{
+`;
+const _columns = `
   columns[]{
     ...,
     title,
@@ -78,7 +87,7 @@ const _columns = `defined(columns)=>{
     ${_icon},
     ${_url}
   }
-}`;
+`;
 
 const _links = `
   links[]{
@@ -98,21 +107,54 @@ const _buttons = `
   }
 `;
 
-const _richText = `defined(richText)=>{
+const _richText = `
   richText[]{
     ...,
     ${_markDefs}
    
   }
+`;
+
+const _form = `
+  form->{
+    ...,
+  }
+`;
+
+const _cta = `_type == "cta"=>{
+  ...,
+  ${_richText},
+  ${_buttons}
+}`;
+const _hero = `_type == "hero"=>{
+  ...,
+  ${_buttons},
+  ${_richText}
+}`;
+
+const _imageCarousel = `_type == "imageCarousel"=>{
+  ...,
+  ${_buttons},
+  ${_richText},
+}`;
+
+const _splitForm = `_type == "splitForm"=>{
+  ...,
+  ${_image},
+  ${_form},
+  ${_richText},
 }`;
 
 const _pageBuilder = `
   pageBuilder[]{
     ...,
     _type,
+    ${_cta},
+    ${_hero},
+    ${_imageCarousel},
+    ${_splitForm}
   }
 `;
-
 
 export const getFooterDataQuery = groq`
 *[_type == "footer"][0]{
@@ -136,6 +178,7 @@ export const getNavbarDataQuery = groq`
 export const getBlogPageDataQuery = groq`
 *[_type == "blog" && slug.current == $slug && ${localeMatch}][0]{
     ...,
+    ${_image},
     ${_richText}
   }
   `;
@@ -146,6 +189,7 @@ export const getMainPageDataQuery = groq`
   _type,
   title,
   description,
+  ${_image},
   ${_pageBuilder}
 }
 `;
@@ -156,6 +200,7 @@ export const getSlugPageDataQuery = groq`
     _type,
     title,
     content,
+    ${_image},
     "slug":slug.current,
     ${_pageBuilder}
     
