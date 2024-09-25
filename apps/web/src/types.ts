@@ -1,5 +1,5 @@
 import type { Locale } from './config';
-import type { CarouselField, Form } from './sanity.types';
+import type { CarouselField, Form, Button } from './sanity.types';
 
 export type PreviewProps<T> = {
   initialData: T;
@@ -26,16 +26,16 @@ export type PageComponentProps<T> = {
 };
 
 export type ProcessedUrl = {
-  openInNewTab: boolean | null;
-  href: string | null;
-} | null;
+  openInNewTab?: Maybe<boolean>;
+  href?: Maybe<string>;
+};
 
 export type SanityButton = {
   _key: string;
   buttonText?: string;
-  icon?: { svg: string | null } | null;
-  variant?: 'default' | 'outline';
-  url?: ProcessedUrl;
+  icon?: Maybe<{ svg?: Maybe<string> }>;
+  variant?: Button['variant'];
+  url?: Maybe<ProcessedUrl>;
 };
 
 export type SanityButtons = Array<SanityButton>;

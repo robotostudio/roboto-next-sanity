@@ -44,12 +44,12 @@ export const getAllBlogsPathsQuery = groq`
 }
 `;
 
-const _url = `defined(url)=>{
+const _url = `
   url{
     openInNewTab,
     "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),
   }
-}`;
+`;
 
 const _customLink = `defined(customLink)=>{
   customLink{
@@ -80,7 +80,7 @@ const _columns = `defined(columns)=>{
   }
 }`;
 
-const _links = `defined(links)=>{
+const _links = `
   links[]{
     ...,
     title,
@@ -88,15 +88,15 @@ const _links = `defined(links)=>{
     ${_url},
     ${_columns}
   }
-}`;
+`;
 
-const _buttons = `defined(buttons)=>{
+const _buttons = `
   buttons[]{
     ...,
     ${_url},
     ${_icon}
   }
-}`;
+`;
 
 const _richText = `defined(richText)=>{
   richText[]{
@@ -106,23 +106,14 @@ const _richText = `defined(richText)=>{
   }
 }`;
 
-const _form = `defined(form)=>{
-  form->{
-    ...,
-  }
-}`;
-
-const _pageBuilder = `defined(pageBuilder)=>{
+const _pageBuilder = `
   pageBuilder[]{
     ...,
     _type,
-    ${_buttons},
-    ${_richText},
-    ${_form}
-
   }
+`;
 
-}`;
+
 export const getFooterDataQuery = groq`
 *[_type == "footer"][0]{
     _id,
