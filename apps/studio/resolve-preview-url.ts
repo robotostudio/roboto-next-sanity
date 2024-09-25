@@ -3,7 +3,7 @@ import type { SanityDocument } from 'sanity';
 const previewSecret = '34845f83-b24b-4896-b18a-061fffbb8bf1';
 
 const localUrl = 'http://localhost:3000';
-const remoteUrl = 'https://roboto-demo-new-web.vercel.app';
+const remoteUrl = 'https://template.roboto.studio';
 
 const baseUrl = window.location.hostname === 'localhost' ? localUrl : remoteUrl;
 
