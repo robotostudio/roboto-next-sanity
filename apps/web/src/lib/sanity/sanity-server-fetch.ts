@@ -1,4 +1,3 @@
-'use server';
 import 'server-only';
 import { type QueryOptions, type QueryParams, createClient } from 'next-sanity';
 import { draftMode } from 'next/headers';
