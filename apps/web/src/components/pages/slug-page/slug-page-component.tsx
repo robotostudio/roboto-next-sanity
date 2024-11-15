@@ -6,11 +6,11 @@ import type { PageComponentProps } from '~/types';
 export type SlugPageProps = PageComponentProps<GetSlugPageDataQueryResult>;
 
 export const SlugPage: FC<SlugPageProps> = ({ data }) => {
-  const { pageBuilder } = data ?? {};
+  const { pageBuilder ,_id,_type} = data ?? {};
   return (
     <main>
       {Array.isArray(pageBuilder) && (
-        <PageBuilderBlock pageBuilder={pageBuilder as unknown as PageBuilder} />
+        <PageBuilderBlock id={_id} type={_type} pageBuilder={pageBuilder as unknown as PageBuilder} />
       )}
     </main>
   );

@@ -8,10 +8,10 @@ export type MainPageComponentProps =
   PageComponentProps<GetMainPageDataQueryResult>;
 
 export const MainPageComponent: FC<MainPageComponentProps> = ({ data }) => {
-  const { pageBuilder } = data ?? {};
+  const { pageBuilder ,_id,_type} = data ?? {};
   return (
     <main>
-      <PageBuilderBlock pageBuilder={pageBuilder as unknown as PageBuilder} />
+      <PageBuilderBlock id={_id} type={_type} pageBuilder={pageBuilder as unknown as PageBuilder} />
     </main>
   );
 };
