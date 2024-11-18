@@ -8,10 +8,10 @@ export type PreviewProps<T> = {
   queryParams: Record<string, unknown>;
 };
 
-export type PageParams<T = Record<string, string>> = {
-  params: T & { locale: Locale };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+// export type PageParams<T = Record<string, string>> = {
+//   params: T & { locale: Locale };
+//   searchParams: { [key: string]: string | string[] | undefined };
+// };
 
 export type Prettify<T> = {
   [K in keyof T]: T[K];
