@@ -9,8 +9,8 @@ import type { Locale } from "~/config";
 import { getMetaData } from "~/lib/seo";
 
 type PageParams = {
-	params: { locale: Locale };
-	searchParams: { [key: string]: string | string[] | undefined };
+	params: Promise<{ locale: Locale }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const generateStaticParams = async () => {
@@ -20,18 +20,18 @@ export const generateStaticParams = async () => {
 	return locales.map((locale) => ({ locale }));
 };
 
-export const generateMetadata = async ({
-	params,
-}: PageParams): Promise<Metadata> => {
-	const [data, err] = await getBlogIndexData(params.locale);
-	if (!data || err) return {};
-	const { seo } = data;
-	if (!seo) return {};
-	return getMetaData(seo);
+export const generateMetadata = async (props: PageParams): Promise<Metadata> => {
+    const params = await props.params;
+    const [data, err] = await getBlogIndexData(params.locale);
+    if (!data || err) return {};
+    const { seo } = data;
+    if (!seo) return {};
+    return getMetaData(seo);
 };
 
-export default async function BlogPage({ params }: PageParams) {
-	const [data, err] = await getBlogIndexData(params.locale);
-	if (!data || err) return notFound();
-	return <BlogIndexPage data={data} />;
+export default async function BlogPage(props: PageParams) {
+    const params = await props.params;
+    const [data, err] = await getBlogIndexData(params.locale);
+    if (!data || err) return notFound();
+    return <BlogIndexPage data={data} />;
 }

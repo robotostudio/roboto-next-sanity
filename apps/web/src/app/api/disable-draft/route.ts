@@ -6,7 +6,7 @@ export async function GET(request: Request) {
 
   const slug = searchParams.get('slug') ?? '/';
 
-  const draft = draftMode();
+  const draft = await draftMode();
 
   draft.disable();
 

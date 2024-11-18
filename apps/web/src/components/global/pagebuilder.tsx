@@ -1,11 +1,10 @@
+import { createDataAttribute } from 'next-sanity';
 import type { FC } from 'react';
-import { SplitFormBlock } from '../blocks/split-form';
-import { ImageCarouselBlock } from '../blocks/image-carousel';
 import type { PageBuilder } from '~/sanity.types';
 import { CtaBlock } from '../blocks/cta';
 import { HeroBlock } from '../blocks/hero';
-import { draftMode } from 'next/headers';
-import { createDataAttribute } from 'next-sanity';
+import { ImageCarouselBlock } from '../blocks/image-carousel';
+import { SplitFormBlock } from '../blocks/split-form';
 
 export type PageBuilderBlockProps<T> = {
   pageBuilder?: T | null;
@@ -37,7 +36,8 @@ export const PageBuilderBlock: FC<PageBuilderBlockProps<PageBuilder>> = ({
   type,
 }) => {
   if (!Array.isArray(pageBuilder)) return null;
-  const isEnabled = draftMode().isEnabled;
+  // const isEnabled = (draftMode() as unknown as UnsafeUnwrappedDraftMode).isEnabled;
+  const isEnabled = false;
   return (
     <section className="flex flex-col gap-4">
         {pageBuilder.map((block) => {
@@ -50,7 +50,7 @@ export const PageBuilderBlock: FC<PageBuilderBlockProps<PageBuilder>> = ({
           });
           return (
             <div key={block._key} data-sanity={attr()}>
-              <Comp {...block} />
+              <Comp {...block}  />
             </div>
           );
         }

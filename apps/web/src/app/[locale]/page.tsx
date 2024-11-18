@@ -9,8 +9,8 @@ import type { Locale } from "~/config";
 import { getMetaData } from "~/lib/seo";
 
 type PageParams = {
-	params: { locale: Locale };
-	searchParams: { [key: string]: string | string[] | undefined };
+	params: Promise<{ locale: Locale }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const generateStaticParams = async () => {
@@ -20,16 +20,16 @@ export const generateStaticParams = async () => {
 	return locales.map((locale) => ({ locale }));
 };
 
-export const generateMetadata = async ({
-	params,
-}: PageParams): Promise<Metadata> => {
-	const [data, err] = await getMainPageData(params.locale);
-	if (!data || err) return {};
-	return getMetaData(data);
+export const generateMetadata = async (props: PageParams): Promise<Metadata> => {
+    const params = await props.params;
+    const [data, err] = await getMainPageData(params.locale);
+    if (!data || err) return {};
+    return getMetaData(data);
 };
 
-export default async function Page({ params }: PageParams) {
-	const [data, err] = await getMainPageData(params.locale);
-	if (!data || err) return notFound();
-	return <MainPageComponent data={data} />;
+export default async function Page(props: PageParams) {
+    const params = await props.params;
+    const [data, err] = await getMainPageData(params.locale);
+    if (!data || err) return notFound();
+    return <MainPageComponent data={data} />;
 }

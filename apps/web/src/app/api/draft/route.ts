@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     return new Response('Invalid token', { status: 401 });
   }
 
-  const draft = draftMode();
+  const draft = await draftMode();
 
   draft.enable();
 

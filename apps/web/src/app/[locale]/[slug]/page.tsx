@@ -9,8 +9,8 @@ import type { Locale } from "~/config";
 import { getMetaData } from "~/lib/seo";
 
 type PageParams = {
-	params: { locale: Locale; slug: string };
-	searchParams: { [key: string]: string | string[] | undefined };
+	params: Promise<{ locale: Locale; slug: string }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const generateStaticParams = async () => {
@@ -18,20 +18,20 @@ export const generateStaticParams = async () => {
 	return slugs;
 };
 
-export const generateMetadata = async ({
-	params,
-}: PageParams): Promise<Metadata> => {
-	const [data, err] = await getSlugPageData(params.slug, params.locale);
-	if (err || !data) return {};
-	return getMetaData(data);
+export const generateMetadata = async (props: PageParams): Promise<Metadata> => {
+    const params = await props.params;
+    const [data, err] = await getSlugPageData(params.slug, params.locale);
+    if (err || !data) return {};
+    return getMetaData(data);
 };
 
-export default async function Page({ params }: PageParams) {
-	const { locale, slug } = params ?? {};
-	const [data, err] = await getSlugPageData(slug, locale);
+export default async function Page(props: PageParams) {
+    const params = await props.params;
+    const { locale, slug } = params ?? {};
+    const [data, err] = await getSlugPageData(slug, locale);
 
-	if (err || !data) {
+    if (err || !data) {
 		return notFound();
 	}
-	return <SlugPage data={data} />;
+    return <SlugPage data={data} />;
 }

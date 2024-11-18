@@ -12,7 +12,7 @@ import { locales } from '~/config';
 
 type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export const metadata = {
@@ -22,10 +22,17 @@ export const metadata = {
   },
 };
 
-export default async function LocaleLayout({
-  children,
-  params: { locale },
-}: Props) {
+export default async function LocaleLayout(props: Props) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const isValidLocale = locales.some((cur) => cur === locale);
   if (!isValidLocale) return notFound();
   setRequestLocale(locale);
@@ -34,11 +41,11 @@ export default async function LocaleLayout({
   prefetchDNS('https://cdn.sanity.io');
 
   return (
-    <html lang={locale}>
+    (<html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale}>
           <Navbar />
-          {draftMode().isEnabled ? (
+          {(await draftMode()).isEnabled ? (
             <>
               {children}
               <PreviewBar />
@@ -68,6 +75,6 @@ export default async function LocaleLayout({
           <Footer />
         </NextIntlClientProvider>
       </body>
-    </html>
+    </html>)
   );
 }

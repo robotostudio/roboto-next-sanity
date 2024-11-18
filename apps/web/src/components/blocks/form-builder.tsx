@@ -1,7 +1,7 @@
 'use client';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import { type FC, useEffect, useState } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { type FC, useEffect, useState, useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { formBuilderResponseHandler } from '~/action/formspark';
 
 import type { Form, FormField as IFormField } from '~/sanity.types';
@@ -66,7 +66,7 @@ export const FormBuilderBlock: FC<Form> = ({
 
   const [tcCheck, setTcCheck] = useState(false);
 
-  const [state, action] = useFormState(_action, INITIAL);
+  const [state, action] = useActionState(_action, INITIAL);
 
   if (!state.hasError && state.isComplete)
     return (
@@ -146,7 +146,7 @@ export const PlainFormBuilder: FC<
 
   const [tcCheck, setTcCheck] = useState(false);
 
-  const [state, action] = useFormState(_action, INITIAL);
+  const [state, action] = useActionState(_action, INITIAL);
 
   useEffect(() => {
     const timer = setTimeout(() => {
