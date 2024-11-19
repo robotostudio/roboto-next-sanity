@@ -117,90 +117,86 @@ export const NavItem = ({ data }: { data: NavN }) => {
 	);
 };
 
-export const MobileNav = ({
-	data,
-}: {
-	data: GetNavbarDataQueryResult;
-}) => {
-	const { buttons, links, logo } = data ?? {};
-	const [openDrawer, setOpenDrawer] = useState(false);
-	return (
-		<Drawer direction="right" open={openDrawer} onOpenChange={setOpenDrawer}>
-			<DrawerTrigger className="md:hidden" aria-label="Menu" id="menu-button">
-				<MenuIcon aria-label="Menu-icon" id="menu-icon" />
-			</DrawerTrigger>
-			<DrawerPortal>
-				<DrawerContent>
-					<DrawerHeader className="flex justify-between">
-						<Link href="/" onClick={() => setOpenDrawer(false)}>
-							<Image
-								src={logo ?? ""}
-								alt="logo"
-								width={80}
-								height={40}
-								priority
-							/>
-						</Link>
-						<DrawerClose asChild>
-							<X />
-						</DrawerClose>
-					</DrawerHeader>
-					<div className="mt-6 flex flex-col pl-4">
-						<NavigationMenu>
-							<NavigationMenuList className="flex flex-col items-start gap-4">
-								{Array.isArray(links) &&
-									links.map((link) =>
-										link._type === "navLink" ? (
-											<Link
-												key={link._key}
-												href={link?.url?.href ?? "#"}
-												className="!ml-0"
-												onClick={() => setOpenDrawer(false)}
-											>
-												{link.title}
-											</Link>
-										) : (
-											<Accordion
-												key={link._key}
-												type="single"
-												collapsible
-												className="!ml-0"
-											>
-												<AccordionItem value={link._key}>
-													<AccordionTrigger className="flex items-center gap-2">
-														{link.title} <ChevronDownIcon className="h-4 w-4" />{" "}
-													</AccordionTrigger>
-													<AccordionContent>
-														<ul className="ml-4 mt-4 flex flex-col items-start gap-4">
-															{Array.isArray(link?.columns) &&
-																link.columns.map((column) => (
-																	<li key={column._key}>
-																		<Link
-																			href={column?.url?.href ?? "#"}
-																			onClick={() => setOpenDrawer(false)}
-																		>
-																			{column.title}
-																		</Link>
-																	</li>
-																))}
-														</ul>
-													</AccordionContent>
-												</AccordionItem>
-											</Accordion>
-										),
-									)}
-							</NavigationMenuList>
-						</NavigationMenu>
-					</div>
-					<DrawerFooter className="flex">
-						<div className="flex">
-							<Buttons buttons={buttons} />
-						</div>
-					</DrawerFooter>
-				</DrawerContent>
-			</DrawerPortal>
-		</Drawer>
-	);
+export const MobileNav = ({ data }: PageComponentProps<GetNavbarDataQueryResult>) => {
+  const { buttons, links, logo } = data ?? {};
+  const [openDrawer, setOpenDrawer] = useState(false);
+  return (
+    <Drawer direction="right" open={openDrawer} onOpenChange={setOpenDrawer}>
+      <DrawerTrigger className="md:hidden" aria-label="Menu" id="menu-button">
+        <MenuIcon aria-label="Menu-icon" id="menu-icon" />
+      </DrawerTrigger>
+      <DrawerPortal>
+        <DrawerContent>
+          <DrawerHeader className="flex justify-between">
+            <Link href="/" onClick={() => setOpenDrawer(false)}>
+              <Image
+                src={logo ?? ''}
+                alt="logo"
+                width={80}
+                height={40}
+                priority
+              />
+            </Link>
+            <DrawerClose asChild>
+              <X />
+            </DrawerClose>
+          </DrawerHeader>
+          <div className="mt-6 flex flex-col pl-4">
+            <NavigationMenu>
+              <NavigationMenuList className="flex flex-col items-start gap-4">
+                {Array.isArray(links) &&
+                  links.map((link) =>
+                    link._type === 'navLink' ? (
+                      <Link
+                        key={link._key}
+                        href={link?.url?.href ?? '#'}
+                        className="!ml-0"
+                        onClick={() => setOpenDrawer(false)}
+                      >
+                        {link.title}
+                      </Link>
+                    ) : (
+                      <Accordion
+                        key={link._key}
+                        type="single"
+                        collapsible
+                        className="!ml-0"
+                      >
+                        <AccordionItem value={link._key}>
+                          <AccordionTrigger className="flex items-center gap-2">
+                            {link.title} <ChevronDownIcon className="h-4 w-4" />{' '}
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <ul className="ml-4 mt-4 flex flex-col items-start gap-4">
+                              {Array.isArray(link?.columns) &&
+                                link.columns.map((column) => (
+                                  <li key={column._key}>
+                                    <Link
+                                      href={column?.url?.href ?? '#'}
+                                      onClick={() => setOpenDrawer(false)}
+                                    >
+                                      {column.title}
+                                    </Link>
+                                  </li>
+                                ))}
+                            </ul>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    ),
+                  )}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+          <DrawerFooter className="flex">
+            <div className="flex">
+              <Buttons buttons={buttons} />
+            </div>
+          </DrawerFooter>
+        </DrawerContent>
+      </DrawerPortal>
+    </Drawer>
+  );
 };
 
 export const NavbarClient = ({
