@@ -121,7 +121,6 @@ export const FormBuilderBlock = ({
                 I agree to receive other communications.
                 <span className="ml-1 inline-block text-red-600">*</span>
               </span>
-
               <span>
                 You can unsubscribe from these communications at any time. For
                 more information on how to unsubscribe, our privacy practices,
