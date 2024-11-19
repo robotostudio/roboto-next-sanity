@@ -9,13 +9,11 @@ importers:
       prettier: 3.3.3
       turbo: ^2.3.0
       typescript: 5.6.3
-      web: workspace:^0.1.0
     dependencies:
       '@sanity/client': 6.22.4
       eslint: 9.15.0
       prettier: 3.3.3
       typescript: 5.6.3
-      web: link:apps/web
     devDependencies:
       turbo: 2.3.0
 
@@ -113,7 +111,7 @@ importers:
       class-variance-authority: 0.7.0
       clsx: 2.1.1
       lucide-react: 0.460.0_djkv2mt33n4uojumpbp7wfsksi
-      next: 15.0.3_aps2igp3doglaqvtduu2fob2me
+      next: 15.0.3_55rfqn2dqraeny2yjtmdl4sm4i
       next-intl: 3.25.1_xwlbhwh6qb5b3fmdaebothwt6i
       next-sanity: 9.8.15_y4vyvm6cnvifmlsxyw7lhgylwq
       react: 19.0.0-rc-66855b96-20241106
@@ -2640,8 +2638,8 @@ packages:
       styled-components: ^6.1.13
     dependencies:
       '@portabletext/patches': 1.1.0
-      '@sanity/block-tools': 3.64.1
-      '@sanity/schema': 3.64.1
+      '@sanity/block-tools': 3.64.1_debug@4.3.7
+      '@sanity/schema': 3.64.1_debug@4.3.7
       '@sanity/types': 3.64.1_debug@4.3.7
       '@xstate/react': 5.0.0_lnj3kmvematof6rfjuvbxmx5em
       debug: 4.3.7
@@ -3287,6 +3285,17 @@ packages:
       - debug
     dev: false
 
+  /@sanity/block-tools/3.64.1_debug@4.3.7:
+    resolution: {integrity: sha512-WJ+L6nhAdabWO1SvwtBCqJ3X9cmky+TQxm1IBXAQtblIKLOc0l1jjx9PCOiVromKUfCMJ6Dfj4uJF4HUEhBakQ==}
+    dependencies:
+      '@sanity/types': 3.64.1
+      '@types/react': 18.3.12
+      get-random-values-esm: 1.0.2
+      lodash: 4.17.21
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /@sanity/cli/3.64.1_djkv2mt33n4uojumpbp7wfsksi:
     resolution: {integrity: sha512-LH1QgxZ+z9IIDUA3JKUs7lMnQNeT8JnC9D/5Fl7LnjlVxXFU0L4RG46NTiTN890/zJcE+KxbeAaWxkhFHI5ppw==}
     engines: {node: '>=18'}
@@ -3742,7 +3751,7 @@ packages:
     dependencies:
       '@sanity/client': 6.22.4
       '@sanity/comlink': 1.1.3
-      next: 15.0.3_aps2igp3doglaqvtduu2fob2me
+      next: 15.0.3_55rfqn2dqraeny2yjtmdl4sm4i
       react: 19.0.0-rc-66855b96-20241106
       use-effect-event: 1.0.2_djkv2mt33n4uojumpbp7wfsksi
     dev: false
@@ -3865,6 +3874,22 @@ packages:
       - supports-color
     dev: false
 
+  /@sanity/schema/3.64.1_debug@4.3.7:
+    resolution: {integrity: sha512-25YSVazehTFSvIS/9FV3CTE0jHRl9AUMbD0dYQrmx37gmsUq7yOfA8Wiy4cScjiuJ5LfGoPfO30P1sKBJJNbcA==}
+    dependencies:
+      '@sanity/generate-help-url': 3.0.0
+      '@sanity/types': 3.64.1
+      arrify: 1.0.1
+      groq-js: 1.14.0
+      humanize-list: 1.0.1
+      leven: 3.1.0
+      lodash: 4.17.21
+      object-inspect: 1.13.3
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+    dev: false
+
   /@sanity/telemetry/0.7.9_djkv2mt33n4uojumpbp7wfsksi:
     resolution: {integrity: sha512-TBBRK2SUwiNND+ZJPwdWSu8tbEjdIz7UjagmCCBBWcfXtDKXXlWawC/DOEWuI4Q+WcA5OWLDjboxZT4ApWjVbw==}
     engines: {node: '>=16.0.0'}
@@ -3910,7 +3935,7 @@ packages:
   /@sanity/types/3.64.1_debug@4.3.7:
     resolution: {integrity: sha512-QmX6ACmiGi6Hrl4bOccsAJ7G2AjKBhQZHREGx8XHPAn0N83wXff71mzVHkFPLK3wSyHwrBqgAc3yDvjfGe7j5g==}
     dependencies:
-      '@sanity/client': 6.22.4_debug@4.3.7
+      '@sanity/client': 6.22.4
       '@types/react': 18.3.12
     transitivePeerDependencies:
       - debug
@@ -4075,7 +4100,7 @@ packages:
       '@sanity/preview-url-secret': 2.0.3_@sanity+client@6.22.4
       '@vercel/stega': 0.1.2
       get-random-values-esm: 1.0.2
-      next: 15.0.3_aps2igp3doglaqvtduu2fob2me
+      next: 15.0.3_55rfqn2dqraeny2yjtmdl4sm4i
       react: 19.0.0-rc-66855b96-20241106
       react-dom: 19.0.0-rc-66855b96-20241106_djkv2mt33n4uojumpbp7wfsksi
       rxjs: 7.8.1
@@ -4757,7 +4782,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.25.9_@babel+core@7.26.0
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 4.5.5_@types+node@22.9.0
+      vite: 4.5.5
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -8325,7 +8350,7 @@ packages:
     dependencies:
       '@formatjs/intl-localematcher': 0.5.8
       negotiator: 1.0.0
-      next: 15.0.3_aps2igp3doglaqvtduu2fob2me
+      next: 15.0.3_55rfqn2dqraeny2yjtmdl4sm4i
       react: 19.0.0-rc-66855b96-20241106
       use-intl: 3.25.1_djkv2mt33n4uojumpbp7wfsksi
     dev: false
@@ -8355,7 +8380,7 @@ packages:
       '@sanity/visual-editing': 2.7.2_cj2nzw6o2tqbk5xkpn3rdmtohy
       groq: 3.64.1
       history: 5.3.0
-      next: 15.0.3_aps2igp3doglaqvtduu2fob2me
+      next: 15.0.3_55rfqn2dqraeny2yjtmdl4sm4i
       react: 19.0.0-rc-66855b96-20241106
       react-dom: 19.0.0-rc-66855b96-20241106_djkv2mt33n4uojumpbp7wfsksi
       sanity: 3.64.1_q26fpzzpwudr5dy5xybb6mnruu
@@ -8367,7 +8392,7 @@ packages:
       - svelte
     dev: false
 
-  /next/15.0.3_aps2igp3doglaqvtduu2fob2me:
+  /next/15.0.3_55rfqn2dqraeny2yjtmdl4sm4i:
     resolution: {integrity: sha512-ontCbCRKJUIoivAdGB34yCaOcPgYXr9AAkV/IwqFfWWTXEPUgLYkSkqBhIk9KK7gGmgjc64B+RdoeIDM13Irnw==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -8396,7 +8421,7 @@ packages:
       postcss: 8.4.31
       react: 19.0.0-rc-66855b96-20241106
       react-dom: 19.0.0-rc-66855b96-20241106_djkv2mt33n4uojumpbp7wfsksi
-      styled-jsx: 5.1.6_mxxyyfm2luafzmfwdlccelu7ka
+      styled-jsx: 5.1.6_djkv2mt33n4uojumpbp7wfsksi
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.0.3
       '@next/swc-darwin-x64': 15.0.3
@@ -10226,7 +10251,7 @@ packages:
       '@rexxars/react-json-inspector': 8.0.1_djkv2mt33n4uojumpbp7wfsksi
       '@sanity/asset-utils': 2.1.0
       '@sanity/bifur-client': 0.4.1
-      '@sanity/block-tools': 3.64.1
+      '@sanity/block-tools': 3.64.1_debug@4.3.7
       '@sanity/cli': 3.64.1_djkv2mt33n4uojumpbp7wfsksi
       '@sanity/client': 6.22.4_debug@4.3.7
       '@sanity/color': 3.0.6
@@ -10242,7 +10267,7 @@ packages:
       '@sanity/migrate': 3.64.1
       '@sanity/mutator': 3.64.1
       '@sanity/presentation': 1.18.2_7zxy4fmbaa3syeehx2h7jrea7m
-      '@sanity/schema': 3.64.1
+      '@sanity/schema': 3.64.1_debug@4.3.7
       '@sanity/telemetry': 0.7.9_djkv2mt33n4uojumpbp7wfsksi
       '@sanity/types': 3.64.1_debug@4.3.7
       '@sanity/ui': 2.8.23_qiff3aftjjfwbwpynvsobybjqi
@@ -10871,7 +10896,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /styled-jsx/5.1.6_mxxyyfm2luafzmfwdlccelu7ka:
+  /styled-jsx/5.1.6_djkv2mt33n4uojumpbp7wfsksi:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -10884,7 +10909,6 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      '@babel/core': 7.26.0
       client-only: 0.0.1
       react: 19.0.0-rc-66855b96-20241106
     dev: false
