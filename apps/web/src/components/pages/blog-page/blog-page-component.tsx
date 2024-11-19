@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type { FC } from 'react';
 import Balancer from 'react-wrap-balancer';
 import { ArticleRichText } from '~/components/global/richText';
 import { SanityImage } from '~/components/global/sanity-image';
@@ -12,7 +11,7 @@ import type { PageComponentProps } from '~/types';
 export type BlogIndexPageProps =
   PageComponentProps<GetBlogIndexDataQueryResult>;
 
-export const BlogIndexPage: FC<BlogIndexPageProps> = ({ data }) => {
+export const BlogIndexPage = ({ data }: BlogIndexPageProps) => {
   const { blogs } = data ?? {};
   return (
     <main>
@@ -23,7 +22,7 @@ export const BlogIndexPage: FC<BlogIndexPageProps> = ({ data }) => {
 
 export type BlogGridProps = Pick<GetBlogIndexDataQueryResult, 'blogs'>;
 
-export const BlogGrid: FC<BlogGridProps> = ({ blogs }) => {
+export const BlogGrid = ({ blogs }: BlogGridProps) => {
   if (!Array.isArray(blogs)) return <></>;
   return (
     <div className="my-10 px-4 lg:px-10">
@@ -41,7 +40,7 @@ export type BlogCardProps = {
   blog: GetBlogIndexDataQueryResult['blogs'][number];
 };
 
-export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
+export const BlogCard = ({ blog }: BlogCardProps) => {
   const { title, image, slug, description } = blog ?? {};
   return (
     <div className="flex items-start justify-center gap-4 ">
@@ -70,7 +69,7 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
 
 export type BlogSlugPageProps = PageComponentProps<GetBlogPageDataQueryResult>;
 
-export const BlogSlugPage: FC<BlogSlugPageProps> = ({ data }) => {
+export const BlogSlugPage = ({ data }: BlogSlugPageProps) => {
   const { richText, title, image, description, _createdAt } = data ?? {};
   return (
     <main className="animate-fade-up-slow mb-32 mt-12 md:mb-56">

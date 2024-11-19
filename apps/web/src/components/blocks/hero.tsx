@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import type { Hero } from '~/sanity.types';
 import type { ProcessPageBuilderBlock } from '~/types';
 import { Buttons } from '../global/buttons';
@@ -6,13 +5,13 @@ import { RichText } from '../global/richText';
 
 export type HeroBlockProps = ProcessPageBuilderBlock<Hero>;
 
-export const HeroBlock: FC<HeroBlockProps> = ({
+export const HeroBlock = ({
   title,
   buttons,
   richText,
   isTitleH1,
   _type,
-}) => {
+}: HeroBlockProps) => {
   return (
     <section key="1" className="py-8 text-center" id={_type}>
       <div className="container px-4 text-center md:px-6">

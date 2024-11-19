@@ -5,10 +5,9 @@ const MAIN_CIRCLE_SIZE = 210;
 const MAIN_CIRCLE_OPACITY = 0.3;
 const NUM_CIRCLES = 10;
 
-const Ripple = React.memo(function Ripple() {
-  return (
-    <div className="absolute inset-0 -z-10 bg-slate-900">
-      <div className="absolute left-1/2 top-1/2 -z-10 h-full w-full overflow-visible opacity-20">
+const Ripple = () => (
+  <div className="absolute inset-0 -z-10 bg-slate-900">
+    <div className="absolute left-1/2 top-1/2 -z-10 h-full w-full overflow-visible opacity-20">
         {Array.from({ length: NUM_CIRCLES }, (_, i) => (
           <div
             key={i.toString()}
@@ -24,6 +23,5 @@ const Ripple = React.memo(function Ripple() {
       </div>
     </div>
   );
-});
 
 export default Ripple;

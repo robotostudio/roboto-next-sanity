@@ -8,17 +8,17 @@ import {
 } from '@portabletext/react';
 import { CheckSquare } from 'lucide-react';
 import Link from 'next/link';
-import type { FC } from 'react';
 import { cn } from '~/lib/utils';
 import type { ProcessedUrl, SanityImage as SanityImageProps } from '~/types';
 import { SanityImage } from './sanity-image';
 
-export const CustomLinkResolver: FC<
-  PortableTextMarkComponentProps<{
-    _type: 'customLink';
-    customLink?: ProcessedUrl;
-  }>
-> = ({ children, value }) => {
+export const CustomLinkResolver = ({
+  children,
+  value,
+}: PortableTextMarkComponentProps<{
+  _type: 'customLink';
+  customLink?: ProcessedUrl;
+}>) => {
   const { href, openInNewTab } = value?.customLink ?? {};
   if (!href) return <span>Link Broken</span>;
   return (
@@ -93,7 +93,7 @@ type PortableRichTextProps = {
   className?: string; // Added className prop
 };
 
-export const RichText: FC<PortableRichTextProps> = ({ value, className }) => {
+export const RichText = ({ value, className }: PortableRichTextProps) => {
   if (!Array.isArray(value)) return <></>;
   return (
     <div
@@ -113,10 +113,10 @@ export const RichText: FC<PortableRichTextProps> = ({ value, className }) => {
   );
 };
 
-export const ArticleRichText: FC<PortableRichTextProps> = ({
+export const ArticleRichText = ({
   value,
   className,
-}) => {
+}: PortableRichTextProps) => {
   if (!Array.isArray(value)) return <></>;
   return (
     <div
@@ -136,10 +136,10 @@ export const ArticleRichText: FC<PortableRichTextProps> = ({
   );
 };
 
-export const PortableRichTextNative: FC<PortableRichTextProps> = ({
+export const PortableRichTextNative = ({
   value,
   className, // Added className prop
-}) => {
+}: PortableRichTextProps) => {
   if (!Array.isArray(value)) return <></>;
   return (
     <div className={className}>

@@ -1,6 +1,5 @@
 import { getImageDimensions } from '@sanity/asset-utils';
 import Image, { type ImageProps } from 'next/image';
-import type { FC } from 'react';
 import { urlFor } from '~/lib/sanity';
 
 import type { Maybe, SanityImage as SanityImageProp } from '~/types';
@@ -46,14 +45,14 @@ type SanityImageProps = {
   loading?: 'lazy' | 'eager';
 };
 
-export const SanityImage: FC<SanityImageProps> = ({
+export const SanityImage = ({
   image,
   className,
   options,
   loading = 'lazy',
   height,
   width,
-}) => {
+}: SanityImageProps) => {
   if (!image?.asset) return <></>;
 
   const dimension = getDimension(image.asset, width, height);

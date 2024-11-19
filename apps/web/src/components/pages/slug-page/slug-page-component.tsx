@@ -1,11 +1,10 @@
-import type { FC } from 'react';
 import { PageBuilderBlock } from '~/components/global/pagebuilder';
 import type { GetSlugPageDataQueryResult, PageBuilder } from '~/sanity.types';
 import type { PageComponentProps } from '~/types';
 
 export type SlugPageProps = PageComponentProps<GetSlugPageDataQueryResult>;
 
-export const SlugPage: FC<SlugPageProps> = ({ data }) => {
+export const SlugPage = ({ data }: SlugPageProps) => {
   const { pageBuilder ,_id,_type} = data ?? {};
   return (
     <main>

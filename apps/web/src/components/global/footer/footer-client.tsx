@@ -1,11 +1,10 @@
 import Link from 'next/link';
-import type { FC } from 'react';
 import type { GetFooterDataQueryResult } from '~/sanity.types';
 import type { PageComponentProps } from '~/types';
 
-export const FooterClient: FC<PageComponentProps<GetFooterDataQueryResult>> = ({
+export const FooterClient = ({
   data,
-}) => {
+}: PageComponentProps<GetFooterDataQueryResult>) => {
   const { links } = data ?? {};
   return (
     <footer className="bg-primary ">

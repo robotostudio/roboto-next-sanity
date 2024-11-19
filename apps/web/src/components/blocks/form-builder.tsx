@@ -1,6 +1,6 @@
 'use client';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import { type FC, useEffect, useState, useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { formBuilderResponseHandler } from '~/action/formspark';
 
@@ -8,7 +8,7 @@ import type { Form, FormField as IFormField } from '~/sanity.types';
 import { Input } from '../global/input';
 import { Button, type ButtonProps } from '../ui/button';
 
-export const FormSubmitButton: FC<ButtonProps> = ({ children, ...props }) => {
+export const FormSubmitButton = ({ children, ...props }: ButtonProps) => {
   const { pending } = useFormStatus();
   return (
     <Button {...props} type="submit" disabled={pending || props.disabled}>
@@ -35,7 +35,7 @@ type Wrapper = {
   field: NonNullable<Form['fields']>[number];
 };
 
-const FormFieldWrapper: FC<Wrapper> = ({ field }) => {
+const FormFieldWrapper = ({ field }: Wrapper) => {
   // const { _type } = field ?? {};
   // if (_type === 'formField') {
   return <FormField field={field as IFormField} />;
@@ -52,16 +52,16 @@ const FormFieldWrapper: FC<Wrapper> = ({ field }) => {
 //   );
 // };
 
-const FormField: FC<{ field: IFormField }> = ({ field }) => {
+const FormField = ({ field }: { field: IFormField }) => {
   return <Input field={field} />;
 };
 
-export const FormBuilderBlock: FC<Form> = ({
+export const FormBuilderBlock = ({
   fields,
   title,
   formId,
   buttonText = 'Submit',
-}) => {
+}: Form) => {
   const _action = formBuilderResponseHandler.bind(null, formId ?? '');
 
   const [tcCheck, setTcCheck] = useState(false);
@@ -137,11 +137,14 @@ export const FormBuilderBlock: FC<Form> = ({
   );
 };
 
-export const PlainFormBuilder: FC<
-  Form & {
-    onSubmit?: () => void;
-  }
-> = ({ fields, formId, onSubmit, buttonText = 'Submit' }) => {
+export const PlainFormBuilder = ({
+  fields,
+  formId,
+  onSubmit,
+  buttonText = 'Submit',
+}: Form & {
+  onSubmit?: () => void;
+}) => {
   const _action = formBuilderResponseHandler.bind(null, formId ?? '');
 
   const [tcCheck, setTcCheck] = useState(false);

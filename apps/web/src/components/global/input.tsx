@@ -1,7 +1,6 @@
-import type { FC } from 'react';
 import type { FormField } from '~/sanity.types';
 
-export const Input: FC<{ field: FormField }> = ({ field }) => {
+export const Input = ({ field }: { field: FormField }) => {
   const { fieldId, fieldName, inputType, placeholder, required } = field ?? {};
 
   if (!fieldId) return <></>;

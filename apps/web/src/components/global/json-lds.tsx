@@ -1,5 +1,5 @@
-import { type FC, useId } from 'react';
-import type { Corporation, LocalBusiness, WithContext } from 'schema-dts';
+import { useId } from "react";
+import type { Corporation, LocalBusiness, WithContext } from "schema-dts";
 
 export const url = 'https://demo.roboto.studio';
 
@@ -199,7 +199,7 @@ const localBusiness: WithContext<LocalBusiness> = {
   ],
 };
 
-export const ScriptLD: FC<{ json: any }> = ({ json }) => {
+export const ScriptLD = ({ json }: { json: any }) => {
   const id = useId();
   return (
     <script
