@@ -16,30 +16,31 @@ const SanityLinkButton = ({
 }: { button: SanityButton } & ButtonProps) => {
 	const { buttonText, url, variant, icon } = button ?? {};
 	if (!url?.href || url?.href === "#")
-		return <Button variant={"destructive"}>Link Broken</Button>;
+		return (
+      <Button variant="destructive" type="button">
+        Link Broken
+      </Button>
+    );
 	return (
-		<Link href={url.href} target={url.openInNewTab ? "_blank" : "_self"}>
-			<Button {...props} variant={variant ?? "default"}>
-				{icon?.svg && <SanityIcon icon={icon} className="size-7" />}
-				{buttonText}
-			</Button>
-		</Link>
-	);
+    <Link href={url.href} target={url.openInNewTab ? '_blank' : '_self'}>
+      <Button variant={variant ?? 'default'} type="button" {...props}>
+        {icon?.svg && <SanityIcon icon={icon} className="size-7" />}
+        {buttonText}
+      </Button>
+    </Link>
+  );
 };
 
 export const Buttons = ({ buttons, wrapperProps, ...props }: ButtonsProps) => {
-	if (!Array.isArray(buttons)) return <></>;
+	if (!Array.isArray(buttons)) return null;
 	return (
-		<div
-			{...wrapperProps}
-			className={cn("flex w-full items-center gap-4", wrapperProps?.className)}
-		>
-			{buttons.map((button, index) => (
-				<SanityLinkButton button={button} {...props} key={button?._key} />
-				// <Fragment key={`${button?._key}-button-${index}`}>
-				// {button && <SanityLinkButton button={button} {...props} />}
-				// </Fragment>
-			))}
-		</div>
-	);
+    <div
+      {...wrapperProps}
+      className={cn('flex w-full items-center gap-4', wrapperProps?.className)}
+    >
+      {buttons.map((button) => (
+        <SanityLinkButton button={button} {...props} key={button?._key} />
+      ))}
+    </div>
+  );
 };

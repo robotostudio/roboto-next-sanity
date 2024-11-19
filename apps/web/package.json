@@ -40,7 +40,7 @@
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "autoprefixer": "^10.4.20",
-    "config": "*",
+    "config": "workspace:*",
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8",
