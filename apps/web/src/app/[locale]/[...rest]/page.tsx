@@ -5,44 +5,62 @@ import {
 import { SlugPage } from '~/components/pages/slug-page/slug-page-component';
 import type { Locale } from '~/config';
 import { getLocalizedSlug } from '~/lib/helper';
+import { notFound } from 'next/navigation';
 
-type Props = {
-  params: Promise<{
-    locale: Locale;
-    rest: string[];
-  }>;
-};
+interface PageParams {
+  locale: Locale;
+  rest: string[];
+}
 
-async function RenderPageType({
-  localizedSlug,
-  locale,
-}: {
+interface Props {
+  params: Promise<PageParams>;
+}
+
+interface RenderPageTypeProps {
   localizedSlug: string;
   locale: Locale;
-}) {
-  console.log('🚀 ~ localizedSlug:', localizedSlug);
-  const [response, err] = await getSlugPageData(localizedSlug, locale);
-  if (err || !response?.data) {
-    return <div>Error: {err}</div>;
+}
+
+async function RenderPageType({ localizedSlug, locale }: RenderPageTypeProps) {
+  const [response, error] = await getSlugPageData(localizedSlug, locale);
+
+  if (error || !response?.data) {
+    // throw new Error(`Failed to fetch page data: ${error}`);
+    return notFound();
   }
+
   return <SlugPage data={response.data} />;
 }
 
 export default async function DynamicSlug({ params }: Props) {
-  const { locale, rest } = await params;
-  const slug = rest.join('/');
+  try {
+    const { locale, rest } = await params;
+    const slug = rest.join('/');
+    const localizedSlug = getLocalizedSlug({ slug, locale });
 
-  const localizedSlug = getLocalizedSlug({ slug, locale });
-  const [response, err] = await getPageType(localizedSlug);
-  if (err || !response) {
-    return <div>Error: {err}</div>;
-  }
-  const pageType = response.data;
+    const [pageTypeResponse, pageTypeError] = await getPageType(localizedSlug);
 
-  switch (pageType) {
-    case 'page':
-      return <RenderPageType localizedSlug={localizedSlug} locale={locale} />;
-    default:
-      return <div>Page not found</div>;
+    if (pageTypeError || !pageTypeResponse) {
+      throw new Error(`Failed to fetch page type: ${pageTypeError}`);
+    }
+
+    const pageType = pageTypeResponse.data;
+
+    // Handle different page types
+    switch (pageType) {
+      case 'page':
+        return <RenderPageType localizedSlug={localizedSlug} locale={locale} />;
+      // Add additional page type cases here as they become available
+      // case 'blog':
+      //   return <BlogPage localizedSlug={localizedSlug} locale={locale} />;
+      // case 'product':
+      //   return <ProductPage localizedSlug={localizedSlug} locale={locale} />;
+      default:
+        return notFound();
+    }
+  } catch (error) {
+    // Log error to monitoring service in production
+    console.error('Error rendering dynamic page:', error);
+    throw error;
   }
 }

@@ -12,14 +12,26 @@ import { cn } from '~/lib/utils';
 import type { ProcessedUrl, SanityImageAsset } from '~/types';
 import { SanityImage } from './sanity-image';
 
-export const CustomLinkResolver: FC<
+// Types
+interface RichTextProps {
+  value?: PortableTextProps['value'] | null;
+  className?: string;
+}
+
+// Constants
+const BASE_PROSE_STYLES = 'prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80';
+
+// Components
+const CustomLink: FC<
   PortableTextMarkComponentProps<{
     _type: 'customLink';
     customLink?: ProcessedUrl;
   }>
 > = ({ children, value }) => {
   const { href, openInNewTab } = value?.customLink ?? {};
-  if (!href) return <span>Link Broken</span>;
+  
+  if (!href) return <span className="text-red-500">Link Broken</span>;
+  
   return (
     <span className="underline underline-offset-2">
       <Link
@@ -33,23 +45,25 @@ export const CustomLinkResolver: FC<
   );
 };
 
-const NextImageResolver = ({
+const ImageComponent = ({
   value,
-}: PortableTextComponentProps<SanityImageAsset>) => {
-  return (
-    <div className="my-4">
-      <SanityImage image={value} className="rounded-xl" />
-    </div>
-  );
-};
+}: PortableTextComponentProps<SanityImageAsset>) => (
+  <div className="my-4">
+    <SanityImage image={value} className="rounded-xl" />
+  </div>
+);
 
-const nativeComponents: PortableTextReactComponents = {
-  unknownList: () => <></>,
-  unknownListItem: () => <></>,
-  unknownMark: () => <></>,
-  unknownType: () => <></>,
-  unknownBlockStyle: () => <></>,
+// Rich Text Components Configuration
+const richTextComponents: PortableTextReactComponents = {
+  // Handle unknown components gracefully
+  unknownList: () => null,
+  unknownListItem: () => null,
+  unknownMark: () => null,
+  unknownType: () => null,
+  unknownBlockStyle: () => null,
   hardBreak: () => <br />,
+
+  // Block styles
   block: {
     normal: ({ children }) => <p>{children}</p>,
     h2: ({ children }) => <h2>{children}</h2>,
@@ -59,12 +73,18 @@ const nativeComponents: PortableTextReactComponents = {
     h6: ({ children }) => <h6>{children}</h6>,
     inline: ({ children }) => <span>{children}</span>,
   },
+
+  // Custom types
   types: {
-    image: NextImageResolver,
+    image: ImageComponent,
   },
+
+  // Custom marks
   marks: {
-    customLink: CustomLinkResolver,
+    customLink: CustomLink,
   },
+
+  // List styles
   list: {
     bullet: ({ children }) => (
       <ul className="list-disc px-8 py-2">{children}</ul>
@@ -76,6 +96,7 @@ const nativeComponents: PortableTextReactComponents = {
       <ol className="list-inside px-8 py-2">{children}</ol>
     ),
   },
+
   listItem: {
     bullet: ({ children }) => <li>{children}</li>,
     number: ({ children }) => <li>{children}</li>,
@@ -87,69 +108,46 @@ const nativeComponents: PortableTextReactComponents = {
   },
 };
 
-type PortableRichTextProps = {
-  value?: PortableTextProps['value'] | null;
-  className?: string; // Added className prop
-};
+// Shared Rich Text Wrapper Component
+const RichTextWrapper: FC<
+  RichTextProps & { size?: 'default' | 'large' | 'native' }
+> = ({ value, className, size = 'default' }) => {
+  if (!Array.isArray(value)) return null;
 
-export const RichText: FC<PortableRichTextProps> = ({ value, className }) => {
-  if (!Array.isArray(value)) return <></>;
+  const sizeStyles = {
+    default: 'prose',
+    large: 'prose-lg',
+    native: '',
+  };
+
   return (
     <div
       className={cn(
-        'prose-lg prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80',
+        size !== 'native' && [sizeStyles[size], BASE_PROSE_STYLES],
         className,
       )}
     >
       <PortableText
         onMissingComponent={(_args, { type }) => {
-          console.log('missing components', type);
+          console.warn('Missing Portable Text component:', type);
+          return null;
         }}
-        components={nativeComponents}
+        components={richTextComponents}
         value={value}
       />
     </div>
   );
 };
 
-export const ArticleRichText: FC<PortableRichTextProps> = ({
-  value,
-  className,
-}) => {
-  if (!Array.isArray(value)) return <></>;
-  return (
-    <div
-      className={cn(
-        'prose prose-slate prose-headings:scroll-m-24 prose-headings:font-bold prose-headings:text-opacity-90 prose-p:text-opacity-80 prose-a:underline prose-a:decoration-dotted prose-ol:list-decimal prose-ol:text-opacity-80 prose-ul:list-disc prose-ul:text-opacity-80',
-        className,
-      )}
-    >
-      <PortableText
-        onMissingComponent={(_args, { type }) => {
-          console.log('missing components', type);
-        }}
-        components={nativeComponents}
-        value={value}
-      />
-    </div>
-  );
-};
+// Exported Components
+export const RichText: FC<RichTextProps> = (props) => (
+  <RichTextWrapper {...props} className="" size="large" />
+);
 
-export const PortableRichTextNative: FC<PortableRichTextProps> = ({
-  value,
-  className, // Added className prop
-}) => {
-  if (!Array.isArray(value)) return <></>;
-  return (
-    <div className={className}>
-      {' '}
-      <PortableText
-        onMissingComponent={(...args) => {
-          console.log('missing components', args);
-        }}
-        components={nativeComponents}
-        value={value}
-      />
-    </div>
-  );
-};
+export const ArticleRichText: FC<RichTextProps> = (props) => (
+  <RichTextWrapper {...props} className="" size="default" />
+);
+
+export const PortableRichTextNative: FC<RichTextProps> = (props) => (
+  <RichTextWrapper {...props} size="native" className="" />
+);

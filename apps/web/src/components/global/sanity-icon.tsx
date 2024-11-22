@@ -1,22 +1,32 @@
-import type { ComponentProps, FC } from 'react';
+import type { ComponentProps } from 'react';
 import { cn } from '~/lib/utils';
+import { memo } from 'react';
 
-type IconProps = Omit<ComponentProps<'span'>, 'src'> & {
+interface IconProps extends Omit<ComponentProps<'span'>, 'src'> {
   icon?: {
     svg?: string | null;
   };
-};
+}
 
-export const SanityIcon: FC<IconProps> = ({ icon, className, ...props }) => {
-  const { svg } = icon ?? {};
+export const SanityIcon = memo(function SanityIconUnmemorized({
+  icon,
+  className,
+  ...props
+}: IconProps) {
+  const svg = icon?.svg;
 
-  if (!svg) return <></>;
+  if (!svg) {
+    return null;
+  }
 
   return (
     <span
       {...props}
       className={cn('flex size-12 items-center justify-center', className)}
-      dangerouslySetInnerHTML={{ __html: svg ?? '' }}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+      dangerouslySetInnerHTML={{ __html: svg }}
+      role="img"
+      aria-hidden="true"
     />
   );
-};
+});

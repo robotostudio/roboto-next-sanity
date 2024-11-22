@@ -1,89 +1,98 @@
 import { getImageDimensions } from '@sanity/asset-utils';
 import Image, { type ImageProps } from 'next/image';
-import type { FC } from 'react';
+import { memo } from 'react';
 import { urlFor } from '~/lib/sanity/utils';
 import type { Maybe, SanityImageAsset } from '~/types';
 
-const getDimension = (
-  image: NonNullable<SanityImageAsset['asset']>,
+interface ImageDimensions {
+  width: number;
+  height: number;
+}
+
+function getDimensions(
+  asset: NonNullable<SanityImageAsset['asset']>,
   width?: number,
   height?: number,
-) => {
-  const dimension = getImageDimensions(image);
+): ImageDimensions {
+  const { width: assetWidth, height: assetHeight } = getImageDimensions(asset);
+  return {
+    width: width ?? assetWidth,
+    height: height ?? assetHeight,
+  };
+}
+
+function getBlurProps(
+  image?: SanityImageAsset,
+): Partial<Pick<ImageProps, 'placeholder' | 'blurDataURL'>> {
+  if (!image || !('blurData' in image)) return {};
 
   return {
-    width: width ?? dimension.width,
-    height: height ?? dimension.height,
+    placeholder: 'blur',
+    blurDataURL: image.blurData as string,
   };
-};
+}
 
-export const getImageBlurProps = (image?: SanityImageAsset) => {
-  if (!image) return {};
-  if ('blurData' in image) {
-    const op: Pick<ImageProps, 'placeholder' | 'blurDataURL'> = {
-      placeholder: 'blur',
-      blurDataURL: image.blurData as string,
-    };
-    return op;
+function getAlt(image: unknown): string {
+  if (
+    !image ||
+    typeof image !== 'object' ||
+    !('alt' in image) ||
+    typeof image.alt !== 'string'
+  ) {
+    return 'image-broken';
   }
-  return {};
-};
+  return image.alt;
+}
 
-const getImageAlt = (image?: unknown): string => {
-  if (!image) return 'image-broken';
-  if (typeof image !== 'object') return 'image-broken';
-  if ('alt' in image && typeof image.alt === 'string') return image.alt;
-  return 'image-broken';
-};
-
-type SanityImageProps = {
+interface SanityImageProps {
   image?: Maybe<SanityImageAsset>;
   className?: string;
-  options?: Omit<ImageProps, 'className' | 'src' | 'width' | 'height'>;
+  options?: Omit<ImageProps, 'className' | 'src' | 'width' | 'height' | 'alt'>;
   width?: number;
   height?: number;
   loading?: 'lazy' | 'eager';
-};
+}
 
-export const SanityImage: FC<SanityImageProps> = ({
+export const SanityImage = memo(function SanityImageUnmemorized({
   image,
   className,
   options,
   loading = 'lazy',
   height,
   width,
-}) => {
-  if (!image?.asset) return <></>;
+}: SanityImageProps) {
+  if (!image?.asset) {
+    return null;
+  }
 
-  const dimension = getDimension(image.asset, width, height);
-  const _image = {
+  const { width: dimensionWidth, height: dimensionHeight } = getDimensions(
+    image.asset,
+    width,
+    height,
+  );
+
+  const url = urlFor({
     ...image,
     _id: image.asset._ref,
-  };
-
-  const blurProps = getImageBlurProps(image);
-
-  const alt = getImageAlt(image);
-
-  const url = urlFor(_image)
-    .width(dimension.width)
-    .height(dimension.height)
+  })
+    .width(dimensionWidth)
+    .height(dimensionHeight)
     .quality(100)
     .url();
 
   return (
     <div className="flex size-full flex-col items-center justify-center">
       <Image
-        alt={alt}
+        alt={getAlt(image)}
         src={url}
         loading={loading}
         sizes="(max-width: 640px) 80vw, 80vw"
-        width={dimension.width}
-        height={dimension.height}
+        width={dimensionWidth}
+        height={dimensionHeight}
         className={className}
-        {...blurProps}
+        {...getBlurProps(image)}
         {...options}
       />
     </div>
   );
-};
+});
