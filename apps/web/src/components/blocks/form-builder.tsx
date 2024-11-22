@@ -1,6 +1,6 @@
 'use client';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { formBuilderResponseHandler } from '~/actions/formspark';
 
@@ -69,7 +69,7 @@ export function FormBuilderBlock({
 
   const [tcCheck, setTcCheck] = useState(false);
 
-  const [state, action] = useFormState(_action, INITIAL);
+  const [state, action] = useActionState(_action, INITIAL);
 
   if (!state.hasError && state.isComplete)
     return (
