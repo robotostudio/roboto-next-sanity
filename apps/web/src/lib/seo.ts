@@ -38,6 +38,7 @@ export const getMetaData = (data: Record<string, any>): Metadata => {
     type: _type,
     id: _id,
   });
+  console.log('🚀 ~ getMetaData ~ ogImage:', ogImage, _id);
 
   const ogImageUrl = seoImage ? ogImage : getPageUrl(`/${ogImage}`);
 

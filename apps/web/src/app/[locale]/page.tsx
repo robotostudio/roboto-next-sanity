@@ -25,9 +25,9 @@ export const generateMetadata = async ({
   params,
 }: Params): Promise<Metadata> => {
   const { locale } = await params;
-  const [data, err] = await getMainPageData(locale);
-  if (!data || err) return {};
-  return getMetaData(data);
+  const [result, err] = await getMainPageData(locale);
+  if (err || !result?.data) return {};
+  return getMetaData(result.data);
 };
 
 export default async function Page({ params }: Params) {

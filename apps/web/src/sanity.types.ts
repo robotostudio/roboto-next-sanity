@@ -1618,67 +1618,6 @@ export type GetFooterDataQueryResult = {
   }> | null;
   logo: string | null;
 } | null;
-// Variable: slugPageQueryOG
-// Query: *[_type == "page" && _id == $id][0]{      _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)  }
-export type SlugPageQueryOGResult = {
-  _id: string;
-  title: string | null;
-  description: string | null;
-  image: string | null;
-  dominantColor: string | null;
-  seoImage: string | null;
-  logo: string | null;
-  _type: 'page';
-  date: null | string;
-} | null;
-// Variable: genericPageQueryOG
-// Query: *[_id == $id && defined(slug.current)][0]{      _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)  }
-export type GenericPageQueryOGResult =
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: string | null;
-      dominantColor: string | null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'blog';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: null;
-      dominantColor: null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'blogIndex';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: null;
-      dominantColor: null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'mainPage';
-      date: null | string;
-    }
-  | {
-      _id: string;
-      title: string | null;
-      description: string | null;
-      image: string | null;
-      dominantColor: string | null;
-      seoImage: string | null;
-      logo: string | null;
-      _type: 'page';
-      date: null | string;
-    }
-  | null;
 // Variable: getPageTypeQuery
 // Query: *[defined(slug.current) && slug.current == $slug][0]._type
 export type GetPageTypeQueryResult =
@@ -1758,19 +1697,6 @@ export type GetAllBlogsPathsQueryResult = Array<{
   slug: string | null;
   locale: string | null;
 }>;
-// Variable: blogPageQueryOG
-// Query: *[_type == "blog" && _id == $id][0]{    _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)}
-export type BlogPageQueryOGResult = {
-  _id: string;
-  title: string | null;
-  description: string | null;
-  image: string | null;
-  dominantColor: string | null;
-  seoImage: string | null;
-  logo: string | null;
-  _type: 'blog';
-  date: null | string;
-} | null;
 // Variable: getBlogPageDataQuery
 // Query: *[_type == "blog" && slug.current == $slug &&   select(    ($locale == 'en-GB' || $locale == '') => (!defined(language) || language == 'en-GB'),    language == $locale => language == $locale  )][0]{    ...,      image{    ...,    "alt": coalesce(asset->altText, asset->originalFilename, "Image-Broken"),    "blurData": asset->metadata.lqip,    "dominantColor": asset->metadata.palette.dominant.background,  },      richText[]{    ...,      markDefs[]{    ...,      customLink{    openInNewTab,    "href": select(      type == "internal" => internal->slug.current,      type == "external" => external,      "#"    ),  }  }  }  }
 export type GetBlogPageDataQueryResult = {
@@ -1867,6 +1793,141 @@ export type GetBlogPageDataQueryResult = {
     _type: 'image';
   };
 } | null;
+// Variable: getOGDataQuery
+// Query: *[_id == $id && defined(slug.current)][0]{      _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)}
+export type GetOGDataQueryResult =
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blog';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blogIndex';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'mainPage';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'page';
+      date: null | string;
+    }
+  | null;
+// Variable: blogPageQueryOG
+// Query: *[_type == "blog" && defined(slug.current) && _id == $id][0]{    _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)}
+export type BlogPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: 'blog';
+  date: null | string;
+} | null;
+// Variable: mainPageQueryOG
+// Query: *[_type == "mainPage" && defined(slug.current) && _id == $id][0]{      _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)  }
+export type MainPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: null;
+  dominantColor: null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: 'mainPage';
+  date: null | string;
+} | null;
+// Variable: slugPageQueryOG
+// Query: *[_type == "page" && defined(slug.current) && _id == $id][0]{      _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)  }
+export type SlugPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: 'page';
+  date: null | string;
+} | null;
+// Variable: genericPageQueryOG
+// Query: *[_id == $id && defined(slug.current)][0]{      _id,  "title": select(    defined(ogTitle) => ogTitle,    defined(seoTitle) => seoTitle,    title  ),  "description": select(    defined(ogDescription) => ogDescription,    defined(seoDescription) => seoDescription,    description  ),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  "dominantColor": image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",   "logo": *[_type == "logo"][0].image.asset->url,  _type,  "date": coalesce(date, _createdAt)  }
+export type GenericPageQueryOGResult =
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blog';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blogIndex';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'mainPage';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'page';
+      date: null | string;
+    }
+  | null;
 
 // Query TypeMap
 import '@sanity/client';
@@ -1879,13 +1940,15 @@ declare module '@sanity/client' {
     '\n  *[_type == "page" && defined(slug.current)]{\n    "slug": slug.current,\n    "locale": language\n  }\n': GetAllSlugPagePathsQueryResult;
     '\n  *[_type == "navbar"][0]{\n    _id,\n    title,\n    links[]{\n      ...,\n      title,\n      _type,\n      \n  url{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n,\n      columns[]{\n        ...,\n        title,\n        description,\n        \n  icon{\n    svg\n  }\n,\n        \n  url{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n      }\n    },\n    \n  buttons[]{\n    ...,\n    \n  url{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n,\n    icon{\n      svg\n    }\n  }\n,\n    "logo": *[_type == "logo"][0].image.asset->url\n  }\n': GetNavbarDataQueryResult;
     '\n  *[_type == "footer"][0]{\n    _id,\n    title,\n    links[]{\n      ...,\n      title,\n      _type,\n      \n  url{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n,\n      columns[]{\n        ...,\n        title,\n        description,\n        \n  icon{\n    svg\n  }\n,\n        \n  url{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n      }\n    },\n    "logo": *[_type == "logo"][0].image.asset->url\n  }\n': GetFooterDataQueryResult;
-    '\n  *[_type == "page" && _id == $id][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': SlugPageQueryOGResult;
-    '\n  *[_id == $id && defined(slug.current)][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': GenericPageQueryOGResult;
     '\n  *[defined(slug.current) && slug.current == $slug][0]._type\n': GetPageTypeQueryResult;
     '\n{\n    "seo":*[_type == "blogIndex" && \n  select(\n    ($locale == \'en-GB\' || $locale == \'\') => (!defined(language) || language == \'en-GB\'),\n    language == $locale => language == $locale\n  )\n][0]{\n        ...,\n    },\n    "blogs":*[_type == "blog" && \n  select(\n    ($locale == \'en-GB\' || $locale == \'\') => (!defined(language) || language == \'en-GB\'),\n    language == $locale => language == $locale\n  )\n]{\n      _id,\n      \n  "title":coalesce(cardTitle,title),\n  "description":coalesce(cardDescription,description),\n  "image":coalesce(cardImage,image)\n,\n      "slug":slug.current\n    }\n}\n': GetBlogIndexDataQueryResult;
     '\n  *[_type == "blogIndex"].language\n': GetAllBlogIndexTranslationsQueryResult;
     '\n*[_type == "blog" && defined(slug.current) && !seoNoIndex]{\n  "slug":slug.current,\n  "locale":language\n}\n': GetAllBlogsPathsQueryResult;
-    '\n*[_type == "blog" && _id == $id][0]{\n  \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n}\n': BlogPageQueryOGResult;
     '\n*[_type == "blog" && slug.current == $slug && \n  select(\n    ($locale == \'en-GB\' || $locale == \'\') => (!defined(language) || language == \'en-GB\'),\n    language == $locale => language == $locale\n  )\n][0]{\n    ...,\n    \n  image{\n    ...,\n    "alt": coalesce(asset->altText, asset->originalFilename, "Image-Broken"),\n    "blurData": asset->metadata.lqip,\n    "dominantColor": asset->metadata.palette.dominant.background,\n  }\n,\n    \n  richText[]{\n    ...,\n    \n  markDefs[]{\n    ...,\n    \n  customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      "#"\n    ),\n  }\n\n  }\n\n  }\n\n  }\n': GetBlogPageDataQueryResult;
+    '\n*[_id == $id && defined(slug.current)][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n}\n': GetOGDataQueryResult;
+    '\n*[_type == "blog" && defined(slug.current) && _id == $id][0]{\n  \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n}\n': BlogPageQueryOGResult;
+    '\n  *[_type == "mainPage" && defined(slug.current) && _id == $id][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': MainPageQueryOGResult;
+    '\n  *[_type == "page" && defined(slug.current) && _id == $id][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': SlugPageQueryOGResult;
+    '\n  *[_id == $id && defined(slug.current)][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': GenericPageQueryOGResult;
   }
 }

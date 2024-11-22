@@ -18,11 +18,7 @@ type PageParams = {
 
 // Generate static paths for all blog posts at build time
 export const generateStaticParams = async () => {
-  const paths = await getAllBlogsPaths();
-  return paths.map(({ slug, locale }) => ({
-    slug,
-    locale,
-  }));
+  return await getAllBlogsPaths();
 };
 
 // Helper function to fetch and validate blog data

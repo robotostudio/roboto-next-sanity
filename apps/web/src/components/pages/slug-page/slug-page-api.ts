@@ -100,12 +100,7 @@ export const getPageType = unstable_cache(
  */
 export const getSlugPageOGData = unstable_cache(
   async (id: string) => {
-    return await handleErrors(
-      sanityFetch({
-        query: slugPageQueryOG,
-        params: { id },
-      }),
-    );
+    return await handleErrors(client.fetch(slugPageQueryOG, { id }));
   },
   ['slugPageOG'],
   cacheConfig,
@@ -116,12 +111,7 @@ export const getSlugPageOGData = unstable_cache(
  */
 export const getGenericPageOGData = unstable_cache(
   async (id: string) => {
-    return await handleErrors(
-      sanityFetch({
-        query: genericPageQueryOG,
-        params: { id },
-      }),
-    );
+    return await handleErrors(client.fetch(genericPageQueryOG, { id }));
   },
   ['genericPageOG'],
   cacheConfig,

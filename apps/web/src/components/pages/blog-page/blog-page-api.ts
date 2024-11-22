@@ -1,8 +1,10 @@
+import { unstable_cache } from 'next/cache';
 import type { Locale } from '~/config';
 import { handleErrors } from '~/lib/helper';
 import { client } from '~/lib/sanity/client';
 import { sanityFetch } from '~/lib/sanity/live';
 import {
+  blogPageQueryOG,
   getAllBlogIndexTranslationsQuery,
   getAllBlogsPathsQuery,
   getBlogIndexDataQuery,
@@ -47,3 +49,7 @@ export async function getAllBlogsPaths() {
 export async function getAllBlogIndexTranslations() {
   return await handleErrors(client.fetch(getAllBlogIndexTranslationsQuery));
 }
+
+export const getBlogPageOGData = unstable_cache(async (id: string) => {
+  return await handleErrors(client.fetch(blogPageQueryOG, { id }));
+});

@@ -121,25 +121,7 @@ const localeMatchFragment = /* groq */ `
   )
 `;
 
-const ogFieldsFragment = /* groq */ `
-  _id,
-  "title": select(
-    defined(ogTitle) => ogTitle,
-    defined(seoTitle) => seoTitle,
-    title
-  ),
-  "description": select(
-    defined(ogDescription) => ogDescription,
-    defined(seoDescription) => seoDescription,
-    description
-  ),
-  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",
-  "dominantColor": image.asset->metadata.palette.dominant.background,
-  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", 
-  "logo": *[_type == "logo"][0].image.asset->url,
-  _type,
-  "date": coalesce(date, _createdAt)
-`;
+
 
 // Query definitions
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]`);
@@ -219,17 +201,7 @@ export const getFooterDataQuery = defineQuery(`
   }
 `);
 
-export const slugPageQueryOG = defineQuery(`
-  *[_type == "page" && _id == $id][0]{
-    ${ogFieldsFragment}
-  }
-`);
 
-export const genericPageQueryOG = defineQuery(`
-  *[_id == $id && defined(slug.current)][0]{
-    ${ogFieldsFragment}
-  }
-`);
 
 export const getPageTypeQuery = defineQuery(`
   *[defined(slug.current) && slug.current == $slug][0]._type
@@ -265,16 +237,58 @@ export const getAllBlogsPathsQuery = defineQuery(`
 }
 `);
 
-export const blogPageQueryOG = defineQuery(`
-*[_type == "blog" && _id == $id][0]{
-  ${ogFieldsFragment}
-}
-`);
-
 export const getBlogPageDataQuery = defineQuery(`
 *[_type == "blog" && slug.current == $slug && ${localeMatchFragment}][0]{
     ...,
     ${imageFragment},
     ${richTextFragment}
+  }
+`);
+const ogFieldsFragment = /* groq */ `
+  _id,
+  "title": select(
+    defined(ogTitle) => ogTitle,
+    defined(seoTitle) => seoTitle,
+    title
+  ),
+  "description": select(
+    defined(ogDescription) => ogDescription,
+    defined(seoDescription) => seoDescription,
+    description
+  ),
+  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+  "dominantColor": image.asset->metadata.palette.dominant.background,
+  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", 
+  "logo": *[_type == "logo"][0].image.asset->url,
+  _type,
+  "date": coalesce(date, _createdAt)
+`;
+
+export const getOGDataQuery = defineQuery(`
+*[_id == $id && defined(slug.current)][0]{
+    ${ogFieldsFragment}
+}
+`);
+
+export const blogPageQueryOG = defineQuery(`
+*[_type == "blog" && defined(slug.current) && _id == $id][0]{
+  ${ogFieldsFragment}
+}
+`);
+export const mainPageQueryOG = defineQuery(`
+  *[_type == "mainPage" && defined(slug.current) && _id == $id][0]{
+    ${ogFieldsFragment}
+  }
+`);
+
+export const slugPageQueryOG = defineQuery(`
+  *[_type == "page" && defined(slug.current) && _id == $id][0]{
+    ${ogFieldsFragment}
+  }
+`);
+
+export const genericPageQueryOG = defineQuery(`
+  *[_id == $id && defined(slug.current)][0]{
+    ${ogFieldsFragment}
   }
 `);
