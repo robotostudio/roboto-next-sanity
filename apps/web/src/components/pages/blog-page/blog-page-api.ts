@@ -30,7 +30,18 @@ export async function getBlogPageData(slug: string, locale: Locale) {
 }
 
 export async function getAllBlogsPaths() {
-  return await handleErrors(client.fetch(getAllBlogsPathsQuery));
+  const [result, err] = await handleErrors(client.fetch(getAllBlogsPathsQuery));
+  if (err || !Array.isArray(result)) return [];
+
+  const paths: { slug: string; locale: string }[] = [];
+
+  for (const item of result) {
+    if (!item.slug || !item.locale) continue;
+    const slugParts = item.slug.split('/').filter(Boolean);
+    paths.push({ slug: slugParts[slugParts.length - 1], locale: item.locale });
+  }
+
+  return paths;
 }
 
 export async function getAllBlogIndexTranslations() {

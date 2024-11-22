@@ -40,6 +40,10 @@ export function getLocalizedSlug({
   locale: Locale;
   prefix?: string;
 }) {
-  const segments = locale === 'en-GB' ? [prefix, slug] : [locale, prefix, slug];
+  const slugParts = slug.split('/').filter(Boolean);
+  const segments =
+    locale === 'en-GB'
+      ? [prefix, ...slugParts]
+      : [locale, prefix, ...slugParts];
   return `/${segments.filter(Boolean).join('/')}`;
 }

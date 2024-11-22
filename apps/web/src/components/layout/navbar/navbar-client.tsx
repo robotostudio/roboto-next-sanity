@@ -218,7 +218,7 @@ export function NavbarClient({
   const isMobile = useIsMobile();
 
   return (
-    <nav className="mx-auto flex w-full max-w-6xl justify-between bg-white/90 p-4 px-4 backdrop-blur-2xl md:grid md:grid-cols-3 md:px-6">
+    <nav className="mx-auto flex w-full max-w-6xl justify-between bg-white/90 py-4 backdrop-blur-2xl md:grid md:grid-cols-3 md:px-6">
       <div className="flex items-center">
         {logo && (
           <Link href="/">
