@@ -2,8 +2,9 @@ export const CONSTANTS = {
   SANITY_API_VERSION: '2024-11-15',
 };
 
+
 export const DEFAULT_LOCALE = 'en-GB';
-export const LOCALES = ['en-GB', 'en-US'] as const;
+export const LOCALES = [DEFAULT_LOCALE, 'de', 'fr'] as const;
 
 export type Locale = (typeof LOCALES)[number];
 

@@ -6,7 +6,6 @@ export type SlugPageProps = PageComponentProps<GetSlugPageDataQueryResult>;
 
 export function SlugPage({ data }: SlugPageProps) {
   const { pageBuilder, _id, _type } = data ?? {};
-  console.log('🚀 ~ SlugPage ~ data:', data);
   return (
     <main>
       {Array.isArray(pageBuilder) && (

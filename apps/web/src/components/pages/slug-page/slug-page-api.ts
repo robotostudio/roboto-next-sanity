@@ -1,5 +1,5 @@
 import { unstable_cache } from 'next/cache';
-import type { Locale } from '~/config';
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '~/config';
 import { handleErrors } from '~/lib/helper';
 import { client } from '~/lib/sanity/client';
 import { sanityFetch } from '~/lib/sanity/live';
@@ -45,34 +45,35 @@ const extractSlugFromPath = (slugPath: string): string => {
 };
 
 /**
+/**
  * Gets all valid page paths with their locales
+ * @returns Array of page paths with their corresponding locales
  */
 export const getAllSlugPagePaths = unstable_cache(
   async () => {
-    const [data, err] = await handleErrors(
+    const [data, error] = await handleErrors(
       client.fetch(getAllSlugPagePathsQuery),
     );
 
-
-    if (!Array.isArray(data) || err) {
+    if (!Array.isArray(data) || error) {
+      console.error('Failed to fetch page paths:', error);
       return [];
     }
-    return data.reduce<Array<{ slug: string; locale: Locale }>>(
-      (
-        paths: Array<{ slug: string; locale: Locale }>,
-        page: { slug: string | null; locale: string | null },
-      ) => {
-        if (!page?.slug || !page?.locale) return paths;
 
-        paths.push({
-          locale: page.locale as Locale,
-          slug: extractSlugFromPath(page.slug),
-        });
+    return data
+      .filter((page): page is { slug: string; locale: string } =>
+        Boolean(page?.slug && page?.locale),
+      )
+      .map(({ slug }) => {
+        const segments = slug.split('/').filter(Boolean);
+        const [firstSegment, ...restSegments] = segments;
+        const isLocaleSegment = LOCALES.includes(firstSegment as Locale);
 
-        return paths;
-      },
-      [],
-    );
+        return {
+          locale: isLocaleSegment ? (firstSegment as Locale) : DEFAULT_LOCALE,
+          rest: isLocaleSegment ? restSegments : segments,
+        };
+      });
   },
   ['allSlugPaths'],
   cacheConfig,

@@ -30,9 +30,9 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <NavbarComponent />
-          <Suspense fallback={<div className="min-h-screen">Loading...</div>}>
-            {children}
-          </Suspense>
+
+          {children}
+
           <Suspense fallback={<div className="">Loading...</div>}>
             <FooterComponent />
           </Suspense>

@@ -1,4 +1,5 @@
 import {
+  getAllSlugPagePaths,
   getPageType,
   getSlugPageData,
 } from '~/components/pages/slug-page/slug-page-api';
@@ -6,6 +7,8 @@ import { SlugPage } from '~/components/pages/slug-page/slug-page-component';
 import type { Locale } from '~/config';
 import { getLocalizedSlug } from '~/lib/helper';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import { getMetaData } from '~/lib/seo';
 
 interface PageParams {
   locale: Locale;
@@ -20,6 +23,23 @@ interface RenderPageTypeProps {
   localizedSlug: string;
   locale: Locale;
 }
+
+export const generateStaticParams = async () => {
+  const slugPaths = await getAllSlugPagePaths();
+
+  return slugPaths;
+};
+
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const { locale, rest } = await params;
+  const slug = rest.join('/');
+  const localizedSlug = getLocalizedSlug({ slug, locale });
+  const [data, err] = await getSlugPageData(localizedSlug, locale);
+  if (err || !data?.data) return {};
+  return getMetaData(data.data);
+};
 
 async function RenderPageType({ localizedSlug, locale }: RenderPageTypeProps) {
   const [response, error] = await getSlugPageData(localizedSlug, locale);
