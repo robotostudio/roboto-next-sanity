@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ComponentType, FC } from 'react';
-// import { SplitFormBlock } from '../blocks/split-form';
-// import { ImageCarouselBlock } from '../blocks/image-carousel';
-// import type { PageBuilder } from '~/sanity.types';
-// import { CtaBlock } from '../blocks/cta';
-// import { HeroBlock } from '../blocks/hero';
 import { createDataAttribute } from 'next-sanity';
 import { draftMode } from 'next/headers';
+import type { ComponentType } from 'react';
 import type { PageBuilder } from '~/sanity.types';
 import { CtaBlock } from '../blocks/cta';
 import { HeroBlock } from '../blocks/hero';
 import { ImageCarouselBlock } from '../blocks/image-carousel';
+import { SplitFormBlock } from '../blocks/split-form';
 export type PageBuilderBlockProps<T> = {
   pageBuilder?: T | null;
   id?: string;
@@ -19,17 +15,17 @@ export type PageBuilderBlockProps<T> = {
 
 type BlockTypeKeys = PageBuilder[number]['_type'];
 
-const BlockNotFound: FC<{ _type: string }> = ({ _type }) => {
+export function BlockNotFound({ _type }: { _type: string }) {
   return (
     <div className="grid place-items-center">Block Not Found : {_type}</div>
   );
-};
+}
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const Blocks: Record<BlockTypeKeys, ComponentType<any>> = {
   cta: CtaBlock,
   hero: HeroBlock,
-  splitForm: BlockNotFound,
+  splitForm: SplitFormBlock,
   imageCarousel: ImageCarouselBlock,
 };
 

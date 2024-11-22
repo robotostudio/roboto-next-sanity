@@ -1,15 +1,14 @@
-import type { FC } from 'react';
 import type { ImageCarousel } from '~/sanity.types';
-import { SanityImage } from '../global/sanity-image';
 import type { ProcessPageBuilderBlock } from '~/types';
 import { RichText } from '../global/rich-text';
 import { SanityButtons } from '../global/sanity-button';
+import { SanityImage } from '../global/sanity-image';
 
 export type ImageCarouselBlockProps = ProcessPageBuilderBlock<ImageCarousel>;
 
 export type CarouselBlockProps = Pick<ImageCarouselBlockProps, 'carousel'>;
 
-export const CarouselBlock: FC<CarouselBlockProps> = ({ carousel }) => {
+export function CarouselBlock({ carousel }: CarouselBlockProps) {
   if (!Array.isArray(carousel)) return <></>;
   return (
     <section className="overflow-x-auto">
@@ -32,16 +31,16 @@ export const CarouselBlock: FC<CarouselBlockProps> = ({ carousel }) => {
       </div>
     </section>
   );
-};
+}
 
-export const ImageCarouselBlock: FC<ImageCarouselBlockProps> = ({
+export function ImageCarouselBlock({
   buttons,
   carousel,
   eyebrow,
   richText,
   title,
   _type,
-}) => {
+}: ImageCarouselBlockProps) {
   return (
     <section className="py-12" id={_type}>
       <div className="mx-auto w-full max-w-6xl">
@@ -62,4 +61,4 @@ export const ImageCarouselBlock: FC<ImageCarouselBlockProps> = ({
       <CarouselBlock carousel={carousel} />
     </section>
   );
-};
+}
