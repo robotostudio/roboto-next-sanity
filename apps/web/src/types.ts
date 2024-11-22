@@ -1,4 +1,4 @@
-import type { Button } from './sanity.types';
+import type { Button, Form, Page } from './sanity.types';
 
 export type Maybe<T> = T | null | undefined;
 
@@ -24,3 +24,17 @@ export type SanityButtonProps = {
   variant?: Button['variant'];
   url?: Maybe<ProcessedUrl>;
 };
+
+export type SanityImageAsset = NonNullable<Page['image']>;
+
+export type ProcessPageBuilderAddButtons<T> = T extends { buttons?: unknown }
+  ? Omit<T, 'buttons'> & { buttons?: SanityButtonProps[] }
+  : T;
+
+export type ProcessPageBuilderAddForm<T> = T extends { form?: unknown }
+  ? Omit<T, 'form'> & { form?: Form }
+  : T;
+
+export type ProcessPageBuilderBlock<T> = ProcessPageBuilderAddButtons<
+  ProcessPageBuilderAddForm<T>
+>;

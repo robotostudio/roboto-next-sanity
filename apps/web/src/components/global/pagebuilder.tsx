@@ -8,7 +8,9 @@ import type { ComponentType, FC } from 'react';
 import { createDataAttribute } from 'next-sanity';
 import { draftMode } from 'next/headers';
 import type { PageBuilder } from '~/sanity.types';
-
+import { CtaBlock } from '../blocks/cta';
+import { HeroBlock } from '../blocks/hero';
+import { ImageCarouselBlock } from '../blocks/image-carousel';
 export type PageBuilderBlockProps<T> = {
   pageBuilder?: T | null;
   id?: string;
@@ -25,10 +27,10 @@ const BlockNotFound: FC<{ _type: string }> = ({ _type }) => {
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const Blocks: Record<BlockTypeKeys, ComponentType<any>> = {
-  cta: BlockNotFound,
-  hero: BlockNotFound,
+  cta: CtaBlock,
+  hero: HeroBlock,
   splitForm: BlockNotFound,
-  imageCarousel: BlockNotFound,
+  imageCarousel: ImageCarouselBlock,
 };
 
 export async function PageBuilderBlock({
