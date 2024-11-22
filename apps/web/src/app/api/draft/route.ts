@@ -10,8 +10,8 @@ export async function GET(request: Request) {
     return new Response('Invalid token', { status: 401 });
   }
 
-  // const { enable } = await draftMode();
-  // enable();
+
+  (await draftMode()).enable();
 
   return redirect(slug);
 }
