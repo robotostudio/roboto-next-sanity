@@ -33,6 +33,6 @@ export const generateMetadata = async ({
 export default async function Page({ params }: Params) {
   const { locale } = await params;
   const [response, err] = await getMainPageData(locale);
-  if (!response || err) return notFound();
+  if (!response || err) notFound();
   return <MainPageComponent data={response.data} />;
 }

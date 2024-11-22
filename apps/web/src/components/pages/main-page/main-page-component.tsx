@@ -5,10 +5,14 @@ import type { PageComponentProps } from '~/types';
 export default function MainPageComponent({
   data,
 }: PageComponentProps<GetMainPageDataQueryResult>) {
-  const { pageBuilder } = data ?? {};
+  const { pageBuilder, _id, _type } = data ?? {};
   return (
     <main>
-      <PageBuilderBlock pageBuilder={pageBuilder as PageBuilder} />
+      <PageBuilderBlock
+        pageBuilder={pageBuilder as PageBuilder}
+        id={_id}
+        type={_type}
+      />
     </main>
   );
 }

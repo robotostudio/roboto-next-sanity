@@ -54,7 +54,7 @@ export default async function BlogSlug({ params }: PageParams) {
   const data = await getBlogData(resolvedParams);
 
   if (!data) {
-    return notFound();
+    notFound();
   }
 
   return <BlogSlugPage data={data} />;

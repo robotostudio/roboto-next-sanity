@@ -7,11 +7,12 @@ import { CtaBlock } from '../blocks/cta';
 import { HeroBlock } from '../blocks/hero';
 import { ImageCarouselBlock } from '../blocks/image-carousel';
 import { SplitFormBlock } from '../blocks/split-form';
+import type { Maybe } from '~/types';
 
 interface PageBuilderBlockProps<T> {
   pageBuilder?: T | null;
-  id?: string;
-  type?: string;
+  id?: Maybe<string>;
+  type?: Maybe<string>;
 }
 
 type BlockType = PageBuilder[number]['_type'];
@@ -35,8 +36,8 @@ const BLOCK_COMPONENTS: Record<BlockType, ComponentType<any>> = {
 function renderBlock(
   block: PageBuilder[number],
   draftModeEnabled: boolean,
-  id?: string,
-  type?: string,
+  id?: Maybe<string>,
+  type?: Maybe<string>,
 ) {
   const Component = BLOCK_COMPONENTS[block._type] ?? BlockNotFound;
 

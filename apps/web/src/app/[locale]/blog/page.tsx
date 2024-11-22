@@ -34,6 +34,6 @@ export const generateMetadata = async ({
 export default async function BlogPage({ params }: PageParams) {
   const { locale } = await params;
   const [result, err] = await getBlogIndexData(locale);
-  if (!result?.data || err) return notFound();
+  if (!result?.data || err) notFound();
   return <BlogIndexPage data={result.data} />;
 }

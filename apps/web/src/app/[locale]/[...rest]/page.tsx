@@ -45,42 +45,39 @@ async function RenderPageType({ localizedSlug, locale }: RenderPageTypeProps) {
   const [response, error] = await getSlugPageData(localizedSlug, locale);
 
   if (error || !response?.data) {
-    // throw new Error(`Failed to fetch page data: ${error}`);
-    return notFound();
+    notFound();
   }
 
   return <SlugPage data={response.data} />;
 }
 
 export default async function DynamicSlug({ params }: Props) {
-  try {
-    const { locale, rest } = await params;
-    const slug = rest.join('/');
-    const localizedSlug = getLocalizedSlug({ slug, locale });
+  const { locale, rest } = await params;
+  const slug = rest.join('/');
+  const localizedSlug = getLocalizedSlug({ slug, locale });
 
-    const [pageTypeResponse, pageTypeError] = await getPageType(localizedSlug);
+  const [pageTypeResponse, pageTypeError] = await getPageType(localizedSlug);
 
-    if (pageTypeError || !pageTypeResponse) {
-      throw new Error(`Failed to fetch page type: ${pageTypeError}`);
-    }
+  if (pageTypeError || !pageTypeResponse) {
+    notFound();
+  }
 
-    const pageType = pageTypeResponse.data;
+  const pageType = pageTypeResponse.data;
 
-    // Handle different page types
-    switch (pageType) {
-      case 'page':
-        return <RenderPageType localizedSlug={localizedSlug} locale={locale} />;
-      // Add additional page type cases here as they become available
-      // case 'blog':
-      //   return <BlogPage localizedSlug={localizedSlug} locale={locale} />;
-      // case 'product':
-      //   return <ProductPage localizedSlug={localizedSlug} locale={locale} />;
-      default:
-        return notFound();
-    }
-  } catch (error) {
-    // Log error to monitoring service in production
-    console.error('Error rendering dynamic page:', error);
-    throw error;
+  if (!pageType) {
+    notFound();
+  }
+
+  // Handle different page types
+  switch (pageType) {
+    case 'page':
+      return <RenderPageType localizedSlug={localizedSlug} locale={locale} />;
+    // Add additional page type cases here as they become available
+    // case 'blog':
+    //   return <BlogPage localizedSlug={localizedSlug} locale={locale} />;
+    // case 'product':
+    //   return <ProductPage localizedSlug={localizedSlug} locale={locale} />;
+    default:
+      notFound();
   }
 }
