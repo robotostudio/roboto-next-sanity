@@ -14,7 +14,7 @@
     "dev": "sanity dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "start": "sanity start",
-    "type": "sanity schema extract && sanity typegen generate --enforce-required-fields"
+    "type": "sanity schema extract --path ../web/src/schema.json && sanity typegen generate --enforce-required-fields"
   },
   "dependencies": {
     "@sanity/assist": "^3.0.8",
