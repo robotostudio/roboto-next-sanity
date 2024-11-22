@@ -1,13 +1,14 @@
-import type { GetMainPageDataQueryResult } from '~/sanity.types';
+import { PageBuilderBlock } from '~/components/global/pagebuilder';
+import type { GetMainPageDataQueryResult, PageBuilder } from '~/sanity.types';
 import type { PageComponentProps } from '~/types';
 
 export default function MainPageComponent({
   data,
 }: PageComponentProps<GetMainPageDataQueryResult>) {
-  const { title } = data ?? {};
+  const { pageBuilder } = data ?? {};
   return (
     <main>
-      <h1>{title}</h1>
+      <PageBuilderBlock pageBuilder={pageBuilder as PageBuilder} />
     </main>
   );
 }

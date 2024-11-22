@@ -3,6 +3,9 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '~/i18n/routing';
 import type { Locale } from '~/config';
+import NavbarComponent from '~/components/layout/navbar/navbar-component';
+import FooterComponent from '~/components/layout/footer/footer-component';
+import { Suspense } from 'react';
 
 export default async function LocaleLayout({
   children,
@@ -26,7 +29,11 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <NavbarComponent />
           {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            <FooterComponent />
+          </Suspense>
         </NextIntlClientProvider>
       </body>
     </html>
