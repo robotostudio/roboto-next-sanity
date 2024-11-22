@@ -17,7 +17,6 @@ export const generateStaticParams = async () => {
   const [slugs, err] = await getAllBlogIndexTranslations();
   if (err || !Array.isArray(slugs)) return [];
   const locales = slugs.filter(Boolean) as string[];
-  console.log('🚀 ~ generateStaticParams ~ locales:', locales);
   return locales.map((locale) => ({ locale }));
 };
 

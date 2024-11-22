@@ -1,11 +1,13 @@
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { routing } from '~/i18n/routing';
-import type { Locale } from '~/config';
-import NavbarComponent from '~/components/layout/navbar/navbar-component';
-import FooterComponent from '~/components/layout/footer/footer-component';
 import { Suspense } from 'react';
+import FooterComponent, {
+  FooterSkeleton,
+} from '~/components/layout/footer/footer-component';
+import { NavbarSkeleton } from '~/components/layout/navbar/navbar-client';
+import NavbarComponent from '~/components/layout/navbar/navbar-component';
+import type { Locale } from '~/config';
+import { routing } from '~/i18n/routing';
 
 export default async function LocaleLayout({
   children,
@@ -20,20 +22,17 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
-  console.log('🚀 ~ messages:', messages, locale);
-
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <NavbarComponent />
+        <NextIntlClientProvider>
+          <Suspense fallback={<NavbarSkeleton />}>
+            <NavbarComponent />
+          </Suspense>
 
           {children}
 
-          <Suspense fallback={<div className="">Loading...</div>}>
+          <Suspense fallback={<FooterSkeleton />}>
             <FooterComponent />
           </Suspense>
         </NextIntlClientProvider>

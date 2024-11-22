@@ -224,7 +224,7 @@ export function NavbarClient({
           <Link href="/">
             <Image
               src={logo}
-              className="h-auto"
+              className="h-[40px] w-[80px]"
               alt="Logo"
               width={80}
               height={40}
@@ -234,6 +234,49 @@ export function NavbarClient({
         )}
       </div>
       {isMobile ? <MobileNav data={data} /> : <DesktopNav data={data} />}
+    </nav>
+  );
+}
+
+// Skeleton component for the navbar
+export function NavbarSkeleton() {
+  return (
+    <nav className="mx-auto flex w-full max-w-6xl justify-between bg-white/90 py-4 backdrop-blur-2xl md:grid md:grid-cols-3 md:px-6">
+      <div className="flex items-center">
+        {/* Logo skeleton - matches Image dimensions */}
+        <div className="h-[40px] w-[80px] animate-pulse rounded bg-slate-200" />
+      </div>
+
+      {/* Desktop navigation skeleton - hidden on mobile */}
+      <div className="hidden md:flex md:items-center md:justify-center">
+        <div className="flex gap-4">
+          {/* Match NavigationMenuLink height which is typically around 40px */}
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="h-[40px] w-[100px] animate-pulse rounded bg-slate-200"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* CTA buttons skeleton - hidden on mobile */}
+      <div className="hidden md:ml-auto md:flex md:items-center">
+        <div className="flex gap-2">
+          {/* Match SanityButtons typical dimensions */}
+          {[1, 2].map((i) => (
+            <div
+              key={i}
+              className="h-[40px] w-[120px] animate-pulse rounded bg-slate-200"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile menu button skeleton - matches MenuIcon dimensions */}
+      <div className="md:hidden">
+        <div className="h-[24px] w-[24px] animate-pulse rounded bg-slate-200" />
+      </div>
     </nav>
   );
 }
