@@ -125,6 +125,24 @@ export const getMainPageDataQuery = defineQuery(`
 }
 `);
 
+export const getSlugPageDataQuery = defineQuery(`
+*[_type == "page" && ${localeMatch} && slug.current == $slug][0]{
+    _id,
+    _type,
+    title,
+    ${_image},
+    "slug":slug.current,
+    ${_pageBuilder}
+}
+`);
+
+export const getAllSlugPagePathsQuery = defineQuery(`
+*[_type == "page" && defined(slug.current)]{
+  "slug":slug.current,
+  "locale":language
+}
+`);
+
 export const getNavbarDataQuery = defineQuery(`
 *[_type == "navbar"][0]{
     _id,
@@ -166,4 +184,32 @@ export const getFooterDataQuery = defineQuery(`
     },
     "logo":*[_type == "logo"][0].image.asset->url
 }
+`);
+
+const _ogFields = `
+  _id,
+  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),
+  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),
+  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  
+  "dominantColor":image.asset->metadata.palette.dominant.background,
+  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",
+  "logo":*[_type =="logo"][0].image.asset->url,
+  _type,
+  "date":coalesce(date,_createdAt)
+`;
+
+export const slugPageQueryOG = defineQuery(`
+*[_type == "page" && _id == $id][0]{
+  ${_ogFields}
+}
+`);
+
+export const genericPageQueryOG = defineQuery(`
+*[_id == $id && defined(slug.current)][0]{
+  ${_ogFields}
+}
+`);
+
+export const getPageTypeQuery = defineQuery(`
+*[defined(slug.current) && slug.current == $slug][0]._type
 `);

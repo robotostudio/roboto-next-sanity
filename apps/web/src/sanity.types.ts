@@ -1271,6 +1271,285 @@ export type GetMainPageDataQueryResult = {
       }
   > | null;
 } | null;
+// Variable: getSlugPageDataQuery
+// Query: *[_type == "page" && select(($locale == 'en-GB' || $locale == '' ) => (!defined(language) || language == 'en-GB'), language == $locale => language == $locale) && slug.current == $slug][0]{    _id,    _type,    title,    image{  ...,  "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),  "blurData":asset->metadata.lqip,  "dominantColor":asset->metadata.palette.dominant.background,},    "slug":slug.current,      pageBuilder[]{    ...,    _type,    _type == "cta"=>{  ...,  richText[]{  ...,   markDefs[]{  ...,  customLink{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),}   } },  buttons[]{  ...,  url{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),},  icon{  svg}}},    _type == "hero"=>{  ...,  buttons[]{  ...,  url{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),},  icon{  svg}},  richText[]{  ...,   markDefs[]{  ...,  customLink{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),}   } }},    _type == "imageCarousel"=>{  ...,  buttons[]{  ...,  url{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),},  icon{  svg}},  richText[]{  ...,   markDefs[]{  ...,  customLink{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),}   } },},    _type == "splitForm"=>{  ...,  image{  ...,  "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),  "blurData":asset->metadata.lqip,  "dominantColor":asset->metadata.palette.dominant.background,},  form->{  ...,},  richText[]{  ...,   markDefs[]{  ...,  customLink{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),}   } },}  }}
+export type GetSlugPageDataQueryResult = {
+  _id: string;
+  _type: 'page';
+  title: string | null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+    alt: string | 'Image-Broken';
+    blurData: string | null;
+    dominantColor: string | null;
+  } | null;
+  slug: string | null;
+  pageBuilder: Array<
+    | {
+        _key: string;
+        _type: 'cta';
+        title?: string;
+        richText: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: 'span';
+                _key: string;
+              }>;
+              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+              listItem?: 'bullet' | 'check' | 'number';
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
+                _type: 'customLink';
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: 'block';
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              caption?: string;
+              alt?: string;
+              _type: 'image';
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: 'hero';
+        title?: string;
+        isTitleH1?: boolean;
+        richText: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: 'span';
+                _key: string;
+              }>;
+              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+              listItem?: 'bullet' | 'check' | 'number';
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
+                _type: 'customLink';
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: 'block';
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              caption?: string;
+              alt?: string;
+              _type: 'image';
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
+      }
+    | {
+        _key: string;
+        _type: 'imageCarousel';
+        eyebrow?: string;
+        title?: string;
+        richText: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: 'span';
+                _key: string;
+              }>;
+              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+              listItem?: 'bullet' | 'check' | 'number';
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
+                _type: 'customLink';
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: 'block';
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              caption?: string;
+              alt?: string;
+              _type: 'image';
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        buttons: Array<{
+          _key: string;
+          _type: 'button';
+          variant?: 'default' | 'link' | 'outline' | 'secondary';
+          icon: {
+            svg: string | null;
+          } | null;
+          buttonText?: string;
+          url: {
+            openInNewTab: boolean | null;
+            href: string | '#' | null;
+          } | null;
+        }> | null;
+        carousel?: Array<
+          {
+            _key: string;
+          } & CarouselField
+        >;
+      }
+    | {
+        _key: string;
+        _type: 'splitForm';
+        title?: string;
+        richText: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: 'span';
+                _key: string;
+              }>;
+              style?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inline' | 'normal';
+              listItem?: 'bullet' | 'check' | 'number';
+              markDefs: Array<{
+                customLink: {
+                  openInNewTab: boolean | null;
+                  href: string | '#' | null;
+                } | null;
+                _type: 'customLink';
+                _key: string;
+              }> | null;
+              level?: number;
+              _type: 'block';
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              caption?: string;
+              alt?: string;
+              _type: 'image';
+              _key: string;
+              markDefs: null;
+            }
+        > | null;
+        form: {
+          _id: string;
+          _type: 'form';
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          label?: string;
+          title?: string;
+          formId?: string;
+          language?: string;
+          fields?: Array<
+            {
+              _key: string;
+            } & FormField
+          >;
+          buttonText?: string;
+        } | null;
+        image: {
+          asset?: {
+            _ref: string;
+            _type: 'reference';
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: 'image';
+          alt: string | 'Image-Broken';
+          blurData: string | null;
+          dominantColor: string | null;
+        } | null;
+      }
+  > | null;
+} | null;
+// Variable: getAllSlugPagePathsQuery
+// Query: *[_type == "page" && defined(slug.current)]{  "slug":slug.current,  "locale":language}
+export type GetAllSlugPagePathsQueryResult = Array<{
+  slug: string | null;
+  locale: string | null;
+}>;
 // Variable: getNavbarDataQuery
 // Query: *[_type == "navbar"][0]{    _id,    title,    links[]{      ...,      title,      _type,      url{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),},      columns[]{        ...,        title,        description,        icon{  svg},        url{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),}      }    },    buttons[]{  ...,  url{  openInNewTab,  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),},  icon{  svg}},    "logo":*[_type == "logo"][0].image.asset->url  }
 export type GetNavbarDataQueryResult = {
@@ -1339,6 +1618,75 @@ export type GetFooterDataQueryResult = {
   }> | null;
   logo: string | null;
 } | null;
+// Variable: slugPageQueryOG
+// Query: *[_type == "page" && _id == $id][0]{    _id,  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",    "dominantColor":image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",  "logo":*[_type =="logo"][0].image.asset->url,  _type,  "date":coalesce(date,_createdAt)}
+export type SlugPageQueryOGResult = {
+  _id: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+  dominantColor: string | null;
+  seoImage: string | null;
+  logo: string | null;
+  _type: 'page';
+  date: null | string;
+} | null;
+// Variable: genericPageQueryOG
+// Query: *[_id == $id && defined(slug.current)][0]{    _id,  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",    "dominantColor":image.asset->metadata.palette.dominant.background,  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",  "logo":*[_type =="logo"][0].image.asset->url,  _type,  "date":coalesce(date,_createdAt)}
+export type GenericPageQueryOGResult =
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blog';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'blogIndex';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'mainPage';
+      date: null | string;
+    }
+  | {
+      _id: string;
+      title: string | null;
+      description: string | null;
+      image: string | null;
+      dominantColor: string | null;
+      seoImage: string | null;
+      logo: string | null;
+      _type: 'page';
+      date: null | string;
+    }
+  | null;
+// Variable: getPageTypeQuery
+// Query: *[defined(slug.current) && slug.current == $slug][0]._type
+export type GetPageTypeQueryResult =
+  | 'blog'
+  | 'blogIndex'
+  | 'mainPage'
+  | 'page'
+  | null;
 
 // Query TypeMap
 import '@sanity/client';
@@ -1347,7 +1695,12 @@ declare module '@sanity/client' {
     '*[_type == "settings"][0]': SettingsQueryResult;
     '\n*[_type == "mainPage"].language\n': GetMainPageTranslationsQueryResult;
     '\n*[_type == "mainPage" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n(!defined(language) || language == \'en-GB\'), language == $locale => language == $locale)][0]{\n  _id,\n  _type,\n  title,\n  description,\n  \n  pageBuilder[]{\n    ...,\n    _type,\n    _type == "cta"=>{\n  ...,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n,\n  \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n\n},\n    _type == "hero"=>{\n  ...,\n  \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n\n},\n    _type == "imageCarousel"=>{\n  ...,\n  \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n,\n},\n    _type == "splitForm"=>{\n  ...,\n  \nimage{\n  ...,\n  "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n  "blurData":asset->metadata.lqip,\n  "dominantColor":asset->metadata.palette.dominant.background,\n}\n,\n  \nform->{\n  ...,\n}\n,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n,\n}\n  }\n\n}\n': GetMainPageDataQueryResult;
+    '\n*[_type == "page" && select(($locale == \'en-GB\' || $locale == \'\' ) => \n(!defined(language) || language == \'en-GB\'), language == $locale => language == $locale) && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    \nimage{\n  ...,\n  "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n  "blurData":asset->metadata.lqip,\n  "dominantColor":asset->metadata.palette.dominant.background,\n}\n,\n    "slug":slug.current,\n    \n  pageBuilder[]{\n    ...,\n    _type,\n    _type == "cta"=>{\n  ...,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n,\n  \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n\n},\n    _type == "hero"=>{\n  ...,\n  \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n\n},\n    _type == "imageCarousel"=>{\n  ...,\n  \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n,\n},\n    _type == "splitForm"=>{\n  ...,\n  \nimage{\n  ...,\n  "alt":coalesce(asset->altText,asset->originalFilename, "Image-Broken"),\n  "blurData":asset->metadata.lqip,\n  "dominantColor":asset->metadata.palette.dominant.background,\n}\n,\n  \nform->{\n  ...,\n}\n,\n  \nrichText[]{\n  ...,\n   \nmarkDefs[]{\n  ...,\n  \ncustomLink{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n   \n}\n\n \n}\n,\n}\n  }\n\n}\n': GetSlugPageDataQueryResult;
+    '\n*[_type == "page" && defined(slug.current)]{\n  "slug":slug.current,\n  "locale":language\n}\n': GetAllSlugPagePathsQueryResult;
     '\n*[_type == "navbar"][0]{\n    _id,\n    title,\n    links[]{\n      ...,\n      title,\n      _type,\n      \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n      columns[]{\n        ...,\n        title,\n        description,\n        \nicon{\n  svg\n}\n,\n        \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n\n      }\n    },\n    \nbuttons[]{\n  ...,\n  \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n  \nicon{\n  svg\n}\n\n}\n,\n    "logo":*[_type == "logo"][0].image.asset->url\n  }\n': GetNavbarDataQueryResult;
     '\n*[_type == "footer"][0]{\n    _id,\n    title,\n    links[]{\n      ...,\n      title,\n      _type,\n      \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n,\n      columns[]{\n        ...,\n        title,\n        description,\n        \nicon{\n  svg\n}\n,\n        \nurl{\n  openInNewTab,\n  "href": select(type == "internal"=>internal->slug.current, type == "external" => external,"#"),\n}\n\n      }\n    },\n    "logo":*[_type == "logo"][0].image.asset->url\n}\n': GetFooterDataQueryResult;
+    '\n*[_type == "page" && _id == $id][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': SlugPageQueryOGResult;
+    '\n*[_id == $id && defined(slug.current)][0]{\n  \n  _id,\n  "title":select(defined(ogTitle)=>ogTitle,defined(seoTitle)=>seoTitle,title),\n  "description":select(defined(ogDescription)=>ogDescription,defined(seoDescription)=>seoDescription,description),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",  \n  "dominantColor":image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max",\n  "logo":*[_type =="logo"][0].image.asset->url,\n  _type,\n  "date":coalesce(date,_createdAt)\n\n}\n': GenericPageQueryOGResult;
+    '\n*[defined(slug.current) && slug.current == $slug][0]._type\n': GetPageTypeQueryResult;
   }
 }
