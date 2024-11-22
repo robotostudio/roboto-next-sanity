@@ -1,21 +1,38 @@
-import { Button } from '~/components/ui/button';
-import { sanityFetch } from '~/lib/sanity/live';
-import { getMainPageDataQuery } from '~/lib/sanity/queries';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import {
+  getAllMainPageTranslations,
+  getMainPageData,
+} from '~/components/pages/main-page/main-page-api';
+import MainPageComponent from '~/components/pages/main-page/main-page-component';
+import type { Locale } from '~/config';
+import { getMetaData } from '~/lib/seo';
 
-export default async function Home() {
-  const { data } = await sanityFetch({
-    query: getMainPageDataQuery,
-    params: {
-      locale: 'en-GB',
-    },
-  });
+type Params = {
+  params: Promise<{
+    locale: Locale;
+  }>;
+};
 
-  console.log(data);
+export const generateStaticParams = async () => {
+  const [slugs, err] = await getAllMainPageTranslations();
+  if (err || !slugs) return [];
+  const locales = slugs.filter(Boolean) as string[];
+  return locales.map((locale) => ({ locale }));
+};
 
-  return (
-    <main>
-      <h1>Hello World</h1>
-      <Button>Click me</Button>
-    </main>
-  );
+export const generateMetadata = async ({
+  params,
+}: Params): Promise<Metadata> => {
+  const { locale } = await params;
+  const [data, err] = await getMainPageData(locale);
+  if (!data || err) return {};
+  return getMetaData(data);
+};
+
+export default async function Page({ params }: Params) {
+  const { locale } = await params;
+  const [response, err] = await getMainPageData(locale);
+  if (!response || err) return notFound();
+  return <MainPageComponent data={response.data} />;
 }

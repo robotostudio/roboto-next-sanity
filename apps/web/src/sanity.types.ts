@@ -1009,6 +1009,9 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
 export type SettingsQueryResult = null;
+// Variable: getMainPageTranslationsQuery
+// Query: *[_type == "mainPage"].language
+export type GetMainPageTranslationsQueryResult = Array<string | null>;
 // Variable: getMainPageDataQuery
 // Query: *[_type == "mainPage" && select(($locale == 'en-GB' || $locale == '' ) => (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{  _id,  _type,  title,  description,}
 export type GetMainPageDataQueryResult = {
@@ -1023,6 +1026,7 @@ import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
     '*[_type == "settings"][0]': SettingsQueryResult;
+    '\n*[_type == "mainPage"].language\n': GetMainPageTranslationsQueryResult;
     "\n*[_type == \"mainPage\" && select(($locale == 'en-GB' || $locale == '' ) => \n(!defined(language) || language == 'en-GB'), language == $locale => language == $locale)][0]{\n  _id,\n  _type,\n  title,\n  description,\n}\n": GetMainPageDataQueryResult;
   }
 }

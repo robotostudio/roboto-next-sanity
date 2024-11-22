@@ -18,6 +18,11 @@ export const localeMatch =
   `select(($locale == 'en-GB' || $locale == '' ) => 
 (!defined(language) || language == 'en-GB'), language == $locale => language == $locale)`;
 
+
+export const getMainPageTranslationsQuery = defineQuery(`
+*[_type == "mainPage"].language
+`);
+
 export const getMainPageDataQuery = defineQuery(`
 *[_type == "mainPage" && ${localeMatch}][0]{
   _id,
