@@ -35,14 +35,7 @@ const customLinkFragment = /* groq */ `
 const markDefsFragment = /* groq */ `
   markDefs[]{
     ...,
-    customLink{
-      openInNewTab,
-      "href": select(
-        type == "internal" => internal->slug.current,
-        type == "external" => external,
-        "#"
-      ),
-    }
+    ${customLinkFragment}
   }
 `;
 
@@ -55,14 +48,7 @@ const iconFragment = /* groq */ `
 const buttonsFragment = /* groq */ `
   buttons[]{
     ...,
-    url{
-      openInNewTab,
-      "href": select(
-        type == "internal" => internal->slug.current,
-        type == "external" => external,
-        "#"
-      ),
-    },
+    ${urlFragment},
     icon{
       svg
     }
@@ -72,17 +58,7 @@ const buttonsFragment = /* groq */ `
 const richTextFragment = /* groq */ `
   richText[]{
     ...,
-    markDefs[]{
-      ...,
-      customLink{
-        openInNewTab,
-        "href": select(
-          type == "internal" => internal->slug.current,
-          type == "external" => external,
-          "#"
-        ),
-      }
-    }
+    ${markDefsFragment}
   }
 `;
 
@@ -257,4 +233,48 @@ export const genericPageQueryOG = defineQuery(`
 
 export const getPageTypeQuery = defineQuery(`
   *[defined(slug.current) && slug.current == $slug][0]._type
+`);
+
+const blogCardProjection = /* groq */ `
+  "title":coalesce(cardTitle,title),
+  "description":coalesce(cardDescription,description),
+  "image":coalesce(cardImage,image)
+`;
+
+export const getBlogIndexDataQuery = defineQuery(`
+{
+    "seo":*[_type == "blogIndex" && ${localeMatchFragment}][0]{
+        ...,
+    },
+    "blogs":*[_type == "blog" && ${localeMatchFragment}]{
+      _id,
+      ${blogCardProjection},
+      "slug":slug.current
+    }
+}
+`);
+
+export const getAllBlogIndexTranslationsQuery = defineQuery(`
+  *[_type == "blogIndex"].language
+`);
+
+export const getAllBlogsPathsQuery = defineQuery(`
+*[_type == "blog" && defined(slug.current) && !seoNoIndex]{
+  "slug":slug.current,
+  "locale":language
+}
+`);
+
+export const blogPageQueryOG = defineQuery(`
+*[_type == "blog" && _id == $id][0]{
+  ${ogFieldsFragment}
+}
+`);
+
+export const getBlogPageDataQuery = defineQuery(`
+*[_type == "blog" && slug.current == $slug && ${localeMatchFragment}][0]{
+    ...,
+    ${imageFragment},
+    ${richTextFragment}
+  }
 `);
