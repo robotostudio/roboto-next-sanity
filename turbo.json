@@ -1,8 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "SANITY_API_TOKEN",
+    "SANITY_PREVIEW_SECRET",
+    "SANITY_API_READ_TOKEN",
+    "TEST_SANITY_TOKEN"
+  ],
+  "globalDependencies": ["**/.env"],
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "inputs": [ ".env*"],
       "dependsOn": ["^build"],
       "outputs": [
         "build/**",
