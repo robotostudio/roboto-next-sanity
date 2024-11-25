@@ -26,7 +26,7 @@ export const SanityIcon = memo(function SanityIconUnmemorized({
       // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
       dangerouslySetInnerHTML={{ __html: svg }}
       role="img"
-      aria-hidden="true"
+      // aria-hidden="true"
     />
   );
 });
