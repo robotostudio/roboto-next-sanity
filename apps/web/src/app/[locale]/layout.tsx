@@ -1,33 +1,33 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import { VisualEditing, } from 'next-sanity';
+import { VisualEditing } from 'next-sanity';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { preconnect, prefetchDNS } from 'react-dom';
-import { Footer } from '~/components/global/footer';
-import { Navbar } from '~/components/global/navbar';
 import { PreviewBar } from '~/components/global/preview-bar';
-import { locales } from '~/config';
-
-type Props = {
-  children: React.ReactNode;
-  params: { locale: string };
-};
-
-export const metadata = {
-  title: {
-    template: '%s | Roboto Studio',
-    default: 'Roboto Studio',
-  },
-};
+import FooterComponent, {
+  FooterSkeleton,
+} from '~/components/layout/footer/footer-component';
+import { NavbarSkeleton } from '~/components/layout/navbar/navbar-client';
+import NavbarComponent from '~/components/layout/navbar/navbar-component';
+import type { Locale } from '~/config';
+import { routing } from '~/i18n/routing';
 
 export default async function LocaleLayout({
   children,
-  params: { locale },
-}: Props) {
-  const isValidLocale = locales.some((cur) => cur === locale);
-  if (!isValidLocale) return notFound();
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  // Ensure that the incoming `locale` is valid
+  if (!routing.locales.includes(locale as Locale)) {
+    notFound();
+  }
+
   setRequestLocale(locale);
 
   preconnect('https://cdn.sanity.io');
@@ -36,9 +36,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body>
-        <NextIntlClientProvider locale={locale}>
-          <Navbar />
-          {draftMode().isEnabled ? (
+        <NextIntlClientProvider>
+          <Suspense fallback={<NavbarSkeleton />}>
+            <NavbarComponent />
+          </Suspense>
+          {children}
+          {(await draftMode()).isEnabled ? (
             <>
               {children}
               <PreviewBar />
@@ -65,7 +68,9 @@ export default async function LocaleLayout({
           ) : (
             children
           )}
-          <Footer />
+          <Suspense fallback={<FooterSkeleton />}>
+            <FooterComponent />
+          </Suspense>
         </NextIntlClientProvider>
       </body>
     </html>

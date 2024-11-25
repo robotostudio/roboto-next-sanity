@@ -1,37 +1,39 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { BlogIndexPage } from "~/components/pages/blog-page";
-import {
-	getAllBlogIndexTranslations,
-	getBlogIndexData,
-} from "~/components/pages/blog-page/blog-page-api";
-import type { Locale } from "~/config";
-import { getMetaData } from "~/lib/seo";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { getBlogIndexData } from '~/components/pages/blog-page/blog-page-api';
+import { getAllBlogIndexTranslations } from '~/components/pages/blog-page/blog-page-api';
+import { BlogIndexPage } from '~/components/pages/blog-page/blog-page-component';
+// import { BlogIndexPage } from "~/components/pages/blog-page";
+
+import type { Locale } from '~/config';
+import { getMetaData } from '~/lib/seo';
 
 type PageParams = {
-	params: { locale: Locale };
-	searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const generateStaticParams = async () => {
-	const [slugs, err] = await getAllBlogIndexTranslations();
-	if (err || !Array.isArray(slugs)) return [];
-	const locales = slugs.filter(Boolean) as string[];
-	return locales.map((locale) => ({ locale }));
+  const [slugs, err] = await getAllBlogIndexTranslations();
+  if (err || !Array.isArray(slugs)) return [];
+  const locales = slugs.filter(Boolean) as string[];
+  return locales.map((locale) => ({ locale }));
 };
 
 export const generateMetadata = async ({
-	params,
+  params,
 }: PageParams): Promise<Metadata> => {
-	const [data, err] = await getBlogIndexData(params.locale);
-	if (!data || err) return {};
-	const { seo } = data;
-	if (!seo) return {};
-	return getMetaData(seo);
+  const { locale } = await params;
+  const [result, err] = await getBlogIndexData(locale);
+  if (!result?.data || err) return {};
+  const { seo } = result.data;
+  if (!seo) return {};
+  return getMetaData(seo);
 };
 
 export default async function BlogPage({ params }: PageParams) {
-	const [data, err] = await getBlogIndexData(params.locale);
-	if (!data || err) return notFound();
-	return <BlogIndexPage data={data} />;
+  const { locale } = await params;
+  const [result, err] = await getBlogIndexData(locale);
+  if (!result?.data || err) notFound();
+  return <BlogIndexPage data={result.data} />;
 }

@@ -1,16 +1,13 @@
 {
   "name": "roboto-next-sanity",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "build": "turbo build",
     "deploy": "turbo deploy",
     "dev": "turbo dev",
     "format": "turbo format",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "typegen": "turbo type"
   },
   "devDependencies": {
     "turbo": "^2.3.0"
@@ -20,7 +17,7 @@
     "prettier": "3.3.3",
     "typescript": "5.6.3"
   },
-  "packageManager": "npm@10.9.0",
+  "packageManager": "pnpm@9.13.2",
   "engines": {
     "node": ">=18"
   }

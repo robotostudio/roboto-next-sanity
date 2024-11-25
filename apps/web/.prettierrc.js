@@ -1,1 +1,1 @@
-module.exports = require("config/prettier-tailwind-config");
+module.exports = require('config/prettier-tailwind-config');

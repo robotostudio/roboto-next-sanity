@@ -1,23 +1,38 @@
 import type { SanityDocument } from 'sanity';
 
-const previewSecret = '34845f83-b24b-4896-b18a-061fffbb8bf1';
-
-const localUrl = 'http://localhost:3000';
-const remoteUrl = 'https://template.roboto.studio';
-
-const baseUrl = window.location.hostname === 'localhost' ? localUrl : remoteUrl;
-
-export function resolvePreviewUrl(
-  doc: SanityDocument & {
-    slug?: {
-      current: string;
-    };
+// Environment configuration
+const PREVIEW_CONFIG = {
+  secret: '34845f83-b24b-4896-b18a-061fffbb8bf1',
+  urls: {
+    local: 'http://localhost:3000',
+    production: 'https://template.roboto.studio',
   },
-) {
+  draftPath: '/api/draft',
+} as const;
+
+// Type for documents that may have a slug
+interface DocumentWithSlug extends SanityDocument {
+  slug?: {
+    current: string;
+  };
+}
+
+/**
+ * Resolves the preview URL for a Sanity document
+ * @param doc - The Sanity document to generate preview URL for
+ * @returns The complete preview URL as a string
+ */
+export function resolvePreviewUrl(doc: DocumentWithSlug): string {
+  const baseUrl = window.location.hostname === 'localhost' 
+    ? PREVIEW_CONFIG.urls.local 
+    : PREVIEW_CONFIG.urls.production;
+
   const previewUrl = new URL(baseUrl);
-  const slug = doc?.slug?.current ?? '/';
-  previewUrl.pathname = '/api/draft';
-  previewUrl.searchParams.append('secret', previewSecret);
-  previewUrl.searchParams.append('slug', slug);
+  
+  // Configure preview URL
+  previewUrl.pathname = PREVIEW_CONFIG.draftPath;
+  previewUrl.searchParams.append('secret', PREVIEW_CONFIG.secret);
+  previewUrl.searchParams.append('slug', doc?.slug?.current ?? '/');
+
   return previewUrl.toString();
 }

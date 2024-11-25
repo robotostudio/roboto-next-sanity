@@ -1,10 +1,13 @@
 import type { MetadataRoute } from 'next';
 import { baseUrl } from '~/config';
 import { handleErrors } from '~/lib/helper';
-import { client } from '~/lib/sanity';
-import { sitemapQuery } from '~/lib/sanity/query';
+import { client } from '~/lib/sanity/client';
+import { sitemapQuery } from '~/lib/sanity/queries';
 
-import type { SitemapProjection } from '~/types';
+type SitemapProjection = {
+  _updatedAt: string;
+  slug: string;
+};
 
 type SiteMap = Pick<
   MetadataRoute.Sitemap[number],

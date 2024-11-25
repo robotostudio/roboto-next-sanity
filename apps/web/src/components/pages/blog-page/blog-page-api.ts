@@ -1,78 +1,55 @@
-import { LOCALIZED_SANITY_TAGS, type Locale, SANITY_TAGS } from '~/config';
-import { getLocalizedSlug, handleErrors } from '~/lib/helper';
-import { client } from '~/lib/sanity';
+import { unstable_cache } from 'next/cache';
+import type { Locale } from '~/config';
+import { handleErrors } from '~/lib/helper';
+import { client } from '~/lib/sanity/client';
+import { sanityFetch } from '~/lib/sanity/live';
 import {
   blogPageQueryOG,
   getAllBlogIndexTranslationsQuery,
   getAllBlogsPathsQuery,
   getBlogIndexDataQuery,
   getBlogPageDataQuery,
-} from '~/lib/sanity/query';
-import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
-import type {
-  BlogPageQueryOGResult,
-  GetAllBlogIndexTranslationsQueryResult,
-  GetAllBlogsPathsQueryResult,
-  GetBlogIndexDataQueryResult,
-  GetBlogPageDataQueryResult,
-} from '~/sanity.types';
+} from '~/lib/sanity/queries';
 
-export const getAllBlogsPaths = async () => {
-  const [data, err] = await handleErrors(
-    client.fetch<GetAllBlogsPathsQueryResult>(getAllBlogsPathsQuery),
-  );
-  if (!data || err) return [];
-  const paths: { slug: string; locale: Locale }[] = [];
-  for (const blog of data) {
-    if (!blog.slug || !blog?.locale) continue;
-    const slugFragments = blog.slug.split('/').filter(Boolean);
-    const slug = slugFragments[slugFragments.length - 1];
-    paths.push({
-      locale: blog.locale as Locale,
-      slug,
-    });
-  }
-  return paths;
-};
-
-export const getAllBlogIndexTranslations = async () => {
+export async function getBlogIndexData(locale: Locale) {
   return await handleErrors(
-    client.fetch<GetAllBlogIndexTranslationsQueryResult>(
-      getAllBlogIndexTranslationsQuery,
-    ),
-  );
-};
-
-export const getBlogPageData = async (slug: string, locale: Locale) => {
-  const localizedSlug = getLocalizedSlug(slug, locale, 'blog');
-  return await handleErrors(
-    sanityServerFetch<GetBlogPageDataQueryResult>({
-      query: getBlogPageDataQuery,
-      params: { slug: localizedSlug, locale },
-      tags: [
-        LOCALIZED_SANITY_TAGS.blogPage(locale),
-        SANITY_TAGS.blogPage,
-        localizedSlug,
-      ],
-    }),
-  );
-};
-
-export const getBlogIndexData = async (locale: Locale) => {
-  return await handleErrors(
-    sanityServerFetch<GetBlogIndexDataQueryResult>({
+    sanityFetch({
       query: getBlogIndexDataQuery,
-      params: { locale },
-      tags: [LOCALIZED_SANITY_TAGS.blogIndex(locale), SANITY_TAGS.blogIndex],
+      params: {
+        locale,
+      },
     }),
   );
-};
+}
 
-export const getBlogPageOGData = async (id: string) => {
+export async function getBlogPageData(slug: string, locale: Locale) {
   return await handleErrors(
-    sanityServerFetch<BlogPageQueryOGResult>({
-      query: blogPageQueryOG,
-      params: { id },
+    sanityFetch({
+      query: getBlogPageDataQuery,
+      params: { slug, locale },
     }),
   );
-};
+}
+
+export async function getAllBlogsPaths() {
+  const [result, err] = await handleErrors(client.fetch(getAllBlogsPathsQuery));
+  if (err || !Array.isArray(result)) return [];
+
+  const paths: { slug: string; locale: string }[] = [];
+
+  for (const item of result) {
+    if (!item.slug || !item.locale) continue;
+    const slugParts = item.slug.split('/').filter(Boolean);
+    paths.push({ slug: slugParts[slugParts.length - 1], locale: item.locale });
+  }
+
+  return paths;
+}
+
+export async function getAllBlogIndexTranslations() {
+  return await handleErrors(client.fetch(getAllBlogIndexTranslationsQuery));
+}
+
+export const getBlogPageOGData = unstable_cache(async (id: string) => {
+  return await handleErrors(client.fetch(blogPageQueryOG, { id }));
+});

@@ -7,6 +7,7 @@ import {
   getGenericPageOGData,
   getSlugPageOGData,
 } from '~/components/pages/slug-page/slug-page-api';
+
 import { ogImageDimensions } from '~/config';
 import { getTitleCase } from '~/lib/helper';
 import type { Maybe } from '~/types';
@@ -193,31 +194,33 @@ const getOptions = async (): Promise<ImageResponseOptions> => {
   };
 };
 
-const getMainPageContent = async () => {
-  const [data] = await getMainPageOGData();
-  if (!data) return undefined;
-  if (data?.seoImage) return seoImageRender({ seoImage: data.seoImage });
-  return dominantColorSeoImageRender(data);
+const getMainPageContent = async ({ id }: ContentProps) => {
+  console.log('🚀 ~ getMainPageContent ~ id:', id);
+  const [result, err] = await getMainPageOGData(id);
+  console.log('🚀 ~ getMainPageContent ~ err:', err);
+  if (err || !result) return undefined;
+  if (result?.seoImage) return seoImageRender({ seoImage: result.seoImage });
+  return dominantColorSeoImageRender(result);
 };
 const getSlugPageContent = async ({ id }: ContentProps) => {
-  const [data] = await getSlugPageOGData(id);
-  if (!data) return undefined;
-  if (data?.seoImage) return seoImageRender({ seoImage: data.seoImage });
-  return dominantColorSeoImageRender(data);
+  const [result, err] = await getSlugPageOGData(id);
+  if (err || !result) return undefined;
+  if (result?.seoImage) return seoImageRender({ seoImage: result.seoImage });
+  return dominantColorSeoImageRender(result);
 };
 
 const getBlogPageContent = async ({ id }: ContentProps) => {
-  const [data] = await getBlogPageOGData(id);
-  if (!data) return undefined;
-  if (data?.seoImage) return seoImageRender({ seoImage: data.seoImage });
-  return dominantColorSeoImageRender(data);
+  const [result, err] = await getBlogPageOGData(id);
+  if (err || !result) return undefined;
+  if (result?.seoImage) return seoImageRender({ seoImage: result.seoImage });
+  return dominantColorSeoImageRender(result);
 };
 
 const getGenericPageContent = async ({ id }: ContentProps) => {
-  const [data] = await getGenericPageOGData(id);
-  if (!data) return undefined;
-  if (data?.seoImage) return seoImageRender({ seoImage: data.seoImage });
-  return dominantColorSeoImageRender(data);
+  const [result, err] = await getGenericPageOGData(id);
+  if (err || !result) return undefined;
+  if (result?.seoImage) return seoImageRender({ seoImage: result.seoImage });
+  return dominantColorSeoImageRender(result);
 };
 
 const block = {

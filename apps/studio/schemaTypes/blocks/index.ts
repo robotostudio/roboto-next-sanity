@@ -1,5 +1,4 @@
 import { cta } from './cta';
-import { dynamicIntro } from './dynamicIntro';
 import { hero } from './hero';
 import { carouselField, imageCarousel } from './image-carousel';
 import { splitForm } from './split-form';

@@ -1,18 +1,17 @@
-import type { FC } from 'react';
 import type { Hero } from '~/sanity.types';
 import type { ProcessPageBuilderBlock } from '~/types';
-import { Buttons } from '../global/buttons';
-import { RichText } from '../global/richText';
+import { RichText } from '../global/rich-text';
+import { SanityButtons } from '../global/sanity-button';
 
 export type HeroBlockProps = ProcessPageBuilderBlock<Hero>;
 
-export const HeroBlock: FC<HeroBlockProps> = ({
+export function HeroBlock({
   title,
   buttons,
   richText,
   isTitleH1,
   _type,
-}) => {
+}: HeroBlockProps) {
   return (
     <section key="1" className="py-8 text-center" id={_type}>
       <div className="container px-4 text-center md:px-6">
@@ -24,7 +23,7 @@ export const HeroBlock: FC<HeroBlockProps> = ({
         <div>
           <RichText value={richText} className="prose-invert" />
         </div>
-        <Buttons
+        <SanityButtons
           buttons={buttons}
           wrapperProps={{
             className:
@@ -34,4 +33,4 @@ export const HeroBlock: FC<HeroBlockProps> = ({
       </div>
     </section>
   );
-};
+}

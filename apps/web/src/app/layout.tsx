@@ -1,6 +1,9 @@
-import type { PropsWithChildren } from 'react';
 import './globals.css';
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return <>{children}</>;
 }

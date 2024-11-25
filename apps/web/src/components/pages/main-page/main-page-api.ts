@@ -1,40 +1,28 @@
+import { unstable_cache } from 'next/cache';
 import type { Locale } from '~/config';
 import { handleErrors } from '~/lib/helper';
-import { client } from '~/lib/sanity';
+import { client } from '~/lib/sanity/client';
+import { sanityFetch } from '~/lib/sanity/live';
 import {
-  getAllMainPageTranslationsQuery,
   getMainPageDataQuery,
+  getMainPageTranslationsQuery,
   mainPageQueryOG,
-} from '~/lib/sanity/query';
-import { sanityServerFetch } from '~/lib/sanity/sanity-server-fetch';
-import type {
-  GetAllMainPageTranslationsQueryResult,
-  GetMainPageDataQueryResult,
-  MainPageQueryOGResult,
-} from '~/sanity.types';
+} from '~/lib/sanity/queries';
 
-export const getMainPageData = async (locale: Locale) => {
+export async function getMainPageData(locale: Locale) {
   return await handleErrors(
-    sanityServerFetch<GetMainPageDataQueryResult>({
+    sanityFetch({
       query: getMainPageDataQuery,
       params: { locale },
-      tags: ['main-page-api'],
+      tag: 'mainPage',
     }),
   );
-};
+}
 
-export const getAllMainPageTranslations = async () => {
-  return await handleErrors(
-    client.fetch<GetAllMainPageTranslationsQueryResult>(
-      getAllMainPageTranslationsQuery,
-    ),
-  );
-};
+export async function getAllMainPageTranslations() {
+  return await handleErrors(client.fetch(getMainPageTranslationsQuery));
+}
 
-export const getMainPageOGData = async () => {
-  return await handleErrors(
-    sanityServerFetch<MainPageQueryOGResult>({
-      query: mainPageQueryOG,
-    }),
-  );
-};
+export const getMainPageOGData = unstable_cache(async (id: string) => {
+  return await handleErrors(client.fetch(mainPageQueryOG, { id }));
+});
