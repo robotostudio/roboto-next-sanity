@@ -292,3 +292,13 @@ export const genericPageQueryOG = defineQuery(`
     ${ogFieldsFragment}
   }
 `);
+
+
+export const sitemapQuery = defineQuery(`
+*[_type in $types && defined(slug.current) && seoNoIndex != true ]{
+  "slug":slug.current,
+  _updatedAt,
+  _type,
+    _id
+  }
+`);
