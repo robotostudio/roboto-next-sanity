@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
     buildActivityPosition: 'bottom-right',
     buildActivity: true,
   },
-  experimental: {
-    optimizeCss: true,
-  },
   images: {
     remotePatterns: [
       {
