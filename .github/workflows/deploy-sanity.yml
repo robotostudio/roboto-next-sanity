@@ -1,33 +1,56 @@
-name: Deploy sanity studio
+name: Deploy Sanity Studio
 on:
   push:
     branches: [main]
     paths:
       - "apps/studio/**"
-
+      - ".github/workflows/deploy-sanity.yml"
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Build and deploy
+    name: Build and Deploy Sanity Studio
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_DEPLOY_TOKEN }}
       NODE_OPTIONS: "--max_old_space_size=4096"
+      PNPM_VERSION: 9.13.2
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 2
-      - uses: actions/setup-node@v2
+          fetch-depth: 1
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: "18.x"
-      - name: Restore cached Node Modules 💾
-        id: cache-node-modules
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      # Simplified cache strategy to reduce cache time
+      - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('package-lock.json') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Install dependencies
-        run: npm install
-      - name: Deploy Studio
-        run: cd ./apps/studio && npm run deploy
+        run: pnpm install --frozen-lockfile --prefer-offline
+        
+      - name: Deploy Sanity Studio
+        working-directory: ./apps/studio
+        run: |
+          echo "Deploying Sanity Studio..."
+          pnpm run deploy
+        env:
+          CI: true
