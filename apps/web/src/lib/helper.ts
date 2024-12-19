@@ -1,4 +1,4 @@
-import type { Locale } from '~/config';
+import { DEFAULT_LOCALE, type Locale } from '~/config';
 
 type Response<T> = [T, undefined] | [undefined, string];
 
@@ -42,7 +42,7 @@ export function getLocalizedSlug({
 }) {
   const slugParts = slug.split('/').filter(Boolean);
   const segments =
-    locale === 'en-GB'
+    locale === DEFAULT_LOCALE
       ? [prefix, ...slugParts]
       : [locale, prefix, ...slugParts];
   return `/${segments.filter(Boolean).join('/')}`;

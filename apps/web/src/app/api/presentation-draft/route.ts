@@ -15,17 +15,22 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const { isValid, redirectTo = '/' } = await validatePreviewUrl(
-    clientWithToken,
-    request.url,
-  );
+  const {
+    isValid,
+    redirectTo = '/',
+    studioPreviewPerspective,
+  } = await validatePreviewUrl(clientWithToken, request.url);
 
-  console.log('🚀 ~ GET ~ isValid:', redirectTo);
+  const params = new URLSearchParams(request.nextUrl.searchParams);
+  const preview = params.get('sanity-preview-pathname');
 
   if (!isValid) {
     return new Response('Invalid secret', { status: 401 });
   }
 
   (await draftMode()).enable();
+  if (preview) {
+    return NextResponse.redirect(new URL(preview, request.url));
+  }
   return NextResponse.redirect(new URL('/', request.url));
 }

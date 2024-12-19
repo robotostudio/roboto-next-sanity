@@ -116,7 +116,7 @@ const pageBuilderFragment = /* groq */ `
 
 const localeMatchFragment = /* groq */ `
   select(
-    ($locale == 'en-GB' || $locale == '') => (!defined(language) || language == 'en-GB'),
+    ($locale == 'en-US' || $locale == '') => (!defined(language) || language == 'en-US'),
     language == $locale => language == $locale
   )
 `;

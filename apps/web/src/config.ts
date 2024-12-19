@@ -3,8 +3,8 @@ export const CONSTANTS = {
 };
 
 
-export const DEFAULT_LOCALE = 'en-GB';
-export const LOCALES = [DEFAULT_LOCALE, 'de', 'fr'] as const;
+export const DEFAULT_LOCALE = 'en-US';
+export const LOCALES = [DEFAULT_LOCALE, 'en-GB', 'de', 'fr'] as const;
 
 export type Locale = (typeof LOCALES)[number];
 

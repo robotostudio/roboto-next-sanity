@@ -30,7 +30,6 @@ type Base<T = SchemaType> = {
   icon?: LucideIcon;
 };
 
-const previewTypes = ['page', 'blog', 'mainPage'];
 
 type CreateSingleTon = {
   S: StructureBuilder;
@@ -48,12 +47,6 @@ const createSingleTon = ({ S, type, title, icon }: CreateSingleTon) => {
     .icon(icon ?? File)
     .child(
       S.document()
-        .views([
-          S.view.form(),
-          ...(previewTypes.includes(type)
-            ? [S.view.component(PreviewIFrame).options({}).title('Preview')]
-            : []),
-        ])
         .schemaType(type)
         .documentId(type),
     );
@@ -161,10 +154,5 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (
 ) => {
   const { schemaType, documentId } = context ?? {};
 
-  return S.document().views([
-    S.view.form(),
-    ...(previewTypes.includes(schemaType)
-      ? [S.view.component(PreviewIFrame).options(context).title('Preview')]
-      : []),
-  ]);
+  return S.document();
 };

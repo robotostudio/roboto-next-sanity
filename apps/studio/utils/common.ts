@@ -3,11 +3,11 @@ import { CONST } from './constant';
 import { CustomSlugField } from '../components/custom-slug-field';
 
 export const languageField = defineField({
-  initialValue: () => 'en-GB',
+  initialValue: () => 'en-US',
   name: 'language',
   type: 'string',
-  readOnly: true,
-  hidden: true,
+  // readOnly: true,
+  // hidden: true,
 });
 
 export const iconField = defineField({
