@@ -1928,6 +1928,34 @@ export type GenericPageQueryOGResult =
       date: null | string;
     }
   | null;
+// Variable: sitemapQuery
+// Query: *[_type in $types && defined(slug.current) && seoNoIndex != true ]{  "slug":slug.current,  _updatedAt,  _type,    _id  }
+export type SitemapQueryResult = Array<
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'blog';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'blogIndex';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'mainPage';
+      _id: string;
+    }
+  | {
+      slug: string | null;
+      _updatedAt: string;
+      _type: 'page';
+      _id: string;
+    }
+>;
 
 // Query TypeMap
 import '@sanity/client';
@@ -1950,5 +1978,6 @@ declare module '@sanity/client' {
     '\n  *[_type == "mainPage" && defined(slug.current) && _id == $id][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': MainPageQueryOGResult;
     '\n  *[_type == "page" && defined(slug.current) && _id == $id][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': SlugPageQueryOGResult;
     '\n  *[_id == $id && defined(slug.current)][0]{\n    \n  _id,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "logo"][0].image.asset->url,\n  _type,\n  "date": coalesce(date, _createdAt)\n\n  }\n': GenericPageQueryOGResult;
+    '\n*[_type in $types && defined(slug.current) && seoNoIndex != true ]{\n  "slug":slug.current,\n  _updatedAt,\n  _type,\n    _id\n  }\n': SitemapQueryResult;
   }
 }

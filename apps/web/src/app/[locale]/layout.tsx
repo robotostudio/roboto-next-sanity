@@ -14,6 +14,7 @@ import { NavbarSkeleton } from '~/components/layout/navbar/navbar-client';
 import NavbarComponent from '~/components/layout/navbar/navbar-component';
 import type { Locale } from '~/config';
 import { routing } from '~/i18n/routing';
+import { SanityLive } from '~/lib/sanity/live';
 
 export default async function LocaleLayout({
   children,
@@ -23,7 +24,6 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  // Ensure that the incoming `locale` is valid
   if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
@@ -40,7 +40,6 @@ export default async function LocaleLayout({
           <Suspense fallback={<NavbarSkeleton />}>
             <NavbarComponent />
           </Suspense>
-          {children}
           {(await draftMode()).isEnabled ? (
             <>
               {children}
@@ -71,6 +70,7 @@ export default async function LocaleLayout({
           <Suspense fallback={<FooterSkeleton />}>
             <FooterComponent />
           </Suspense>
+          <SanityLive />
         </NextIntlClientProvider>
       </body>
     </html>
