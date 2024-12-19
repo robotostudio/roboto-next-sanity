@@ -39,6 +39,15 @@ export default defineConfig({
       structure,
       defaultDocumentNode,
     }),
+    documentInternationalization({
+      schemaTypes: internationalizedDocuments,
+      supportedLanguages: [
+        { id: 'en-US', title: 'English (US)' },
+        { id: 'en-GB', title: 'English (UK)' },
+        { id: 'de', title: 'German' },
+        { id: 'fr', title: 'French' },
+      ],
+    }),
     visionTool(),
     assist({
       translate: {
@@ -62,15 +71,6 @@ export default defineConfig({
           enable: '/api/presentation-draft',
         },
       },
-    }),
-    documentInternationalization({
-      schemaTypes: [],
-      supportedLanguages: [
-        { id: 'en-US', title: 'English (US)' },
-        { id: 'en-GB', title: 'English (UK)' },
-        { id: 'de', title: 'German' },
-        { id: 'fr', title: 'French' },
-      ],
     }),
   ],
 
