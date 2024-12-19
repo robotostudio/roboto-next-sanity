@@ -9,16 +9,16 @@
     "prettier-tailwind-config.js"
   ],
   "dependencies": {
-    "@next/eslint-plugin-next": "^15.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.14.0",
-    "@typescript-eslint/parser": "^8.14.0",
-    "eslint": "9.15.0",
-    "eslint-config-next": "^15.0.3",
+    "@next/eslint-plugin-next": "^15.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "9.17.0",
+    "eslint-config-next": "^15.1.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1"
   },
   "devDependencies": {
-    "prettier": "3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8"
+    "prettier": "3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9"
   }
 }

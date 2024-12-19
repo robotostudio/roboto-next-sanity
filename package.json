@@ -10,14 +10,14 @@
     "typegen": "turbo type"
   },
   "devDependencies": {
-    "turbo": "^2.3.0"
+    "turbo": "^2.3.3"
   },
   "dependencies": {
-    "eslint": "9.15.0",
-    "prettier": "3.3.3",
+    "eslint": "9.17.0",
+    "prettier": "3.4.2",
     "typescript": "5.6.3"
   },
-  "packageManager": "pnpm@9.13.2",
+  "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=18"
   }
