@@ -14,7 +14,7 @@
     "dev": "sanity dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "start": "sanity start",
-    "type": "sanity schema extract --path ../web/src/schema.json && sanity typegen generate --enforce-required-fields"
+    "type": "sanity schema extract && sanity typegen generate --enforce-required-fields"
   },
   "dependencies": {
     "@sanity/assist": "^3.0.9",
@@ -22,13 +22,12 @@
     "@sanity/icons": "^3.5.5",
     "@sanity/ui": "^2.10.12",
     "@sanity/vision": "^3.68.1",
-    "config": "*",
     "country-flag-icons": "^1.5.13",
     "lucide-react": "^0.468.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
-    "react-is": "^19.0.0",
+    "react-is": "^18.3.1",
     "sanity": "^3.68.1",
     "sanity-plugin-asset-source-unsplash": "^3.0.2",
     "sanity-plugin-icon-picker": "^3.3.0",
@@ -37,8 +36,8 @@
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^5.0.1",
-    "config": "workspace:*",
-    "@types/react": "^19.0.2"
+    "@sanity/eslint-config-studio": "^4.0.0",
+    "@types/react": "^18.3.12",
+    "config": "workspace:*"
   }
 }

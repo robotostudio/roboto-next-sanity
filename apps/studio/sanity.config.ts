@@ -30,63 +30,62 @@ const template: TemplateResolver = (prev) => {
 };
 
 export default defineConfig({
-	name: "default",
-	title: "roboto-next-sanity",
-	projectId: "hlsgi7fv",
-	dataset: "production",
+  name: 'default',
+  title: 'roboto-next-sanity',
+  projectId: 'hlsgi7fv',
+  dataset: 'production',
+  plugins: [
+    structureTool({
+      structure,
+      defaultDocumentNode,
+    }),
+    visionTool(),
+    assist({
+      translate: {
+        document: {
+          languageField: 'language',
+        },
+      },
+    }),
+    unsplashImageAsset(),
+    presentationUrl(),
+    media(),
+    iconPicker(),
+    presentationTool({
+      resolve: resolve,
+      previewUrl: {
+        origin:
+          window.location.hostname === 'localhost'
+            ? 'http://localhost:3000'
+            : 'https://template.roboto.studio',
+        previewMode: {
+          enable: '/api/presentation-draft',
+        },
+      },
+    }),
+    documentInternationalization({
+      schemaTypes: [],
+      supportedLanguages: [
+        { id: 'en-US', title: 'English (US)' },
+        { id: 'en-GB', title: 'English (UK)' },
+        { id: 'de', title: 'German' },
+        { id: 'fr', title: 'French' },
+      ],
+    }),
+  ],
 
-	plugins: [
-		structureTool({
-			structure,
-			defaultDocumentNode,
-		}),
-		visionTool(),
-		assist({
-			translate: {
-				document: {
-					languageField: "language",
-				},
-			},
-		}),
-		unsplashImageAsset(),
-		presentationUrl(),
-		media(),
-		iconPicker(),
-		presentationTool({
-			resolve: resolve,
-			previewUrl: {
-				origin:
-					window.location.hostname === "localhost"
-						? "http://localhost:3000"
-						: "https://template.roboto.studio",
-				previewMode: {
-					enable: "/api/presentation-draft",
-				},
-			},
-		}),
-		documentInternationalization({
-			schemaTypes: internationalizedDocuments,
-			supportedLanguages: [
-				{ id: "en-US", title: "English (US)" },
-				{ id: "en-GB", title: "English (UK)" },
-				{ id: "de", title: "German" },
-				{ id: "fr", title: "French" },
-			],
-		}),
-	],
-
-	document: {
-		newDocumentOptions: (prev, { creationContext }) => {
-			const { type } = creationContext;
-			if (type === "global") return [];
-			return prev;
-		},
-	},
-	scheduledPublishing: {
-		enabled: false,
-	},
-	schema: {
-		types: schemaTypes,
-		templates: template,
-	},
+  document: {
+    newDocumentOptions: (prev, { creationContext }) => {
+      const { type } = creationContext;
+      if (type === 'global') return [];
+      return prev;
+    },
+  },
+  scheduledPublishing: {
+    enabled: false,
+  },
+  schema: {
+    types: schemaTypes,
+    templates: template,
+  },
 });
