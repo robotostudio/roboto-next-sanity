@@ -2,7 +2,7 @@ import { PageBuilderBlock } from '~/components/global/pagebuilder';
 import type { GetMainPageDataQueryResult, PageBuilder } from '~/sanity.types';
 import type { PageComponentProps } from '~/types';
 
-export default function MainPageComponent({
+export function MainPageComponent({
   data,
 }: PageComponentProps<GetMainPageDataQueryResult>) {
   const { pageBuilder, _id, _type } = data ?? {};

@@ -4,7 +4,7 @@ import {
   getAllMainPageTranslations,
   getMainPageData,
 } from '~/components/pages/main-page/main-page-api';
-import MainPageComponent from '~/components/pages/main-page/main-page-component';
+import { MainPageComponent } from '~/components/pages/main-page/main-page-component';
 import type { Locale } from '~/config';
 import { getMetaData } from '~/lib/seo';
 

@@ -64,7 +64,7 @@ export function FooterClient({
   );
 }
 
-export default async function FooterComponent() {
+export async function FooterComponent() {
   const [result, error] = await handleErrors(getFooterData());
   if (error || !result) return null;
   const { data } = result ?? {};

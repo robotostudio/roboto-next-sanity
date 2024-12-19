@@ -5,13 +5,13 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-import { preconnect, prefetchDNS } from 'react-dom';
 import { PreviewBar } from '~/components/global/preview-bar';
-import FooterComponent, {
+import {
+  FooterComponent,
   FooterSkeleton,
 } from '~/components/layout/footer/footer-component';
 import { NavbarSkeleton } from '~/components/layout/navbar/navbar-client';
-import NavbarComponent from '~/components/layout/navbar/navbar-component';
+import { NavbarComponent } from '~/components/layout/navbar/navbar-component';
 import type { Locale } from '~/config';
 import { routing } from '~/i18n/routing';
 import { SanityLive } from '~/lib/sanity/live';
@@ -28,10 +28,8 @@ export default async function LocaleLayout({
     notFound();
   }
   setRequestLocale(locale);
-
-  preconnect('https://cdn.sanity.io');
-  prefetchDNS('https://cdn.sanity.io');
-
+  // preconnect('https://cdn.sanity.io');
+  // prefetchDNS('https://cdn.sanity.io');
   return (
     <html lang={locale}>
       <body>

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import FooterComponent from '~/components/layout/footer/footer-component';
-import NavbarComponent from '~/components/layout/navbar/navbar-component';
+import { FooterComponent } from '~/components/layout/footer/footer-component';
+import { NavbarComponent } from '~/components/layout/navbar/navbar-component';
 
 export default function NotFound() {
   return (

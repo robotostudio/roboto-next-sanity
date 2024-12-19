@@ -15,11 +15,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const {
-    isValid,
-    redirectTo = '/',
-    studioPreviewPerspective,
-  } = await validatePreviewUrl(clientWithToken, request.url);
+  const { isValid } = await validatePreviewUrl(clientWithToken, request.url);
 
   const params = new URLSearchParams(request.nextUrl.searchParams);
   const preview = params.get('sanity-preview-pathname');

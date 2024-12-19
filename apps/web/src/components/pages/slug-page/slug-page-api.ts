@@ -36,13 +36,13 @@ export const getSlugPageData = unstable_cache(
   cacheConfig,
 );
 
-/**
- * Extracts slug from path segments
- */
-const extractSlugFromPath = (slugPath: string): string => {
-  const slugFragments = slugPath.split('/').filter(Boolean);
-  return slugFragments.length > 1 ? slugFragments[1] : slugFragments[0];
-};
+// /**
+//  * Extracts slug from path segments
+//  */
+// const extractSlugFromPath = (slugPath: string): string => {
+//   const slugFragments = slugPath.split('/').filter(Boolean);
+//   return slugFragments.length > 1 ? slugFragments[1] : slugFragments[0];
+// };
 
 /**
 /**

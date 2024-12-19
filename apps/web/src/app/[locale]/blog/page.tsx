@@ -3,8 +3,6 @@ import { notFound } from 'next/navigation';
 import { getBlogIndexData } from '~/components/pages/blog-page/blog-page-api';
 import { getAllBlogIndexTranslations } from '~/components/pages/blog-page/blog-page-api';
 import { BlogIndexPage } from '~/components/pages/blog-page/blog-page-component';
-// import { BlogIndexPage } from "~/components/pages/blog-page";
-
 import type { Locale } from '~/config';
 import { getMetaData } from '~/lib/seo';
 

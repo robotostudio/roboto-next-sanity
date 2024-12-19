@@ -55,11 +55,9 @@ export default async function DynamicSlug({ params }: Props) {
   const { locale, rest } = await params;
   const slug = rest.join('/');
   const localizedSlug = getLocalizedSlug({ slug, locale });
-  console.log('🚀 ~ DynamicSlug ~ localizedSlug:', localizedSlug);
 
   const [pageTypeResponse, pageTypeError] = await getPageType(localizedSlug);
 
-  console.log('🚀 ~ pageTypeResponse:', pageTypeResponse);
 
   if (pageTypeError || !pageTypeResponse) {
     notFound();
