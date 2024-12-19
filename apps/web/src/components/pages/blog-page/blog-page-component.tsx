@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type { FC } from 'react';
 import { ArticleRichText } from '~/components/global/rich-text';
 import { SanityImage } from '~/components/global/sanity-image';
 import type {
@@ -15,18 +14,20 @@ export type BlogIndexPageProps =
   PageComponentProps<GetBlogIndexDataQueryResult>;
 
 // Simplified BlogIndexPage component
-export const BlogIndexPage: FC<BlogIndexPageProps> = ({ data }) => (
-  <main>
-    <BlogGrid blogs={data?.blogs ?? []} />
-  </main>
-);
+export function BlogIndexPage({ data }: BlogIndexPageProps) {
+  return (
+    <main>
+      <BlogGrid blogs={data?.blogs ?? []} />
+    </main>
+  );
+}
 
 export type BlogGridProps = {
   blogs: Blog[];
 };
 
 // Improved BlogGrid with semantic HTML and consistent spacing
-export const BlogGrid: FC<BlogGridProps> = ({ blogs }) => {
+export function BlogGrid({ blogs }: BlogGridProps) {
   if (!blogs.length) return null;
 
   return (
@@ -41,14 +42,14 @@ export const BlogGrid: FC<BlogGridProps> = ({ blogs }) => {
       </div>
     </section>
   );
-};
+}
 
 export type BlogCardProps = {
   blog: Blog;
 };
 
 // Optimized BlogCard with better accessibility and layout
-export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
+export function BlogCard({ blog }: BlogCardProps) {
   const { title, image, slug, description } = blog ?? {};
 
   if (!slug) return null;
@@ -78,12 +79,12 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
       </Link>
     </article>
   );
-};
+}
 
 export type BlogSlugPageProps = PageComponentProps<GetBlogPageDataQueryResult>;
 
 // Enhanced BlogSlugPage with better semantics and responsive design
-export const BlogSlugPage: FC<BlogSlugPageProps> = ({ data }) => {
+export function BlogSlugPage({ data }: BlogSlugPageProps) {
   const { richText, title, image, description, _createdAt } = data ?? {};
 
   return (
@@ -130,4 +131,4 @@ export const BlogSlugPage: FC<BlogSlugPageProps> = ({ data }) => {
       </article>
     </main>
   );
-};
+}

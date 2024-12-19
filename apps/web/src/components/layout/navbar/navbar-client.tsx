@@ -1,9 +1,9 @@
 'use client';
 
-import { ChevronDownIcon, MenuIcon, X } from 'lucide-react';
+import { MenuIcon, X } from 'lucide-react';
 import Image from 'next/image';
-import * as React from 'react';
 import Link from 'next/link';
+import * as React from 'react';
 import { SanityButtons } from '~/components/global/sanity-button';
 import { SanityIcon } from '~/components/global/sanity-icon';
 import {

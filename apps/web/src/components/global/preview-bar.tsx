@@ -1,9 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { FC } from 'react';
 
-export const PreviewBar: FC = () => {
+export const PreviewBar = () => {
   const path = usePathname();
   return (
     <div className="fixed bottom-2 left-0 right-0 z-10 px-2 md:bottom-4 md:px-4">
