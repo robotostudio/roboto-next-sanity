@@ -42,7 +42,7 @@ export function getLocalizedSlug({
 }) {
   const slugParts = slug.split('/').filter(Boolean);
   const segments =
-    locale === 'en-GB'
+    locale === 'en-US'
       ? [prefix, ...slugParts]
       : [locale, prefix, ...slugParts];
   return `/${segments.filter(Boolean).join('/')}`;

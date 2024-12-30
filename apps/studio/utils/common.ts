@@ -2,8 +2,12 @@ import { defineField } from 'sanity';
 import { CONST } from './constant';
 import { CustomSlugField } from '../components/custom-slug-field';
 
+
+export const defaultLanguage = 'en-US';  
+
+
 export const languageField = defineField({
-  initialValue: () => 'en-GB',
+  initialValue: () => 'en-US',
   name: 'language',
   type: 'string',
   readOnly: true,

@@ -26,11 +26,9 @@ async function getBlogData(params: Awaited<PageParams['params']>) {
   const { slug, locale } = params;
   const localizedSlug = getLocalizedSlug({ slug, locale, prefix: 'blog' });
   const [result, err] = await getBlogPageData(localizedSlug, locale);
-
   if (!result?.data || err) {
     return null;
   }
-
   return result.data;
 }
 
@@ -52,6 +50,7 @@ export const generateMetadata = async ({
 export default async function BlogSlug({ params }: PageParams) {
   const resolvedParams = await params;
   const data = await getBlogData(resolvedParams);
+  console.log('🚀 ~ BlogSlug ~ data:', data);
 
   if (!data) {
     notFound();

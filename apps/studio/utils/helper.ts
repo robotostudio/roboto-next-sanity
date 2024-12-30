@@ -50,7 +50,7 @@ export const isUniqueAcrossAllDocuments: SlugIsUniqueValidator = async (
 const indexPageTypes = ['blogIndex'];
 
 export const processLanguage = (lang: string) => {
-  if (lang === 'en-GB') return '';
+  if (lang === 'en-US') return '';
   return lang;
 };
 export const getDocTypePrefix = (type: string) => {
@@ -64,7 +64,7 @@ export const getDocTypePrefix = (type: string) => {
   return type;
 };
 
-export const serializeSlug = (input: string, language = 'en-GB', type = '') => {
+export const serializeSlug = (input: string, language = 'en-US', type = '') => {
   const locale = processLanguage(language);
   const prefix = getDocTypePrefix(type);
   const slugParts = [
@@ -88,7 +88,7 @@ export const getFlag = (lang: string) => {
 };
 
 export const createSlug: SlugifierFn = (input, _, { parent }) => {
-  const { language = 'en-GB', _type } = parent as {
+  const { language = 'en-US', _type } = parent as {
     _type: string;
     language: string;
   };

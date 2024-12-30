@@ -50,7 +50,8 @@ export default defineConfig({
     documentInternationalization({
       schemaTypes: internationalizedDocuments,
       supportedLanguages: [
-        { id: 'en-GB', title: 'English' },
+        { id: 'en-US', title: 'English (US)' },
+        { id: 'en-GB', title: 'English (UK)' },
         { id: 'de', title: 'German' },
         { id: 'fr', title: 'French' },
       ],

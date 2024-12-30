@@ -66,7 +66,7 @@ export const mainPage = defineType({
       slug: 'slug.current',
     },
     prepare(value) {
-      const { lang = 'en-GB', slug, title } = value ?? {};
+      const { lang = 'en-US', slug, title } = value ?? {};
       return {
         title: [getFlag(lang), title].join(' '),
         media: Home,
